@@ -3,12 +3,14 @@ import { Group, Matrix4, PerspectiveCamera, Scene, WebGLRenderer, SRGBColorSpace
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { isSetId, SETS } from '../data/sets';
 import { startCameraPreview, mediaError } from './camera-preview';
+import { trackingConfig } from './tracking-config';
 
 // A disposable browsing context owns camera, TensorFlow, worker and WebGL resources.
 // Removing this frame tears down the entire AR runtime, including upstream workers.
 const query = new URLSearchParams(location.search);
 const requested = query.get('set');
 const setId = isSetId(requested) ? requested : 'one';
+const tracking = trackingConfig(query.get('tracking'), query.get('motion'));
 const send = (type: string, data: Record<string, unknown> = {}) => parent.postMessage({ channel: 'obake-lab', type, ...data }, location.origin);
 let stopped = false;
 let stream: MediaStream | undefined;
@@ -98,7 +100,9 @@ async function start() {
   renderer.domElement.addEventListener('webglcontextlost', event => { event.preventDefault(); fail(new Error('描画が中断されました。カメラを開始し直してください。')); });
   const scene = new Scene(), camera = new PerspectiveCamera();
   const anchors = SETS[setId].ids.map(id => { const group = new Group(); group.matrixAutoUpdate = false; group.visible = false; const model = ghost.clone(true); model.position.z = .1; group.add(model); scene.add(group); return { id, group, model, post: new Matrix4() }; });
+  send('tracking-config', { config: tracking });
   controller = new Controller({ inputWidth: width, inputHeight: height, maxTrack: 1, warmupTolerance: 3, missTolerance: 5,
+    filterMinCF: tracking.filterMinCF, filterBeta: tracking.filterBeta,
     onUpdate: event => {
       if (stopped || event.type !== 'updateMatrix') return;
       const anchor = anchors[event.targetIndex]; if (!anchor) return;
@@ -132,7 +136,7 @@ async function start() {
   let fpsTime=performance.now(), frames=0;
   renderer.setAnimationLoop(time => {
     if(stopped||!renderer)return;
-    for(const a of anchors) if(a.group.visible) {a.model.position.y=Math.sin(time/650)*.025;a.model.rotation.y=Math.sin(time/1100)*.08;}
+    if(tracking.ghostMotion==='float') for(const a of anchors) if(a.group.visible) {a.model.position.y=Math.sin(time/650)*.025;a.model.rotation.y=Math.sin(time/1100)*.08;}
     renderer.render(scene,camera);frames++;
     const now=performance.now();if(now-fpsTime>=1000){send('fps',{value:frames*1000/(now-fpsTime)});frames=0;fpsTime=now;}
   });

@@ -1,32 +1,50 @@
 {
-  "testedAt": "2026-09-10T10:53:35.697Z",
+  "testedAt": "2026-09-10T11:16:24.186Z",
   "environment": "Playwright Chromium with SwiftShader and synthetic Y4M video; not physical camera or Air 2",
   "results": [
     {
       "set": "one",
+      "tracking": {
+        "mode": "stable",
+        "filterMinCF": 0.0015,
+        "filterBeta": 0.01,
+        "ghostMotion": "still"
+      },
       "recognized": [
         "H01"
       ],
-      "trackingInitMs": 1899,
+      "trackingInitMs": 1215.5999999940395,
       "foundCount": 1,
-      "elapsedSeconds": 5.882900000005961,
-      "fpsAverage": 29.17599157358088
+      "elapsedSeconds": 4.317800000011921,
+      "fpsAverage": 35.30819500105692
     },
     {
       "set": "four",
+      "tracking": {
+        "mode": "stable",
+        "filterMinCF": 0.0015,
+        "filterBeta": 0.01,
+        "ghostMotion": "still"
+      },
       "recognized": [
         "H01",
         "H02",
         "H03",
         "ANSWER"
       ],
-      "trackingInitMs": 2445.4000000059605,
+      "trackingInitMs": 1589.800000011921,
       "foundCount": 4,
-      "elapsedSeconds": 47.83079999998212,
-      "fpsAverage": 37.38662522403867
+      "elapsedSeconds": 48.75719999998808,
+      "fpsAverage": 39.043001572500785
     },
     {
       "set": "nine",
+      "tracking": {
+        "mode": "stable",
+        "filterMinCF": 0.0015,
+        "filterBeta": 0.01,
+        "ghostMotion": "still"
+      },
       "recognized": [
         "H01",
         "H02",
@@ -38,15 +56,17 @@
         "H08",
         "ANSWER"
       ],
-      "trackingInitMs": 5823.800000011921,
+      "trackingInitMs": 1815.5999999940395,
       "foundCount": 9,
-      "elapsedSeconds": 51.08619999998808,
-      "fpsAverage": 26.02233093992364
+      "elapsedSeconds": 48.33379999998212,
+      "fpsAverage": 32.454427579319585
     }
   ],
   "passed": [
     "all marker IDs in 1/4/9 sets recognized by actual MindAR",
     "3D rendered",
+    "stable still mode and comparison controls reach AR frame and session log",
+    "settings lock while running and unlock on stop",
     "stop removes iframe",
     "startup cancellation",
     "JSON export",

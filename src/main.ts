@@ -1,10 +1,11 @@
 import './style.css';
 import {APP_VERSION,ASSET_VERSION,SETS,type SetId} from './data/sets';
 import {beginTrial,observeTrial,finishTrial,summarizeTrials,type Trial} from './lab/measurements';
+import {trackingConfig,type TrackingConfig} from './ar/tracking-config';
 import {mount,el} from './ui/layout';
 mount();
 type LogEntry={at:string;message:string};
-interface Session {id:string;appVersion?:string;lastStartupStage?:string;startedAt:string;endedAt?:string;reason?:string;running:boolean;set:SetId;device:string;userAgent:string;requestedResolution:string;actualResolution?:string;totalStartupMs?:number;trackingInitMs?:number;elapsedSeconds:number;foundCount:number;fpsAverage?:number;fpsMin?:number;trials:Trial[];events:LogEntry[]}
+interface Session {id:string;tracking?:TrackingConfig;appVersion?:string;lastStartupStage?:string;startedAt:string;endedAt?:string;reason?:string;running:boolean;set:SetId;device:string;userAgent:string;requestedResolution:string;actualResolution?:string;totalStartupMs?:number;trackingInitMs?:number;elapsedSeconds:number;foundCount:number;fpsAverage?:number;fpsMin?:number;trials:Trial[];events:LogEntry[]}
 let setId:SetId='one',frame:HTMLIFrameElement|undefined,active:Session|undefined,sessions:Session[]=[];
 let readyAt=0,clickAt=0,lastFpsAt=0,frameSamples=0,fpsSum=0,isReady=false,trial:Trial|undefined;
 const visible=new Set<string>(),STORAGE='ar-obake-lab-v1';
@@ -15,7 +16,7 @@ persist();
 function renderEvents(){const list=el('events');list.replaceChildren();const latest=active??sessions[sessions.length-1];for(const event of (latest?.events??[]).slice(-8).reverse()){const li=document.createElement('li'),time=document.createElement('time'),text=document.createElement('span');time.textContent=new Date(event.at).toLocaleTimeString('ja-JP');text.textContent=event.message;li.append(time,text);list.append(li);}if(!list.children.length){const li=document.createElement('li');li.className='empty-log';li.textContent='カメラを開始すると記録が表示されます。';list.append(li);}}
 function log(message:string){if(!active)return;active.events.push({at:new Date().toISOString(),message});active.events=active.events.slice(-200);renderEvents();persist();}
 function setup(){el('set-description').textContent=SETS[setId].description;el('camera-label').textContent=`${SETS[setId].label}セット / ${setId==='nine'?'H01〜H08 · ANSWER':SETS[setId].ids.join(' · ')}`;el<HTMLSelectElement>('expected').replaceChildren(...SETS[setId].ids.map(id=>new Option(id,id)));el('overlay-text').textContent=`印刷した${SETS[setId].ids[0]}を用意して、カメラを開始してください。`;document.querySelectorAll<HTMLButtonElement>('[data-set]').forEach(b=>{b.classList.toggle('selected',b.dataset.set===setId);b.setAttribute('aria-pressed',String(b.dataset.set===setId));});}
-function lock(running:boolean){el<HTMLButtonElement>('start').disabled=running;el<HTMLButtonElement>('stop').disabled=!running;el<HTMLSelectElement>('resolution').disabled=running;el<HTMLInputElement>('device-note').disabled=running;document.querySelectorAll<HTMLButtonElement>('[data-set]').forEach(b=>b.disabled=running);el<HTMLButtonElement>('trial-start').disabled=!isReady;}
+function lock(running:boolean){el<HTMLButtonElement>('start').disabled=running;el<HTMLButtonElement>('stop').disabled=!running;el<HTMLSelectElement>('resolution').disabled=running;el<HTMLSelectElement>('tracking-mode').disabled=running;el<HTMLSelectElement>('ghost-motion').disabled=running;el<HTMLInputElement>('device-note').disabled=running;document.querySelectorAll<HTMLButtonElement>('[data-set]').forEach(b=>b.disabled=running);el<HTMLButtonElement>('trial-start').disabled=!isReady;}
 function showOverlay(title:string,text:string){el('overlay').hidden=false;el('overlay-title').textContent=title;el('overlay-text').textContent=text;}
 function updateTrialSummary(){const s=summarizeTrials(active?.trials??[]);el('trial-summary').textContent=s.attempts?`${s.attempts}回中 ${s.within3s}回が3秒以内 / 未検出 ${s.timeouts}回 / 別マーカー検出 ${s.wrongDetections}回`:'まだ計測していません。';}
 function completeTrial(result:Trial){trial=undefined;active?.trials.push(result);el<HTMLSelectElement>('expected').disabled=false;el<HTMLButtonElement>('trial-start').disabled=!isReady;const seconds=((result.durationMs??0)/1000).toFixed(2);el('trial-result').textContent=result.outcome==='recognized'?`${result.expected}を ${seconds}秒で認識しました。`:result.outcome==='timeout'?`${result.expected}：10秒以内に認識できませんでした。`:'計測を中止しました。';log(`読取計測 ${result.expected}: ${result.outcome} (${seconds}s)`);updateTrialSummary();}
@@ -28,11 +29,11 @@ function stop(reason:string,message='カメラを停止しました。'){
 function start(){
   if(frame)return;if(!isSecureContext||!navigator.mediaDevices?.getUserMedia){showOverlay('カメラを使用できません','HTTPSのURLをSafariで開いてください。');return;}
   clickAt=performance.now();readyAt=0;frameSamples=0;fpsSum=0;isReady=false;trial=undefined;
-  active={id:`${Date.now()}-${Math.random().toString(16).slice(2,8)}`,startedAt:new Date().toISOString(),appVersion:APP_VERSION,running:true,set:setId,device:el<HTMLInputElement>('device-note').value.trim(),userAgent:navigator.userAgent,requestedResolution:el<HTMLSelectElement>('resolution').value,elapsedSeconds:0,foundCount:0,trials:[],events:[]};
+  active={id:`${Date.now()}-${Math.random().toString(16).slice(2,8)}`,startedAt:new Date().toISOString(),appVersion:APP_VERSION,tracking:trackingConfig(el<HTMLSelectElement>('tracking-mode').value,el<HTMLSelectElement>('ghost-motion').value),running:true,set:setId,device:el<HTMLInputElement>('device-note').value.trim(),userAgent:navigator.userAgent,requestedResolution:el<HTMLSelectElement>('resolution').value,elapsedSeconds:0,foundCount:0,trials:[],events:[]};
   sessions.push(active);sessions=sessions.slice(-10);log(`${SETS[setId].label}セットの検証を開始`);
   for(const [id,value]of Object.entries({startup:'—',elapsed:'00:00',fps:'—','found-count':'0'}))el(id).textContent=value;
   el('trial-result').textContent='ARの準備ができると計測できます。';updateTrialSummary();
-  frame=document.createElement('iframe');frame.title='マーカー認識カメラ';frame.allow='camera; autoplay';frame.className='ar-frame';frame.src=`./ar.html?set=${setId}&resolution=${encodeURIComponent(active.requestedResolution)}&v=${APP_VERSION}`;
+  frame=document.createElement('iframe');frame.title='マーカー認識カメラ';frame.allow='camera; autoplay';frame.className='ar-frame';frame.src=`./ar.html?set=${setId}&resolution=${encodeURIComponent(active.requestedResolution)}&tracking=${active.tracking!.mode}&motion=${active.tracking!.ghostMotion}&v=${APP_VERSION}`;
   el('stage').prepend(frame);lock(true);el('status').textContent='準備中';showOverlay('カメラを準備しています','確認が表示されたら、カメラの使用を許可してください。');el('guidance').textContent='準備中でも「停止する」で中止できます。';
 }
 window.addEventListener('message',event=>{
@@ -42,6 +43,7 @@ window.addEventListener('message',event=>{
     case 'loading':showOverlay('カメラを準備しています',String(d.stage));break;
     case 'diagnostic':active.lastStartupStage=String(d.stage);log(`開始確認 ${JSON.stringify(d)}`);break;
     case 'playback-required':el('overlay').hidden=true;el('status').textContent='映像の再生待ち';el('guidance').textContent='カメラ欄の「映像を表示」を押してください。';break;
+    case 'tracking-config':active.tracking=d.config;log(`追従設定 ${JSON.stringify(d.config)}`);break;
     case 'camera':active.actualResolution=`${d.width} × ${d.height}`;log(`カメラ開始 ${active.actualResolution}`);break;
     case 'ready':isReady=true;readyAt=performance.now();lastFpsAt=readyAt;active.totalStartupMs=readyAt-clickAt;active.trackingInitMs=d.trackingInitMs;el('startup').textContent=`${(d.trackingInitMs/1000).toFixed(1)}s`;el('status').textContent='認識中';el('status').classList.add('live');el('overlay').hidden=true;el('guidance').textContent='印刷したカード全体を、カメラに向けてください。';el('trial-result').textContent='カードを画面の外に出してから、計測開始を押してください。';lock(true);log(`AR準備完了 ${active.actualResolution} / 許可後 ${(d.trackingInitMs/1000).toFixed(2)}s / 開始操作から ${(active.totalStartupMs/1000).toFixed(2)}s`);break;
     case 'found':if(!(SETS[setId].ids as readonly string[]).includes(d.id))return;visible.add(d.id);active.foundCount++;el('found-count').textContent=String(active.foundCount);el('found-badge').hidden=false;el('found-badge').textContent=`${d.id} を認識`;el('guidance').textContent=`${d.id}のおばけがカードに追従するか、角度をゆっくり変えてください。`;log(`${d.id}を認識（targetIndex ${d.targetIndex}）`);if(trial){trial=observeTrial(trial,d.id,performance.now());if(trial.outcome)completeTrial(trial);}break;

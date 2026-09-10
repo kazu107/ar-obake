@@ -1,6 +1,7 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
-import {writeFile} from 'node:fs/promises';
+import {readFile,writeFile} from 'node:fs/promises';
+const {version:appVersion}=JSON.parse(await readFile('package.json','utf8'));
 const browser=await chromium.launch({headless:true,args:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader','--use-fake-device-for-media-stream','--use-fake-ui-for-media-stream']});
 try{
   const denied=await browser.newContext();
@@ -48,7 +49,7 @@ try{
     }
     await page.waitForFunction(() => document.querySelector('#status').textContent === '認識中', {}, {timeout:60000});
     const session = await page.evaluate(() => JSON.parse(localStorage.getItem('ar-obake-lab-v1')).sessions.at(-1));
-    assert.equal(session.appVersion, '0.1.1');
+    assert.equal(session.appVersion, appVersion);
     assert.equal(session.events.filter(event => event.message.includes('"stage":"camera-request"')).length, 1);
     assert.ok(session.events.some(event => event.message.includes(mode === 'abort' ? 'video-play-retry' : 'video-play-tap-required')));
     assert.ok(session.events.some(event => event.message.includes('video-playing')));
