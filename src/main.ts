@@ -4,7 +4,7 @@ import {beginTrial,observeTrial,finishTrial,summarizeTrials,type Trial} from './
 import {mount,el} from './ui/layout';
 mount();
 type LogEntry={at:string;message:string};
-interface Session {id:string;startedAt:string;endedAt?:string;reason?:string;running:boolean;set:SetId;device:string;userAgent:string;requestedResolution:string;actualResolution?:string;totalStartupMs?:number;trackingInitMs?:number;elapsedSeconds:number;foundCount:number;fpsAverage?:number;fpsMin?:number;trials:Trial[];events:LogEntry[]}
+interface Session {id:string;appVersion?:string;lastStartupStage?:string;startedAt:string;endedAt?:string;reason?:string;running:boolean;set:SetId;device:string;userAgent:string;requestedResolution:string;actualResolution?:string;totalStartupMs?:number;trackingInitMs?:number;elapsedSeconds:number;foundCount:number;fpsAverage?:number;fpsMin?:number;trials:Trial[];events:LogEntry[]}
 let setId:SetId='one',frame:HTMLIFrameElement|undefined,active:Session|undefined,sessions:Session[]=[];
 let readyAt=0,clickAt=0,lastFpsAt=0,frameSamples=0,fpsSum=0,isReady=false,trial:Trial|undefined;
 const visible=new Set<string>(),STORAGE='ar-obake-lab-v1';
@@ -28,25 +28,27 @@ function stop(reason:string,message='カメラを停止しました。'){
 function start(){
   if(frame)return;if(!isSecureContext||!navigator.mediaDevices?.getUserMedia){showOverlay('カメラを使用できません','HTTPSのURLをSafariで開いてください。');return;}
   clickAt=performance.now();readyAt=0;frameSamples=0;fpsSum=0;isReady=false;trial=undefined;
-  active={id:`${Date.now()}-${Math.random().toString(16).slice(2,8)}`,startedAt:new Date().toISOString(),running:true,set:setId,device:el<HTMLInputElement>('device-note').value.trim(),userAgent:navigator.userAgent,requestedResolution:el<HTMLSelectElement>('resolution').value,elapsedSeconds:0,foundCount:0,trials:[],events:[]};
+  active={id:`${Date.now()}-${Math.random().toString(16).slice(2,8)}`,startedAt:new Date().toISOString(),appVersion:APP_VERSION,running:true,set:setId,device:el<HTMLInputElement>('device-note').value.trim(),userAgent:navigator.userAgent,requestedResolution:el<HTMLSelectElement>('resolution').value,elapsedSeconds:0,foundCount:0,trials:[],events:[]};
   sessions.push(active);sessions=sessions.slice(-10);log(`${SETS[setId].label}セットの検証を開始`);
   for(const [id,value]of Object.entries({startup:'—',elapsed:'00:00',fps:'—','found-count':'0'}))el(id).textContent=value;
   el('trial-result').textContent='ARの準備ができると計測できます。';updateTrialSummary();
-  frame=document.createElement('iframe');frame.title='マーカー認識カメラ';frame.allow='camera; autoplay';frame.className='ar-frame';frame.src=`./ar.html?set=${setId}&resolution=${encodeURIComponent(active.requestedResolution)}`;
+  frame=document.createElement('iframe');frame.title='マーカー認識カメラ';frame.allow='camera; autoplay';frame.className='ar-frame';frame.src=`./ar.html?set=${setId}&resolution=${encodeURIComponent(active.requestedResolution)}&v=${APP_VERSION}`;
   el('stage').prepend(frame);lock(true);el('status').textContent='準備中';showOverlay('カメラを準備しています','確認が表示されたら、カメラの使用を許可してください。');el('guidance').textContent='準備中でも「停止する」で中止できます。';
 }
 window.addEventListener('message',event=>{
   if(!frame||event.source!==frame.contentWindow||event.origin!==location.origin||event.data?.channel!=='obake-lab'||!active)return;
   const d=event.data;
   switch(d.type){
-    case 'loading':el('overlay-text').textContent=String(d.stage);break;
+    case 'loading':showOverlay('カメラを準備しています',String(d.stage));break;
+    case 'diagnostic':active.lastStartupStage=String(d.stage);log(`開始確認 ${JSON.stringify(d)}`);break;
+    case 'playback-required':el('overlay').hidden=true;el('status').textContent='映像の再生待ち';el('guidance').textContent='カメラ欄の「映像を表示」を押してください。';break;
     case 'camera':active.actualResolution=`${d.width} × ${d.height}`;log(`カメラ開始 ${active.actualResolution}`);break;
     case 'ready':isReady=true;readyAt=performance.now();lastFpsAt=readyAt;active.totalStartupMs=readyAt-clickAt;active.trackingInitMs=d.trackingInitMs;el('startup').textContent=`${(d.trackingInitMs/1000).toFixed(1)}s`;el('status').textContent='認識中';el('status').classList.add('live');el('overlay').hidden=true;el('guidance').textContent='印刷したカード全体を、カメラに向けてください。';el('trial-result').textContent='カードを画面の外に出してから、計測開始を押してください。';lock(true);log(`AR準備完了 ${active.actualResolution} / 許可後 ${(d.trackingInitMs/1000).toFixed(2)}s / 開始操作から ${(active.totalStartupMs/1000).toFixed(2)}s`);break;
     case 'found':if(!(SETS[setId].ids as readonly string[]).includes(d.id))return;visible.add(d.id);active.foundCount++;el('found-count').textContent=String(active.foundCount);el('found-badge').hidden=false;el('found-badge').textContent=`${d.id} を認識`;el('guidance').textContent=`${d.id}のおばけがカードに追従するか、角度をゆっくり変えてください。`;log(`${d.id}を認識（targetIndex ${d.targetIndex}）`);if(trial){trial=observeTrial(trial,d.id,performance.now());if(trial.outcome)completeTrial(trial);}break;
     case 'lost':visible.delete(d.id);if(!visible.size){el('found-badge').hidden=true;el('guidance').textContent='カードを探しています。全体が映るように向けてください。';}log(`${d.id}を見失いました`);break;
     case 'fps':if(isReady&&Number.isFinite(d.value)){lastFpsAt=performance.now();frameSamples++;fpsSum+=d.value;active.fpsAverage=fpsSum/frameSamples;active.fpsMin=Math.min(active.fpsMin??Infinity,d.value);el('fps').textContent=d.value.toFixed(0);}break;
     case 'restart-required':stop('orientation',String(d.reason));break;
-    case 'error':{const message=d.name==='NotAllowedError'?'カメラが許可されていません。Safariのサイト設定で許可し、開始し直してください。':d.name==='NotFoundError'?'カメラを見つけられませんでした。カメラのある端末で試してください。':String(d.message||'カメラの開始に失敗しました。');log(`エラー ${d.name}: ${d.message}`);stop('error',message);el('status').textContent='要確認';break;}
+    case 'error':{const message=d.name==='NotAllowedError'?'Safariがカメラの開始を許可しませんでした。サイト設定でカメラを許可し、許可済みならSafariを開き直して試してください。':d.name==='AbortError'?'カメラ映像の開始が中断されました。もう一度開始し、改善しない場合はSafariを開き直してください。':d.name==='NotFoundError'?'カメラを見つけられませんでした。カメラのある端末で試してください。':String(d.message||'カメラの開始に失敗しました。');log(`エラー [${d.stage??active.lastStartupStage??'unknown'}] ${d.name}: ${d.message}`);stop('error',message);showOverlay('カメラを開始できませんでした',message);el('status').textContent='要確認';break;}
   }
 });
 el('start').addEventListener('click',start);el('stop').addEventListener('click',()=>stop('user'));

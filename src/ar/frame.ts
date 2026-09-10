@@ -2,6 +2,7 @@ import { Controller } from 'mind-ar/dist/mindar-image.prod.js';
 import { Group, Matrix4, PerspectiveCamera, Scene, WebGLRenderer, SRGBColorSpace, Vector3 } from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { isSetId, SETS } from '../data/sets';
+import { startCameraPreview, mediaError } from './camera-preview';
 
 // A disposable browsing context owns camera, TensorFlow, worker and WebGL resources.
 // Removing this frame tears down the entire AR runtime, including upstream workers.
@@ -13,6 +14,7 @@ let stopped = false;
 let stream: MediaStream | undefined;
 let controller: Controller | undefined;
 let renderer: WebGLRenderer | undefined;
+let currentStage = 'runtime-loading';
 const abort = new AbortController();
 function stop() {
   if (stopped) return;
@@ -25,9 +27,39 @@ function stop() {
 }
 function fail(error: unknown) {
   if (stopped) return;
-  const e = error instanceof Error ? error : new Error(String(error));
-  send('error', { name: e.name, message: e.message });
+  const e = mediaError(error);
+  send('error', { ...e, stage: currentStage, visibility: document.visibilityState });
   stop();
+}
+
+function requestPlayback(video: HTMLVideoElement, signal: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const panel = document.createElement('div');
+    panel.className = 'playback-panel';
+    const explanation = document.createElement('p');
+    explanation.textContent = 'カメラの映像を表示するため、下のボタンを押してください。';
+    const button = document.createElement('button');
+    button.type = 'button'; button.textContent = '映像を表示';
+    panel.append(explanation, button); document.body.append(panel);
+    const cleanup = () => { panel.remove(); signal.removeEventListener('abort', cancelled); };
+    const cancelled = () => { cleanup(); reject(new DOMException('Camera startup cancelled', 'AbortError')); };
+    signal.addEventListener('abort', cancelled, { once: true });
+    if (signal.aborted) { cancelled(); return; }
+    send('playback-required');
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      try {
+        await video.play();
+        if (signal.aborted) return;
+        cleanup(); resolve();
+      } catch (error) {
+        if (signal.aborted) return;
+        send('diagnostic', { stage: 'video-play-user-rejected', ...mediaError(error) });
+        explanation.textContent = '映像の再生が中断されました。もう一度押すか、停止してSafariを開き直してください。';
+        button.disabled = false;
+      }
+    });
+  });
 }
 addEventListener('pagehide', stop);
 addEventListener('error', event => fail(event.error ?? event.message));
@@ -43,24 +75,23 @@ async function start() {
   send('loading', { stage: 'カメラの許可を確認しています' });
   if (!isSecureContext || !navigator.mediaDevices?.getUserMedia) throw new Error('HTTPSのSafariから開いてください。');
   const requestedWidth = query.get('resolution') === '960' ? 960 : 640;
-  stream = await navigator.mediaDevices.getUserMedia({ audio: false, video: { facingMode: { ideal: 'environment' }, width: { ideal: requestedWidth }, height: { ideal: requestedWidth * .75 } } });
-  if (stopped) { stream.getTracks().forEach(track => track.stop()); return; }
   const video = document.createElement('video');
-  video.muted = true; video.autoplay = true; video.playsInline = true;
-  video.setAttribute('playsinline', ''); video.setAttribute('muted', '');
-  video.srcObject = stream; document.body.append(video);
-  await video.play();
-  if (!video.videoWidth) await new Promise<void>((resolve,reject) => { video.addEventListener('loadedmetadata', () => resolve(), { once: true }); setTimeout(() => { if (!video.videoWidth) reject(new Error('カメラ映像の準備が時間内に完了しませんでした。')); }, 15000); });
-  if (stopped) return;
+  document.body.append(video);
+  stream = await startCameraPreview(video, { requestedWidth, signal: abort.signal, requestPlayback,
+    onStage: (stage, details) => { currentStage = stage; send('diagnostic', { stage, ...details }); },
+  });
+  if (stopped) { stream.getTracks().forEach(track => track.stop()); return; }
   const width=video.videoWidth, height=video.videoHeight;
   // MindAR InputLoader reads the element's width/height, not videoWidth/videoHeight.
   video.width=width;video.height=height;
   const gpuStart = performance.now();
   send('camera', { width, height });
   send('loading', { stage: '認識データとおばけを準備しています' });
+  currentStage = 'assets-loading';
   const [targetBuffer, ghostBuffer] = await Promise.all([resource(`./targets/${setId}.mind`), resource('./models/ghost.glb')]);
   const ghost = (await new GLTFLoader().parseAsync(ghostBuffer, './')).scene;
   if (stopped) return;
+  currentStage = 'tracking-initialization';
   renderer = new WebGLRenderer({ antialias: false, alpha: true, powerPreference: 'low-power' });
   renderer.setPixelRatio(1); renderer.outputColorSpace = SRGBColorSpace;
   renderer.setClearColor(0x000000,0); document.body.append(renderer.domElement);
@@ -105,6 +136,7 @@ async function start() {
     renderer.render(scene,camera);frames++;
     const now=performance.now();if(now-fpsTime>=1000){send('fps',{value:frames*1000/(now-fpsTime)});frames=0;fpsTime=now;}
   });
+  currentStage = 'tracking';
   send('ready',{width,height,trackingInitMs:performance.now()-gpuStart,targetCount:dimensions.length});
 }
 start().catch(fail);

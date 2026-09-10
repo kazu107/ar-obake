@@ -11,6 +11,8 @@
 
 HTTPSのURLをSafariで開き、マーカー印刷ページからH01を印刷して「1枚」「カメラを開始」で試します。Sitesの非公開配信では所有者のChatGPTサインインが必要です。参加者用の公開配信・ログイン不要化はまだ行っていません。
 
+アプリ0.1.1ではSafariの映像準備を待ち、中断時に再試行します。「映像を表示」が出た場合は押してください。更新後はSafariを再読み込みして画面下部の版を確認します。
+
 画面の「実機テストの手順」に開始、計測、4枚・9枚、復帰、記録の保存方法を記載しています。
 
 ## ローカル開発
@@ -39,6 +41,7 @@ npm run preview
 ## 構成
 
 - `src/main.ts`：検証画面、認識イベント、ログ、手動計測、JSON出力。
+- `src/ar/camera-preview.ts`：カメラ取得と映像再生を分離し、準備待ち・再試行・タップ再生を処理。
 - `src/ar/frame.ts`：MindAR Controller＋Three.js、カメラ、投影行列、GLB表示。
 - `ar.html`：AR処理専用の同一オリジンiframe。停止するとiframe全体を破棄し、カメラ・Worker・TensorFlow・WebGLの寿命をまとめて管理します。
 - `src/data/sets.ts`：1枚・4枚・9枚の対応。
@@ -71,6 +74,7 @@ production buildのpreviewをポート4173で起動してから実行します�
 
 ```powershell
 npm run test:browser
+node scripts/browser-errors.mjs
 ```
 
 これはChromiumに合成映像をカメラ入力として渡し、実際のMindARが1枚・4枚・9枚の各IDを認識できるかを試す自動確認です。計測用のモデル出力や認識成功イベントを捏造していません。SwiftShaderを使うため、速度はAir 2の性能評価には使えません。中間のY4M・画像・書き出し記録はGit対象外の`.artifacts/`に保存します。
@@ -79,6 +83,8 @@ npm run test:browser
 
 `localStorage`には直近10セッションを保存し、JSONへ書き出せます。映像や静止画は保存・送信しません。
 
+- セッションの`appVersion`／`lastStartupStage`：その試行のアプリ版と最後に通過した開始段階。0.1.0の過去記録にはありません。
+- `events`の`開始確認`：カメラ要求、許可取得、映像接続、映像寸法確定、再生・再試行の経過。映像やデバイスIDは含めません。
 - `trackingInitMs`：カメラ映像の準備完了からAR準備完了まで。必要素材の取得とGPU準備を含みます。
 - `totalStartupMs`：開始ボタンからAR準備完了まで。許可操作やライブラリ取得時間も含みます。
 - `elapsedSeconds`：認識開始から停止までの連続動作時間。中断からの再開は新しいセッションです。

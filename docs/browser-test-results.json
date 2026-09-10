@@ -1,5 +1,5 @@
 {
-  "testedAt": "2026-09-10T01:06:00.730Z",
+  "testedAt": "2026-09-10T10:53:35.697Z",
   "environment": "Playwright Chromium with SwiftShader and synthetic Y4M video; not physical camera or Air 2",
   "results": [
     {
@@ -7,10 +7,10 @@
       "recognized": [
         "H01"
       ],
-      "trackingInitMs": 1376.5999999940395,
+      "trackingInitMs": 1899,
       "foundCount": 1,
-      "elapsedSeconds": 4.258300000011921,
-      "fpsAverage": 37.07964569696872
+      "elapsedSeconds": 5.882900000005961,
+      "fpsAverage": 29.17599157358088
     },
     {
       "set": "four",
@@ -20,10 +20,10 @@
         "H03",
         "ANSWER"
       ],
-      "trackingInitMs": 1501.5999999940395,
+      "trackingInitMs": 2445.4000000059605,
       "foundCount": 4,
-      "elapsedSeconds": 48.10890000000596,
-      "fpsAverage": 44.60419810707013
+      "elapsedSeconds": 47.83079999998212,
+      "fpsAverage": 37.38662522403867
     },
     {
       "set": "nine",
@@ -38,10 +38,10 @@
         "H08",
         "ANSWER"
       ],
-      "trackingInitMs": 1335.300000011921,
+      "trackingInitMs": 5823.800000011921,
       "foundCount": 9,
-      "elapsedSeconds": 48.351,
-      "fpsAverage": 42.06795000106672
+      "elapsedSeconds": 51.08619999998808,
+      "fpsAverage": 26.02233093992364
     }
   ],
   "passed": [
