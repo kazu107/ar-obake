@@ -5,7 +5,7 @@
 - [実装計画](docs/implementation-plan.md)
 - [実機試験の記録表](docs/air2-test-checklist.md)
 - [実装と検証の状況](docs/phase-0-1-status.md)
-- 配信URL：https://ar-obake-lab.super-emu-7772.chatgpt.site
+- 配信URL：https://ar-obake-lab.kazu107.chatgpt.site
 
 ## 使う
 

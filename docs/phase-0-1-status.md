@@ -2,6 +2,10 @@
 
 更新日：2026-09-10
 
+非公開配信済み：https://ar-obake-lab.kazu107.chatgpt.site
+
+Sitesの配信成功と、配信先で検証画面が表示されることを確認。所有者のChatGPTサインインが必要。
+
 ## 実装済み
 
 - Git、Vite＋TypeScript、Safari 15を対象にした静的ビルド。
