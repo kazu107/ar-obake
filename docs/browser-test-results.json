@@ -1,5 +1,5 @@
 {
-  "testedAt": "2026-09-10T14:46:08.744Z",
+  "testedAt": "2026-09-10T19:44:10.555Z",
   "environment": "Playwright Chromium with SwiftShader and synthetic Y4M video; not physical camera or Air 2",
   "results": [
     {
@@ -9,21 +9,23 @@
         "filterMinCF": 0.001,
         "filterBeta": 1000,
         "poseStabilization": {
-          "algorithm": "pose-deadband-v1",
-          "positionDeadband": 0.004,
-          "rotationDeadbandRadians": 0.03490658503988659,
-          "positionTimeConstantMs": 100,
-          "rotationTimeConstantMs": 160
+          "algorithm": "projection-depth-v2",
+          "centerDeadband": 0.0008,
+          "depthLogDeadband": 0.01,
+          "rotationDeadbandRadians": 0.04363323129985824,
+          "centerTimeConstantMs": 45,
+          "depthTimeConstantMs": 420,
+          "rotationTimeConstantMs": 240
         },
         "ghostMotion": "still"
       },
       "recognized": [
         "H01"
       ],
-      "trackingInitMs": 1269.800000011921,
+      "trackingInitMs": 1260.9000000059605,
       "foundCount": 1,
-      "elapsedSeconds": 14.620699999988078,
-      "fpsAverage": 47.37628261617608
+      "elapsedSeconds": 15.188,
+      "fpsAverage": 40.025350030703756
     },
     {
       "set": "four",
@@ -32,11 +34,13 @@
         "filterMinCF": 0.001,
         "filterBeta": 1000,
         "poseStabilization": {
-          "algorithm": "pose-deadband-v1",
-          "positionDeadband": 0.004,
-          "rotationDeadbandRadians": 0.03490658503988659,
-          "positionTimeConstantMs": 100,
-          "rotationTimeConstantMs": 160
+          "algorithm": "projection-depth-v2",
+          "centerDeadband": 0.0008,
+          "depthLogDeadband": 0.01,
+          "rotationDeadbandRadians": 0.04363323129985824,
+          "centerTimeConstantMs": 45,
+          "depthTimeConstantMs": 420,
+          "rotationTimeConstantMs": 240
         },
         "ghostMotion": "still"
       },
@@ -46,10 +50,10 @@
         "H03",
         "ANSWER"
       ],
-      "trackingInitMs": 1379.6000000238419,
+      "trackingInitMs": 1348,
       "foundCount": 4,
-      "elapsedSeconds": 58.49190000000596,
-      "fpsAverage": 42.40147375336619
+      "elapsedSeconds": 58.364699999988076,
+      "fpsAverage": 43.56922923529504
     },
     {
       "set": "nine",
@@ -58,11 +62,13 @@
         "filterMinCF": 0.001,
         "filterBeta": 1000,
         "poseStabilization": {
-          "algorithm": "pose-deadband-v1",
-          "positionDeadband": 0.004,
-          "rotationDeadbandRadians": 0.03490658503988659,
-          "positionTimeConstantMs": 100,
-          "rotationTimeConstantMs": 160
+          "algorithm": "projection-depth-v2",
+          "centerDeadband": 0.0008,
+          "depthLogDeadband": 0.01,
+          "rotationDeadbandRadians": 0.04363323129985824,
+          "centerTimeConstantMs": 45,
+          "depthTimeConstantMs": 420,
+          "rotationTimeConstantMs": 240
         },
         "ghostMotion": "still"
       },
@@ -77,10 +83,10 @@
         "H08",
         "ANSWER"
       ],
-      "trackingInitMs": 1439,
+      "trackingInitMs": 1933.0999999940395,
       "foundCount": 9,
-      "elapsedSeconds": 58.316399999976156,
-      "fpsAverage": 37.555606395308224
+      "elapsedSeconds": 57.77579999998212,
+      "fpsAverage": 39.95929260061606
     }
   ],
   "passed": [

@@ -5,6 +5,7 @@ import { isSetId, SETS } from '../data/sets';
 import { startCameraPreview, mediaError } from './camera-preview';
 import { trackingConfig } from './tracking-config';
 import { PoseStabilizer } from './pose-stabilizer';
+import { ProjectedPoseStabilizer } from './projected-pose-stabilizer';
 
 // A disposable browsing context owns camera, TensorFlow, worker and WebGL resources.
 // Removing this frame tears down the entire AR runtime, including upstream workers.
@@ -100,7 +101,7 @@ async function start() {
   renderer.setClearColor(0x000000,0); document.body.append(renderer.domElement);
   renderer.domElement.addEventListener('webglcontextlost', event => { event.preventDefault(); fail(new Error('描画が中断されました。カメラを開始し直してください。')); });
   const scene = new Scene(), camera = new PerspectiveCamera();
-  const anchors = SETS[setId].ids.map(id => { const group = new Group(); group.matrixAutoUpdate = false; group.visible = false; const model = ghost.clone(true); model.position.z = .1; group.add(model); scene.add(group); return { id, group, model, post: new Matrix4(), input: new Matrix4(), pose: new PoseStabilizer(), markerWidth: 1, inputAtMs: 0, updateIndex: 0 }; });
+  const anchors = SETS[setId].ids.map(id => { const group = new Group(); group.matrixAutoUpdate = false; group.visible = false; const model = ghost.clone(true); model.position.z = .1; group.add(model); scene.add(group); return { id, group, model, post: new Matrix4(), input: new Matrix4(), pose: tracking.poseStabilization?.algorithm==='projection-depth-v2' ? new ProjectedPoseStabilizer() : new PoseStabilizer(), markerWidth: 1, inputAtMs: 0, updateIndex: 0 }; });
   send('tracking-config', { config: tracking });
   controller = new Controller({ inputWidth: width, inputHeight: height, maxTrack: 1, warmupTolerance: 3, missTolerance: 5,
     filterMinCF: tracking.filterMinCF, filterBeta: tracking.filterBeta,
