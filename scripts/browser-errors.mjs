@@ -1,0 +1,13 @@
+import {chromium} from 'playwright';
+import assert from 'node:assert/strict';
+import {writeFile} from 'node:fs/promises';
+const browser=await chromium.launch({headless:true,args:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader','--use-fake-device-for-media-stream','--use-fake-ui-for-media-stream']});
+try{
+  const denied=await browser.newContext();
+  await denied.addInitScript(()=>{navigator.mediaDevices.getUserMedia=async()=>{throw new DOMException('Denied for test','NotAllowedError');};});
+  const p=await denied.newPage();await p.goto('http://127.0.0.1:4173/');await p.locator('#start').click();await p.waitForFunction(()=>document.querySelector('#status').textContent==='要確認');assert.ok((await p.locator('#guidance').textContent()).includes('許可'));assert.equal(await p.locator('iframe').count(),0);assert.ok(await p.locator('#start').isEnabled());await denied.close();
+  const missing=await browser.newContext();const m=await missing.newPage();await m.route('**/targets/one.mind',route=>route.fulfill({status:503,body:'Unavailable for test'}));await m.goto('http://127.0.0.1:4173/');await m.locator('#start').click();await m.waitForFunction(()=>document.querySelector('#status').textContent==='要確認');assert.equal(await m.locator('iframe').count(),0);assert.ok((await m.locator('#guidance').textContent()).includes('503'));await missing.close();
+  const valid=await browser.newContext();const v=await valid.newPage();await v.goto('http://127.0.0.1:4173/');await v.locator('#start').click();await v.waitForFunction(()=>document.querySelector('#status').textContent==='認識中');await v.locator('#trial-start').click();await v.waitForFunction(()=>document.querySelector('#trial-result').textContent.includes('10秒以内'),{},{timeout:15000});assert.ok((await v.locator('#trial-summary').textContent()).includes('未検出 1回'));
+  await v.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});assert.equal(await v.locator('iframe').count(),0);assert.ok(await v.locator('#start').isEnabled());await valid.close();
+  const results={testedAt:new Date().toISOString(),environment:'Chromium; permission rejection, HTTP error and visibility state injected for error-path testing',passed:['permission denial shows recovery message and allows retry','target download 503 releases camera frame','real recognition with blank fake video times out at 10 seconds and records failure','background notification stops AR context']};await writeFile('docs/browser-error-test-results.json',JSON.stringify(results,null,2)+'\n');console.log('BROWSER_ERROR_PATHS_OK');
+}finally{await browser.close();}

@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "markers": {
+    "creator": "Original procedural calibration patterns",
+    "source": "scripts/generate-assets.mjs",
+    "seed": 260910,
+    "license": "CC0-1.0"
+  },
+  "ghost": {
+    "creator": "Original procedural low-poly test model",
+    "source": "scripts/generate-assets.mjs",
+    "license": "CC0-1.0",
+    "bytes": 43700
+  },
+  "note": "Provisional calibration assets. Not the final event artwork."
+}

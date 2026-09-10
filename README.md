@@ -1,0 +1,100 @@
+# ARおばけ探偵団：MindAR実機検証版
+
+段階0～1の実装。iPad Air 2向けに画像認識ARと軽量GLBの表示を確認するための静的Webアプリです。
+
+- [実装計画](docs/implementation-plan.md)
+- [実機試験の記録表](docs/air2-test-checklist.md)
+- [実装と検証の状況](docs/phase-0-1-status.md)
+- 配信URL：https://ar-obake-lab.super-emu-7772.chatgpt.site
+
+## 使う
+
+HTTPSのURLをSafariで開き、マーカー印刷ページからH01を印刷して「1枚」「カメラを開始」で試します。Sitesの非公開配信では所有者のChatGPTサインインが必要です。参加者用の公開配信・ログイン不要化はまだ行っていません。
+
+画面の「実機テストの手順」に開始、計測、4枚・9枚、復帰、記録の保存方法を記載しています。
+
+## ローカル開発
+
+検証した実行環境はNode.js 24.19.0、npm 11.6.1。`.node-version`を用意しています。
+
+```powershell
+npm ci
+npm run dev
+npm run build
+npm test
+npm run check:assets
+npm run preview
+```
+
+このPCにある古いNode.js 24.11.0では、大きい依存を含むbuildがWindowsネイティブ例外で終了しました。Codexの同梱Node.js 24.19.0では成功しています。Windowsでは同梱版を選ぶ次の補助スクリプトも使えます。
+
+```powershell
+.\scripts\run.ps1 dev
+.\scripts\run.ps1 build
+.\scripts\run.ps1 test
+```
+
+実機からPCのlocalhostを開くことはできません。iPadでは配信済みのHTTPS URLを使います。
+
+## 構成
+
+- `src/main.ts`：検証画面、認識イベント、ログ、手動計測、JSON出力。
+- `src/ar/frame.ts`：MindAR Controller＋Three.js、カメラ、投影行列、GLB表示。
+- `ar.html`：AR処理専用の同一オリジンiframe。停止するとiframe全体を破棄し、カメラ・Worker・TensorFlow・WebGLの寿命をまとめて管理します。
+- `src/data/sets.ts`：1枚・4枚・9枚の対応。
+- `src/lab/measurements.ts`：計測の成功・未検出・中止・別マーカー検出。
+- `public/targets/manifest.json`：画像ID・ハッシュ・コンパイル順。
+- `public/markers.pdf`：160mm角、A4全9ページの印刷用PDF。
+- `public/guide.html`：端末から読める実機手順。
+
+同時追跡は1枚、描画のpixelRatioは1、影なし、単一の約44KBのGLBを共有します。カメラ解像度は要求値と実際の値を分けて記録します。Safari 15を対象にビルドし、import mapや外部CDNを実行時に使いません。
+
+## 素材の再生成
+
+```powershell
+npm run assets
+npx playwright install chromium
+npm run compile:targets
+python scripts/print-markers.py
+npm run check:assets
+```
+
+PDF生成にはreportlabが必要です。Windowsの游ゴシックがある場合はサブセットを埋め込みます。画像生成は`@napi-rs/canvas`、GLBはThree.jsのGLTFExporterを使います。
+
+マーカーは固定seedの非対称な幾何学パターンです。元画像9枚を一括コンパイルし、MindAR形式の各targetデータを順序を保って取り出し、1枚・4枚・9枚のセットを生成します。4枚セットのANSWERはindex 3、9枚セットではindex 8です。素材の編集後は.mindとPDFも作り直してください。
+
+ブラウザ用のMindAR配布物を利用します。MindARが依存する開発用`canvas`は`@napi-rs/canvas`へのnpm overrideで置き換えています。アプリではNode用canvasを読み込みません。依存のinstall scriptは実行せず、lockfileを固定しています。esbuildは修正済み0.28.1へ固定しています。
+
+## ブラウザ試験
+
+production buildのpreviewをポート4173で起動してから実行します。
+
+```powershell
+npm run test:browser
+```
+
+これはChromiumに合成映像をカメラ入力として渡し、実際のMindARが1枚・4枚・9枚の各IDを認識できるかを試す自動確認です。計測用のモデル出力や認識成功イベントを捏造していません。SwiftShaderを使うため、速度はAir 2の性能評価には使えません。中間のY4M・画像・書き出し記録はGit対象外の`.artifacts/`に保存します。
+
+## 記録の読み方
+
+`localStorage`には直近10セッションを保存し、JSONへ書き出せます。映像や静止画は保存・送信しません。
+
+- `trackingInitMs`：カメラ映像の準備完了からAR準備完了まで。必要素材の取得とGPU準備を含みます。
+- `totalStartupMs`：開始ボタンからAR準備完了まで。許可操作やライブラリ取得時間も含みます。
+- `elapsedSeconds`：認識開始から停止までの連続動作時間。中断からの再開は新しいセッションです。
+- `fpsAverage`／`fpsMin`：描画頻度。画像認識の頻度ではありません。
+- `trials`：手動の計測開始から発見まで。カードを提示する操作時間を含み、10秒で未検出を記録します。
+- `reason: interrupted`：正常な停止記録のない前回セッション。クラッシュと再読み込みは区別できません。
+
+## 現段階の範囲
+
+捜査メモ、ヒント演算、代表回答、正誤判定、PWAオフライン起動は次の段階です。iPad Air 2の実機動作と10分耐久試験は、端末での確認結果がそろうまで未検証とします。
+
+## 出典
+
+- [MindAR 1.2.5 / MIT](https://github.com/hiukim/mind-ar-js/tree/v1.2.5)
+- [MindARの導入](https://hiukim.github.io/mind-ar-js-doc/installation/)
+- [画像ターゲットのコンパイル](https://hiukim.github.io/mind-ar-js-doc/quick-start/compile/)
+- [Three.js / MIT](https://github.com/mrdoob/three.js/tree/r160)
+
+マーカーと検証用GLBは本プロジェクトで作成したオリジナルの仮素材です。生成元とCC0指定を`assets/source/provenance.json`に記録しています。

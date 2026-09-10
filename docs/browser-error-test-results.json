@@ -1,0 +1,10 @@
+{
+  "testedAt": "2026-09-10T01:04:27.131Z",
+  "environment": "Chromium; permission rejection, HTTP error and visibility state injected for error-path testing",
+  "passed": [
+    "permission denial shows recovery message and allows retry",
+    "target download 503 releases camera frame",
+    "real recognition with blank fake video times out at 10 seconds and records failure",
+    "background notification stops AR context"
+  ]
+}

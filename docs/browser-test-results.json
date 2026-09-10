@@ -1,0 +1,58 @@
+{
+  "testedAt": "2026-09-10T01:06:00.730Z",
+  "environment": "Playwright Chromium with SwiftShader and synthetic Y4M video; not physical camera or Air 2",
+  "results": [
+    {
+      "set": "one",
+      "recognized": [
+        "H01"
+      ],
+      "trackingInitMs": 1376.5999999940395,
+      "foundCount": 1,
+      "elapsedSeconds": 4.258300000011921,
+      "fpsAverage": 37.07964569696872
+    },
+    {
+      "set": "four",
+      "recognized": [
+        "H01",
+        "H02",
+        "H03",
+        "ANSWER"
+      ],
+      "trackingInitMs": 1501.5999999940395,
+      "foundCount": 4,
+      "elapsedSeconds": 48.10890000000596,
+      "fpsAverage": 44.60419810707013
+    },
+    {
+      "set": "nine",
+      "recognized": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H07",
+        "H08",
+        "ANSWER"
+      ],
+      "trackingInitMs": 1335.300000011921,
+      "foundCount": 9,
+      "elapsedSeconds": 48.351,
+      "fpsAverage": 42.06795000106672
+    }
+  ],
+  "passed": [
+    "all marker IDs in 1/4/9 sets recognized by actual MindAR",
+    "3D rendered",
+    "stop removes iframe",
+    "startup cancellation",
+    "JSON export",
+    "reload preserves log",
+    "responsive widths 390/768/1024"
+  ],
+  "pageErrors": [],
+  "consoleErrors": []
+}
