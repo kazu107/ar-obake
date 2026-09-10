@@ -1,5 +1,5 @@
 {
-  "testedAt": "2026-09-10T11:16:57.080Z",
+  "testedAt": "2026-09-10T14:47:07.963Z",
   "environment": "Chromium; permission rejection, HTTP error, playback failures and visibility state injected for error-path testing",
   "passed": [
     "permission denial shows recovery message and allows retry",

@@ -21,15 +21,15 @@ function noiseRms(mode, fps) {
   return sums.map(sum => Math.sqrt(sum / (samples - fps)));
 }
 
-describe('tracking stability and responsiveness', () => {
+describe('0.1.2 comparison filter baseline', () => {
   it.each([15, 26, 37])('attenuates small static pose noise at %i updates per second', fps => {
-    const stable = noiseRms('stable', fps), previous = noiseRms('responsive', fps);
+    const stable = noiseRms('legacy', fps), previous = noiseRms('responsive', fps);
     expect(stable[0]).toBeLessThan(previous[0] * .5);
     expect(stable[1]).toBeLessThan(previous[1] * .5);
   });
 
   it.each([15, 26, 37])('follows a real pose change within 450 ms at %i updates per second', fps => {
-    const f = filter('stable');
+    const f = filter('legacy');
     f.filter(0, [0, 0]);
     const target = [.3, 60]; // A deliberate rotation and translation, not noise.
     let out;

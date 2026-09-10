@@ -1,29 +1,43 @@
 {
-  "testedAt": "2026-09-10T11:16:24.186Z",
+  "testedAt": "2026-09-10T14:46:08.744Z",
   "environment": "Playwright Chromium with SwiftShader and synthetic Y4M video; not physical camera or Air 2",
   "results": [
     {
       "set": "one",
       "tracking": {
         "mode": "stable",
-        "filterMinCF": 0.0015,
-        "filterBeta": 0.01,
+        "filterMinCF": 0.001,
+        "filterBeta": 1000,
+        "poseStabilization": {
+          "algorithm": "pose-deadband-v1",
+          "positionDeadband": 0.004,
+          "rotationDeadbandRadians": 0.03490658503988659,
+          "positionTimeConstantMs": 100,
+          "rotationTimeConstantMs": 160
+        },
         "ghostMotion": "still"
       },
       "recognized": [
         "H01"
       ],
-      "trackingInitMs": 1215.5999999940395,
+      "trackingInitMs": 1269.800000011921,
       "foundCount": 1,
-      "elapsedSeconds": 4.317800000011921,
-      "fpsAverage": 35.30819500105692
+      "elapsedSeconds": 14.620699999988078,
+      "fpsAverage": 47.37628261617608
     },
     {
       "set": "four",
       "tracking": {
         "mode": "stable",
-        "filterMinCF": 0.0015,
-        "filterBeta": 0.01,
+        "filterMinCF": 0.001,
+        "filterBeta": 1000,
+        "poseStabilization": {
+          "algorithm": "pose-deadband-v1",
+          "positionDeadband": 0.004,
+          "rotationDeadbandRadians": 0.03490658503988659,
+          "positionTimeConstantMs": 100,
+          "rotationTimeConstantMs": 160
+        },
         "ghostMotion": "still"
       },
       "recognized": [
@@ -32,17 +46,24 @@
         "H03",
         "ANSWER"
       ],
-      "trackingInitMs": 1589.800000011921,
+      "trackingInitMs": 1379.6000000238419,
       "foundCount": 4,
-      "elapsedSeconds": 48.75719999998808,
-      "fpsAverage": 39.043001572500785
+      "elapsedSeconds": 58.49190000000596,
+      "fpsAverage": 42.40147375336619
     },
     {
       "set": "nine",
       "tracking": {
         "mode": "stable",
-        "filterMinCF": 0.0015,
-        "filterBeta": 0.01,
+        "filterMinCF": 0.001,
+        "filterBeta": 1000,
+        "poseStabilization": {
+          "algorithm": "pose-deadband-v1",
+          "positionDeadband": 0.004,
+          "rotationDeadbandRadians": 0.03490658503988659,
+          "positionTimeConstantMs": 100,
+          "rotationTimeConstantMs": 160
+        },
         "ghostMotion": "still"
       },
       "recognized": [
@@ -56,15 +77,17 @@
         "H08",
         "ANSWER"
       ],
-      "trackingInitMs": 1815.5999999940395,
+      "trackingInitMs": 1439,
       "foundCount": 9,
-      "elapsedSeconds": 48.33379999998212,
-      "fpsAverage": 32.454427579319585
+      "elapsedSeconds": 58.316399999976156,
+      "fpsAverage": 37.555606395308224
     }
   ],
   "passed": [
     "all marker IDs in 1/4/9 sets recognized by actual MindAR",
     "3D rendered",
+    "ten-second pose recording contains numerical input and displayed poses",
+    "pose recording cancellation and JSON export",
     "stable still mode and comparison controls reach AR frame and session log",
     "settings lock while running and unlock on stop",
     "stop removes iframe",

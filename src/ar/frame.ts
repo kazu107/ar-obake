@@ -1,9 +1,10 @@
 import { Controller } from 'mind-ar/dist/mindar-image.prod.js';
-import { Group, Matrix4, PerspectiveCamera, Scene, WebGLRenderer, SRGBColorSpace, Vector3 } from 'three';
+import { Group, Matrix4, PerspectiveCamera, Quaternion, Scene, WebGLRenderer, SRGBColorSpace, Vector3 } from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { isSetId, SETS } from '../data/sets';
 import { startCameraPreview, mediaError } from './camera-preview';
 import { trackingConfig } from './tracking-config';
+import { PoseStabilizer } from './pose-stabilizer';
 
 // A disposable browsing context owns camera, TensorFlow, worker and WebGL resources.
 // Removing this frame tears down the entire AR runtime, including upstream workers.
@@ -99,7 +100,7 @@ async function start() {
   renderer.setClearColor(0x000000,0); document.body.append(renderer.domElement);
   renderer.domElement.addEventListener('webglcontextlost', event => { event.preventDefault(); fail(new Error('描画が中断されました。カメラを開始し直してください。')); });
   const scene = new Scene(), camera = new PerspectiveCamera();
-  const anchors = SETS[setId].ids.map(id => { const group = new Group(); group.matrixAutoUpdate = false; group.visible = false; const model = ghost.clone(true); model.position.z = .1; group.add(model); scene.add(group); return { id, group, model, post: new Matrix4() }; });
+  const anchors = SETS[setId].ids.map(id => { const group = new Group(); group.matrixAutoUpdate = false; group.visible = false; const model = ghost.clone(true); model.position.z = .1; group.add(model); scene.add(group); return { id, group, model, post: new Matrix4(), input: new Matrix4(), pose: new PoseStabilizer(), markerWidth: 1, inputAtMs: 0, updateIndex: 0 }; });
   send('tracking-config', { config: tracking });
   controller = new Controller({ inputWidth: width, inputHeight: height, maxTrack: 1, warmupTolerance: 3, missTolerance: 5,
     filterMinCF: tracking.filterMinCF, filterBeta: tracking.filterBeta,
@@ -107,14 +108,22 @@ async function start() {
       if (stopped || event.type !== 'updateMatrix') return;
       const anchor = anchors[event.targetIndex]; if (!anchor) return;
       const visible = event.worldMatrix !== null;
-      if (visible) anchor.group.matrix.fromArray(event.worldMatrix!).multiply(anchor.post);
+      if (visible) {
+        const now = performance.now();
+        anchor.input.fromArray(event.worldMatrix!).multiply(anchor.post);
+        if (tracking.poseStabilization) {
+          if (!anchor.pose.update(anchor.input, anchor.markerWidth, now)) return;
+          if (!anchor.group.visible) anchor.pose.render(now, anchor.markerWidth, anchor.group.matrix);
+        } else anchor.group.matrix.copy(anchor.input);
+        anchor.inputAtMs = now; anchor.updateIndex++;
+      } else anchor.pose.reset();
       if (visible !== anchor.group.visible) send(visible ? 'found' : 'lost', { id: anchor.id, targetIndex: event.targetIndex });
       anchor.group.visible = visible;
     }
   });
   const { dimensions } = controller.addImageTargetsFromBuffer(targetBuffer);
   if (dimensions.length !== anchors.length) throw new Error('マーカーセットの対応が一致しません。');
-  dimensions.forEach(([w,h],index) => anchors[index].post.makeTranslation(w/2,h/2,0).scale(new Vector3(w,w,w)));
+  dimensions.forEach(([w,h],index) => { anchors[index].markerWidth=w; anchors[index].post.makeTranslation(w/2,h/2,0).scale(new Vector3(w,w,w)); });
   const projection=controller.getProjectionMatrix();
   function resize() {
     if (!renderer || stopped) return;
@@ -133,12 +142,31 @@ async function start() {
   controller.dummyRun(video);
   if (stopped) return;
   controller.processVideo(video);
+  let recordingStarted = -Infinity, lastPoseSample = -Infinity;
+  addEventListener('message', event => {
+    if (stopped || event.source !== parent || event.origin !== location.origin ||
+        event.data?.channel !== 'obake-lab' || event.data?.type !== 'record-pose') return;
+    recordingStarted = performance.now(); lastPoseSample = -Infinity;
+  });
+  const diagnosticPosition = new Vector3(), diagnosticRotation = new Quaternion(), diagnosticScale = new Vector3();
+  function readPose(matrix: Matrix4, markerWidth: number) {
+    matrix.decompose(diagnosticPosition, diagnosticRotation, diagnosticScale);
+    diagnosticPosition.divideScalar(markerWidth); diagnosticRotation.normalize();
+    return [...diagnosticPosition.toArray(), ...diagnosticRotation.toArray()].map(value => Number(value.toFixed(6)));
+  }
   let fpsTime=performance.now(), frames=0;
   renderer.setAnimationLoop(time => {
     if(stopped||!renderer)return;
+    const now=performance.now();
+    for(const a of anchors) if(a.group.visible && tracking.poseStabilization) a.pose.render(now,a.markerWidth,a.group.matrix);
     if(tracking.ghostMotion==='float') for(const a of anchors) if(a.group.visible) {a.model.position.y=Math.sin(time/650)*.025;a.model.rotation.y=Math.sin(time/1100)*.08;}
     renderer.render(scene,camera);frames++;
-    const now=performance.now();if(now-fpsTime>=1000){send('fps',{value:frames*1000/(now-fpsTime)});frames=0;fpsTime=now;}
+    if(now-recordingStarted<=10000 && now-lastPoseSample>=100) {
+      const a=anchors.find(anchor=>anchor.group.visible);
+      if(a) send('pose-sample',{sample:{atMs:Math.round(now-recordingStarted),inputAtMs:Math.max(0,Math.round(a.inputAtMs-recordingStarted)),updateIndex:a.updateIndex,targetId:a.id,input:readPose(a.input,a.markerWidth),displayed:readPose(a.group.matrix,a.markerWidth)}});
+      lastPoseSample=now;
+    }
+    if(now-fpsTime>=1000){send('fps',{value:frames*1000/(now-fpsTime)});frames=0;fpsTime=now;}
   });
   currentStage = 'tracking';
   send('ready',{width,height,trackingInitMs:performance.now()-gpuStart,targetCount:dimensions.length});
