@@ -1,0 +1,5743 @@
+{
+  "missionId": "obake-mission-01",
+  "missionVersion": 1,
+  "hintCount": 8,
+  "subsetCount": 256,
+  "minimumHintsToSolve": 4,
+  "everySingleOmissionSolvable": true,
+  "byHintCount": [
+    {
+      "count": 0,
+      "total": 1,
+      "solved": 0,
+      "solvedFraction": 0,
+      "minCandidates": 16,
+      "maxCandidates": 16
+    },
+    {
+      "count": 1,
+      "total": 8,
+      "solved": 0,
+      "solvedFraction": 0,
+      "minCandidates": 8,
+      "maxCandidates": 12
+    },
+    {
+      "count": 2,
+      "total": 28,
+      "solved": 0,
+      "solvedFraction": 0,
+      "minCandidates": 3,
+      "maxCandidates": 9
+    },
+    {
+      "count": 3,
+      "total": 56,
+      "solved": 0,
+      "solvedFraction": 0,
+      "minCandidates": 2,
+      "maxCandidates": 6
+    },
+    {
+      "count": 4,
+      "total": 70,
+      "solved": 12,
+      "solvedFraction": 0.17142857142857143,
+      "minCandidates": 1,
+      "maxCandidates": 4
+    },
+    {
+      "count": 5,
+      "total": 56,
+      "solved": 30,
+      "solvedFraction": 0.5357142857142857,
+      "minCandidates": 1,
+      "maxCandidates": 2
+    },
+    {
+      "count": 6,
+      "total": 28,
+      "solved": 24,
+      "solvedFraction": 0.8571428571428571,
+      "minCandidates": 1,
+      "maxCandidates": 2
+    },
+    {
+      "count": 7,
+      "total": 8,
+      "solved": 8,
+      "solvedFraction": 1,
+      "minCandidates": 1,
+      "maxCandidates": 1
+    },
+    {
+      "count": 8,
+      "total": 1,
+      "solved": 1,
+      "solvedFraction": 1,
+      "minCandidates": 1,
+      "maxCandidates": 1
+    }
+  ],
+  "minimalSolutions": [
+    [
+      "H01",
+      "H02",
+      "H05",
+      "H06"
+    ],
+    [
+      "H02",
+      "H03",
+      "H05",
+      "H06"
+    ],
+    [
+      "H01",
+      "H04",
+      "H05",
+      "H06"
+    ],
+    [
+      "H03",
+      "H04",
+      "H05",
+      "H06"
+    ],
+    [
+      "H01",
+      "H02",
+      "H05",
+      "H07"
+    ],
+    [
+      "H02",
+      "H03",
+      "H05",
+      "H07"
+    ],
+    [
+      "H01",
+      "H02",
+      "H06",
+      "H08"
+    ],
+    [
+      "H01",
+      "H04",
+      "H06",
+      "H08"
+    ],
+    [
+      "H01",
+      "H02",
+      "H07",
+      "H08"
+    ],
+    [
+      "H02",
+      "H03",
+      "H07",
+      "H08"
+    ],
+    [
+      "H01",
+      "H04",
+      "H07",
+      "H08"
+    ],
+    [
+      "H03",
+      "H04",
+      "H07",
+      "H08"
+    ]
+  ],
+  "subsets": [
+    {
+      "markerIds": [],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "glasses"
+        },
+        {
+          "color": "red",
+          "item": "tie"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "glasses"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H03"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "glasses"
+        },
+        {
+          "color": "red",
+          "item": "tie"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H04"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "glasses"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "glasses"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "glasses"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "glasses"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H04",
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "glasses"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04",
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04",
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04",
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04",
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04",
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04",
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H04",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H04",
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04",
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04",
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04",
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04",
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04",
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H06"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "glasses"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H04",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "glasses"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "glasses"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H04",
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "glasses"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04",
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04",
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04",
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04",
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04",
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "glasses"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H04",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "purple",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H04",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H07"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "tie"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "tie"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H04",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "ribbon"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H04",
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04",
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04",
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04",
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04",
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04",
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "ribbon"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "red",
+          "item": "tie"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H04",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "red",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H04",
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04",
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04",
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04",
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H04",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H04",
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04",
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04",
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04",
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04",
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04",
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H04",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "blue",
+          "item": "tie"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H04",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H04",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H04",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        },
+        {
+          "color": "yellow",
+          "item": "hat"
+        }
+      ],
+      "solved": false
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H04",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    },
+    {
+      "markerIds": [
+        "H01",
+        "H02",
+        "H03",
+        "H04",
+        "H05",
+        "H06",
+        "H07",
+        "H08"
+      ],
+      "remaining": [
+        {
+          "color": "blue",
+          "item": "hat"
+        }
+      ],
+      "solved": true
+    }
+  ],
+  "criteriaPassed": true,
+  "failures": []
+}

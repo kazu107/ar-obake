@@ -1,0 +1,217 @@
+{
+  "id": "obake-mission-01",
+  "version": 1,
+  "title": "8にんの おばけのひみつ",
+  "markerSet": "nine",
+  "assetVersion": "calibration-v1",
+  "colors": [
+    {
+      "id": "red",
+      "label": "あか",
+      "hex": "#db4c58"
+    },
+    {
+      "id": "blue",
+      "label": "あお",
+      "hex": "#337cce"
+    },
+    {
+      "id": "yellow",
+      "label": "きいろ",
+      "hex": "#f1bf31"
+    },
+    {
+      "id": "purple",
+      "label": "むらさき",
+      "hex": "#8f60b7"
+    }
+  ],
+  "items": [
+    {
+      "id": "hat",
+      "label": "ぼうし",
+      "icon": "hat"
+    },
+    {
+      "id": "glasses",
+      "label": "めがね",
+      "icon": "glasses"
+    },
+    {
+      "id": "tie",
+      "label": "ネクタイ",
+      "icon": "tie"
+    },
+    {
+      "id": "ribbon",
+      "label": "リボン",
+      "icon": "ribbon"
+    }
+  ],
+  "answer": {
+    "color": "blue",
+    "item": "hat"
+  },
+  "answerMarker": {
+    "markerId": "ANSWER",
+    "targetIndex": 8
+  },
+  "hints": [
+    {
+      "id": "hint-01",
+      "markerId": "H01",
+      "targetIndex": 0,
+      "speaker": "1ばんの おばけ",
+      "text": "あおか むらさき、\nどちらかの 色だよ。",
+      "condition": {
+        "op": "any",
+        "conditions": [
+          {
+            "op": "is",
+            "field": "color",
+            "value": "blue"
+          },
+          {
+            "op": "is",
+            "field": "color",
+            "value": "purple"
+          }
+        ]
+      }
+    },
+    {
+      "id": "hint-02",
+      "markerId": "H02",
+      "targetIndex": 1,
+      "speaker": "2ばんの おばけ",
+      "text": "ぼうしか リボン、\nどちらかの アイテムだよ。",
+      "condition": {
+        "op": "any",
+        "conditions": [
+          {
+            "op": "is",
+            "field": "item",
+            "value": "hat"
+          },
+          {
+            "op": "is",
+            "field": "item",
+            "value": "ribbon"
+          }
+        ]
+      }
+    },
+    {
+      "id": "hint-03",
+      "markerId": "H03",
+      "targetIndex": 2,
+      "speaker": "3ばんの おばけ",
+      "text": "きいろい アイテムでは\nないんだ。",
+      "condition": {
+        "op": "not",
+        "field": "color",
+        "value": "yellow"
+      }
+    },
+    {
+      "id": "hint-04",
+      "markerId": "H04",
+      "targetIndex": 3,
+      "speaker": "4ばんの おばけ",
+      "text": "ネクタイでは\nないんだ。",
+      "condition": {
+        "op": "not",
+        "field": "item",
+        "value": "tie"
+      }
+    },
+    {
+      "id": "hint-05",
+      "markerId": "H05",
+      "targetIndex": 4,
+      "speaker": "5ばんの おばけ",
+      "text": "あおか きいろ、\nどちらかの 色だよ。",
+      "condition": {
+        "op": "any",
+        "conditions": [
+          {
+            "op": "is",
+            "field": "color",
+            "value": "blue"
+          },
+          {
+            "op": "is",
+            "field": "color",
+            "value": "yellow"
+          }
+        ]
+      }
+    },
+    {
+      "id": "hint-06",
+      "markerId": "H06",
+      "targetIndex": 5,
+      "speaker": "6ばんの おばけ",
+      "text": "ぼうしか ネクタイ、\nどちらかの アイテムだよ。",
+      "condition": {
+        "op": "any",
+        "conditions": [
+          {
+            "op": "is",
+            "field": "item",
+            "value": "hat"
+          },
+          {
+            "op": "is",
+            "field": "item",
+            "value": "tie"
+          }
+        ]
+      }
+    },
+    {
+      "id": "hint-07",
+      "markerId": "H07",
+      "targetIndex": 6,
+      "speaker": "7ばんの おばけ",
+      "text": "あかい アイテムでは ないよ。\nリボンでも ないんだ。",
+      "condition": {
+        "op": "all",
+        "conditions": [
+          {
+            "op": "not",
+            "field": "color",
+            "value": "red"
+          },
+          {
+            "op": "not",
+            "field": "item",
+            "value": "ribbon"
+          }
+        ]
+      }
+    },
+    {
+      "id": "hint-08",
+      "markerId": "H08",
+      "targetIndex": 7,
+      "speaker": "8ばんの おばけ",
+      "text": "むらさきの アイテムでは ないよ。\nめがねでも ないんだ。",
+      "condition": {
+        "op": "all",
+        "conditions": [
+          {
+            "op": "not",
+            "field": "color",
+            "value": "purple"
+          },
+          {
+            "op": "not",
+            "field": "item",
+            "value": "glasses"
+          }
+        ]
+      }
+    }
+  ]
+}

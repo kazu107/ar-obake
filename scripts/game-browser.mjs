@@ -1,7 +1,7 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
-const url='http://127.0.0.1:5173/?simulate=1';
+const url='http://127.0.0.1:5173/?mission=practice&simulate=1';
 const key='ar-obake-game-v1',errors=[],passed=[];
 await mkdir('.artifacts/game',{recursive:true});
 const browser=await chromium.launch({headless:true});

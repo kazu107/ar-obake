@@ -1,5 +1,5 @@
 {
-  "testedAt": "2026-09-11T12:29:11.824Z",
+  "testedAt": "2026-09-11T12:55:21.070Z",
   "environment": "Chromium, development-only simulated recognition; actual MindAR tested separately",
   "passed": [
     "stable hint requires explicit collection; loss and stop hide unrecorded hint; duplicate collection prevented; early ANSWER does not skip consultation",

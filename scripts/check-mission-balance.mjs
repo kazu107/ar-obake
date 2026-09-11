@@ -1,0 +1,15 @@
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {fileURLToPath,pathToFileURL} from 'node:url';
+import path from 'node:path';
+import {build} from 'esbuild';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const temporary=path.join(root,'.artifacts','mission-check');await mkdir(temporary,{recursive:true});
+const entry=path.join(temporary,'entry.ts'),output=path.join(temporary,'check.mjs');
+await writeFile(entry,`export {parseMission} from '../../src/game/mission';\nexport {analyzeBalance,checkMainMissionBalance} from '../../src/game/balance';\n`);
+await build({entryPoints:[entry],outfile:output,bundle:true,platform:'node',format:'esm',logLevel:'silent'});
+const {parseMission,analyzeBalance,checkMainMissionBalance}=await import(pathToFileURL(output).href);
+const mission=parseMission(JSON.parse(await readFile(path.join(root,'public/missions/main.json'),'utf8')));
+const report=analyzeBalance(mission),failures=checkMainMissionBalance(report);
+await writeFile(path.join(root,'docs/mission-balance.json'),JSON.stringify({...report,criteriaPassed:failures.length===0,failures},null,2)+'\n');
+console.log(JSON.stringify({missionId:report.missionId,subsetCount:report.subsetCount,minimumHintsToSolve:report.minimumHintsToSolve,byHintCount:report.byHintCount,failures},null,2));
+if(failures.length)process.exitCode=1;

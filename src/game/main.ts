@@ -5,12 +5,16 @@ import { correct, parseMission, type Answer, type Mission } from './mission';
 import { collect, newProgress, submitAnswer, type Progress } from './progress';
 import { loadProgress, saveProgress, type LoadResult } from '../storage/game-storage';
 import { ScanGate } from './scan-gate';
-import { escape as e, shell, welcome } from './ui';
+import { escape as e, shell as pageShell, welcome } from './ui';
 import * as views from './screens';
 
 type Screen='home'|'explore'|'memo'|'share'|'answer-scan'|'color'|'item'|'confirm'|'wrong'|'win'|'reset';
 const app=document.querySelector<HTMLDivElement>('#app')!;
-const simulation=import.meta.env.DEV && new URLSearchParams(location.search).has('simulate');
+const params=new URLSearchParams(location.search);
+const practice=params.get('mission')==='practice';
+const missionFile=practice?'./missions/prototype.json':'./missions/main.json';
+const homeUrl=practice?'./?mission=practice':'./';
+const simulation=import.meta.env.DEV && params.has('simulate');
 let mission:Mission, progress:Progress, gate:ScanGate, loaded:LoadResult, hasGame=false;
 let screen:Screen='home',memoReturn:Screen='explore',resetReturn:Screen='home';
 let selected:Partial<Answer>={},answerUnlocked=false,saveFailed=false;
@@ -21,6 +25,7 @@ try{storage=window.localStorage;}catch{storage={getItem(){throw Error('Storage u
 const byId=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id) as T|null;
 const isScan=()=>screen==='explore'||screen==='answer-scan';
 const isScanScreen=(s:Screen)=>s==='explore'||s==='answer-scan';
+const shell=(content:string,count=0,active=false)=>pageShell(content,count,active,mission,practice);
 
 function persist(next:Progress) {
   progress=next;hasGame=true;saveFailed=!saveProgress(storage,mission,progress);showSaveWarning();
@@ -44,7 +49,7 @@ function loadNotice() {
 function render() {
   let content='';
   switch(screen){
-    case 'home':content=loadNotice()+welcome(hasGame,progress.phase==='complete');break;
+    case 'home':content=loadNotice()+welcome(mission,hasGame,progress.phase==='complete');break;
     case 'explore':case 'answer-scan':content=views.scan(mission,progress,screen==='answer-scan');break;
     case 'memo':content=`<div class="screen-top"><div><p class="kicker">きみだけの ヒント</p><h1 tabindex="-1">そうさメモ</h1></div></div><div class="memo-page-layout">${views.memo(mission,progress)}${views.hintList(mission,progress)}</div><div class="button-row memo-back"><button class="secondary" data-action="memo-back">もとの画面に もどる</button>${progress.phase!=='complete'?'<button class="primary" data-action="share">みんなと そうだんする →</button>':''}</div>`;break;
     case 'share':content=views.share(mission,progress);break;
@@ -126,7 +131,7 @@ app.addEventListener('click',event=>{
       case 'submit-answer':if(screen==='confirm'&&answerUnlocked){persist(submitAnswer(mission,progress,selected as Answer));go(correct(mission,selected as Answer)?'win':'wrong');}break;
       case 'retry-answer':if(screen==='wrong'&&answerUnlocked){selected={};go('color');}break;
     }
-  }catch{stopCamera();app.innerHTML=shell('<section class="centered card"><h1>メモを ひらけませんでした</h1><p>スタッフに つたえてね。前の保存は のこっています。</p><a class="secondary" href="./">はじめの画面に もどる</a></section>');}
+  }catch{stopCamera();app.innerHTML=shell('<section class="centered card"><h1>メモを ひらけませんでした</h1><p>スタッフに つたえてね。前の保存は のこっています。</p><a class="secondary" href="'+homeUrl+'">はじめの画面に もどる</a></section>');}
 });
 window.addEventListener('message',event=>{
   if(!frame||event.source!==frame.contentWindow||event.origin!==location.origin||event.data?.channel!=='obake-lab'||!isScan())return;
@@ -154,10 +159,10 @@ async function boot(){
   app.innerHTML=shell('<section class="loading"><h1>ミッションを じゅんび中…</h1></section>');
   const abort=new AbortController(),timeout=setTimeout(()=>abort.abort(),10000);
   try{
-    const response=await fetch(new URL('./missions/prototype.json',document.baseURI),{signal:abort.signal});if(!response.ok)throw Error('Mission unavailable');
+    const response=await fetch(new URL(missionFile,document.baseURI),{signal:abort.signal});if(!response.ok)throw Error('Mission unavailable');
     mission=parseMission(await response.json());gate=new ScanGate(SETS[mission.markerSet].ids);
     loaded=loadProgress(storage,mission);hasGame=loaded.kind==='valid';progress=loaded.kind==='valid'?loaded.progress:newProgress(mission);render();
-  }catch{app.innerHTML=shell('<section class="centered card"><h1>ミッションを よみこめません</h1><p>通信を確認して、もういちど ひらいてね。<br>なおらないときは スタッフに つたえてね。</p><a class="primary" href="./">もういちど よみこむ</a></section>');}
+  }catch{app.innerHTML=shell('<section class="centered card"><h1>ミッションを よみこめません</h1><p>通信を確認して、もういちど ひらいてね。<br>なおらないときは スタッフに つたえてね。</p><a class="primary" href="'+homeUrl+'">もういちど よみこむ</a></section>');}
   finally{clearTimeout(timeout);}
 }
 void boot();

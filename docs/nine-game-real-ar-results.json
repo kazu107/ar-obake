@@ -1,0 +1,16 @@
+{
+  "testedAt": "2026-09-11T12:57:13.313Z",
+  "appVersion": "0.3.0",
+  "missionId": "obake-mission-01",
+  "environment": "Chromium SwiftShader with synthetic Y4M input; actual MindAR pipeline, not physical iPad",
+  "passed": [
+    "production build ignores simulate query",
+    "real MindAR recognized H01/H02/H03/H04/H05/H06/H07/H08 and all hints saved",
+    "memo and consultation stop camera",
+    "ANSWER recognition opens colour and item selection",
+    "correct answer completes game",
+    "retained laboratory page starts and stops AR",
+    "camera denial offers restart without discarding progress"
+  ],
+  "pageErrors": []
+}

@@ -1,0 +1,14 @@
+{
+  "testedAt": "2026-09-11T12:55:18.187Z",
+  "environment": "Chromium, development-only simulated recognition; physical iPad not tested",
+  "passed": [
+    "nine-card home and eight acquired-status indicators",
+    "three hints remain unresolved; duplicates and early ANSWER rejected",
+    "reload restores nine-card progress independently of legacy four-card progress",
+    "seven hints excluding H04 identify both answer components",
+    "seven clues displayed in consultation at 390/768/1024 without overflow",
+    "ANSWER, correct answer, completion restore, and confirmed reset",
+    "reset of nine-card mission preserves original four-card save"
+  ],
+  "pageErrors": []
+}

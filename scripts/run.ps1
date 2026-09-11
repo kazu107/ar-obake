@@ -1,4 +1,4 @@
-param([ValidateSet('dev','build','preview','test','typecheck','assets','compile:targets','check:assets','test:browser')][string]$Command = 'dev')
+param([ValidateSet('dev','build','preview','test','typecheck','assets','compile:targets','check:assets','check:mission','test:browser')][string]$Command = 'dev')
 $ErrorActionPreference = 'Stop'
 $taskNode = (Get-Command node -ErrorAction SilentlyContinue).Source
 $taskBundledNode = Join-Path $env:USERPROFILE '.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe'
@@ -18,6 +18,7 @@ try {
     'assets' { & $taskNode scripts/generate-assets.mjs }
     'compile:targets' { & $taskNode scripts/compile-targets.mjs }
     'check:assets' { & $taskNode scripts/check-assets.mjs }
+    'check:mission' { & $taskNode scripts/check-mission-balance.mjs }
     'test:browser' { & $taskNode scripts/browser-smoke.mjs }
   }
   if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

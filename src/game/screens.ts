@@ -1,6 +1,6 @@
 import type { Answer, Mission } from './mission';
 import { candidates, memoMark, type Progress } from './progress';
-import { escape as e, icon } from './ui';
+import { escape as e, icon, hintMarkerLabel } from './ui';
 const symbols={yes:'○',no:'×',unknown:'？'}, meanings={yes:'これだ！',no:'ちがう',unknown:'まだ わからない'};
 export function memo(m:Mission,p:Progress,compact=false):string {
   const remaining=candidates(m,p.markerIds);
@@ -8,14 +8,14 @@ export function memo(m:Mission,p:Progress,compact=false):string {
     const mark=memoMark(remaining,field,c.id);
     return `<div class="memo-option ${mark}" aria-label="${e(c.label)}：${meanings[mark]}">${'hex' in c?`<span class="color-dot" style="background:${c.hex}"></span>`:icon(c.icon)}<span class="choice-label">${e(c.label)}</span><strong class="mark">${symbols[mark]}</strong></div>`;
   }).join('')}</div></section>`).join('');
-  return `<div class="notebook ${compact?'compact':''}"><div class="notebook-top"><span>${icon('note')}そうさメモ</span><strong>${p.markerIds.length} / ${m.hints.length}</strong></div>${fields}${compact?'<button class="text-button" data-action="memo">メモを おおきく見る →</button>':`<p class="legend">○ これだ！　× ちがう　？ まだ わからない</p><p class="small">このiPadで あつめた ヒントだけが のっているよ。</p>`}</div>`;
+  return `<div class="notebook ${compact?'compact':''}"><div class="notebook-top"><span>${icon('note')}そうさメモ</span><strong>${p.markerIds.length} / ${m.hints.length}</strong></div>${fields}${hintStamps(m,p)}${compact?'<button class="text-button" data-action="memo">メモを おおきく見る →</button>':`<p class="legend">○ これだ！　× ちがう　？ まだ わからない</p><p class="small">このiPadで あつめた ヒントだけが のっているよ。</p>`}</div>`;
 }
 export function hintList(m:Mission,p:Progress):string {
   const hints=m.hints.filter(h=>p.markerIds.includes(h.markerId));
   return `<section class="clue-list"><h2>あつめた ヒント <span class="badge">${hints.length}こ</span></h2>${hints.length?hints.map(h=>`<article class="saved-clue"><span class="badge">${e(h.markerId)}</span><div><h3>${e(h.speaker)}</h3><p>${e(h.text).replace(/\n/g,'<br>')}</p></div></article>`).join(''):'<p class="empty">まだ ヒントは ないよ。おばけのカードを さがそう！</p>'}</section>`;
 }
 export function scan(m:Mission,p:Progress,answerMode:boolean):string {
-  return `<div class="screen-top"><div><p class="kicker">${answerMode?'みんなの こたえを とどけよう':'ヒントを あつめよう'}</p><h1 tabindex="-1">${answerMode?'ANSWERを よもう':'おばけを さがそう'}</h1></div><button class="secondary" data-action="${answerMode?'share':'home'}">${answerMode?'そうだんに もどる':'おやすみする'}</button></div><div class="play-layout"><div class="scan-column"><section class="scanner" aria-label="ARカメラ"><div class="scanner-top"><span>${answerMode?'こたえのカード / ANSWER':'H01・H02・H03'}</span><span id="scan-status" role="status">カメラの開始待ち</span></div><div class="game-camera" id="game-camera"><div class="camera-cover" id="camera-cover"><div class="scan-symbol">${icon('scan')}</div><h2 id="camera-title">カードを うつしてね</h2><p id="camera-message">カメラの きょかが出たら「許可」をおしてね。</p></div></div><p class="scanner-guidance" id="scan-message" role="status">カードの ぜんたいを うつしてね。</p></section><div class="camera-buttons"><button class="secondary" id="camera-action" data-action="camera">カメラを開始</button><button class="text-button" id="camera-stop" data-action="stop-camera" disabled>カメラを とめる</button></div></div><aside class="memo-column"><div id="hint-panel" class="hint-panel" aria-live="polite"></div><div id="mini-memo">${memo(m,p,true)}</div>${answerMode?'<p class="small">ヒントのカードでは こたえられないよ。<br>ANSWERの カードを さがしてね。</p>':'<button class="primary" data-action="share">みんなと そうだんする →</button><p class="small">ぜんぶ あつめなくても、そうだんできるよ。</p>'}</aside></div>`;
+  return `<div class="screen-top"><div><p class="kicker">${answerMode?'みんなの こたえを とどけよう':'ヒントを あつめよう'}</p><h1 tabindex="-1">${answerMode?'ANSWERを よもう':'おばけを さがそう'}</h1></div><button class="secondary" data-action="${answerMode?'share':'home'}">${answerMode?'そうだんに もどる':'おやすみする'}</button></div><div class="play-layout"><div class="scan-column"><section class="scanner" aria-label="ARカメラ"><div class="scanner-top"><span>${answerMode?'こたえのカード / ANSWER':e(hintMarkerLabel(m))}</span><span id="scan-status" role="status">カメラの開始待ち</span></div><div class="game-camera" id="game-camera"><div class="camera-cover" id="camera-cover"><div class="scan-symbol">${icon('scan')}</div><h2 id="camera-title">カードを うつしてね</h2><p id="camera-message">カメラの きょかが出たら「許可」をおしてね。</p></div></div><p class="scanner-guidance" id="scan-message" role="status">カードの ぜんたいを うつしてね。</p></section><div class="camera-buttons"><button class="secondary" id="camera-action" data-action="camera">カメラを開始</button><button class="text-button" id="camera-stop" data-action="stop-camera" disabled>カメラを とめる</button></div></div><aside class="memo-column"><div id="hint-panel" class="hint-panel" aria-live="polite"></div><div id="mini-memo">${memo(m,p,true)}</div>${answerMode?'<p class="small">ヒントのカードでは こたえられないよ。<br>ANSWERの カードを さがしてね。</p>':'<button class="primary" data-action="share">みんなと そうだんする →</button><p class="small">ぜんぶ あつめなくても、そうだんできるよ。</p>'}</aside></div>`;
 }
 export function share(m:Mission,p:Progress):string {
   return `<div class="screen-top"><div><p class="kicker">カメラは おやすみ中</p><h1 tabindex="-1">メモを 見せあおう</h1></div><button class="secondary" data-action="explore">もっと さがす</button></div><div class="sharing-intro"><span>${icon('chat')}</span><p>きみの ヒントと、みんなの ヒント。<br><strong>あわせたら、なにが わかるかな？</strong></p></div><div class="share-layout">${memo(m,p)}${hintList(m,p)}</div><div class="representative card"><div><h2>こたえが きまったら</h2><p>だいひょうの ひとりが、ANSWERの カードを よんでね。</p></div><button class="primary" data-action="answer-scan">回答マーカーを読む →</button></div>`;
@@ -35,4 +35,8 @@ export function wrong(m:Mission,a:Answer):string {
 }
 export function win(m:Mission):string {
   return `<section class="centered success"><p class="success-seal">○</p><p class="kicker">みんなの すいり、だいせいこう！</p><h1 tabindex="-1">せいかい！</h1>${answerCard(m,m.answer)}<p>おばけの ひみつが わかったね。<br><strong>スタッフに せいかいの画面を 見せよう！</strong></p><p class="small">つぎの ボールでの おばけたいじは、スタッフの あんないを きいてね。</p><div class="button-row"><button class="secondary" data-action="memo">あつめた メモを見る</button><button class="primary" data-action="reset">もういちど あそぶ</button></div></section>`;
+}
+
+function hintStamps(m:Mission,p:Progress):string {
+  return `<section class="hint-record"><h3>ヒントの きろく</h3><ul class="hint-stamps">${m.hints.map(h=>{const obtained=p.markerIds.includes(h.markerId);return `<li class="${obtained?'obtained':'missing'}" aria-label="${e(h.markerId)}：${obtained?'記録ずみ':'まだ あつめていない'}"><span>${e(h.markerId)}</span><strong aria-hidden="true">${obtained?'✓':'−'}</strong></li>`;}).join('')}</ul></section>`;
 }

@@ -1,6 +1,6 @@
-# ARおばけ探偵団：4枚で遊ぶゲーム試作
+# ARおばけ探偵団：8ヒント＋ANSWERの9枚ゲーム
 
-段階2〜3のゲーム試作。iPadで画像マーカーのおばけからヒントを集め、捜査メモを持ち寄って色とアイテムを回答する静的Webアプリです。
+0.3.0で8ヒントに拡張したゲーム試作。iPadで画像マーカーのおばけからヒントを集め、捜査メモを持ち寄って色とアイテムを回答する静的Webアプリです。
 
 - [実装計画](docs/implementation-plan.md)
 - [実機試験の記録表](docs/air2-test-checklist.md)
@@ -9,10 +9,12 @@
 
 ## ゲームで遊ぶ
 
-トップページの「たんけんを はじめる」から開始。印刷済みH01・H02・H03で「ヒントを記録する」→「みんなと そうだんする」→代表者がANSWERを読む→色・アイテムを回答します。誤答は再回答でき、メモは各iPad内に自動保存します。「さいしょから」は確認後にゲームのメモだけをリセットします。
+トップページの「たんけんを はじめる」から開始。印刷済みH01〜H08で「ヒントを記録する」→「みんなと そうだんする」→代表者がANSWERを読む→色・アイテムを回答します。誤答は再回答でき、メモは各iPad内に自動保存します。「さいしょから」は確認後にゲームのメモだけをリセットします。
 
-- [ゲーム試作の実装・確認手順](docs/game-prototype-0.2.0.md)
-- ゲーム：トップページ
+- [9枚ミッションの設計・検証・確認手順](docs/nine-mission-0.3.0.md)
+- [4枚試作の記録](docs/game-prototype-0.2.0.md)
+- 9枚ゲーム：トップページ
+- 4枚ゲーム：`/?mission=practice`（従来のメモを保持）
 - カメラの検証：`lab.html`（旧トップページ。既存の記録は保持）
 
 ## カメラを検証する
@@ -35,6 +37,7 @@ npm run dev
 npm run build
 npm test
 npm run check:assets
+npm run check:mission
 npm run preview
 ```
 
@@ -44,6 +47,7 @@ npm run preview
 .\scripts\run.ps1 dev
 .\scripts\run.ps1 build
 .\scripts\run.ps1 test
+.\scripts\run.ps1 check:mission
 ```
 
 実機からPCのlocalhostを開くことはできません。iPadでは配信済みのHTTPS URLを使います。
@@ -52,7 +56,9 @@ npm run preview
 
 - `src/game/`：Mission検証、ヒント演算、メモ、認識待機、相談・回答の画面。
 - `src/storage/game-storage.ts`：端末内のゲーム保存・検証。
+- `public/missions/main.json`：8ヒント＋ANSWERのMission。
 - `public/missions/prototype.json`：4枚の試作用Mission。
+- `src/game/balance.ts`：全256通りの取得集合を分析する開発用の問題検証。
 
 - `src/main.ts`：検証画面、認識イベント、ログ、手動計測、JSON出力。
 - `src/ar/stationary-pose-stabilizer.ts`：観測窓で静止を判定し、外れ値を除き、持続する動きで保持を解除。
@@ -68,6 +74,8 @@ npm run preview
 - `public/targets/manifest.json`：画像ID・ハッシュ・コンパイル順。
 - `public/markers.pdf`：160mm角、A4全9ページの印刷用PDF。
 - `public/guide.html`：端末から読める実機手順。
+
+9枚版のメモは`ar-obake-game-v1:obake-mission-01`、4枚版は従来の`ar-obake-game-v1`へ保存し、それぞれ独立して復元・リセットします。
 
 同時追跡は1枚、描画のpixelRatioは1、影なし、単一の約44KBのGLBを共有します。カメラ解像度は要求値と実際の値を分けて記録します。Safari 15を対象にビルドし、import mapや外部CDNを実行時に使いません。
 
@@ -92,11 +100,12 @@ PDF生成にはreportlabが必要です。Windowsの游ゴシックがある場�
 開発サーバー5173で `/?simulate=1` を開くと、カメラなしで認識を再現できます。操作部は本番ビルドに含めません。
 
 ```powershell
+node scripts/nine-game-browser.mjs
 node scripts/game-browser.mjs
 node scripts/game-real-ar.mjs
 ```
 
-前者は開発サーバー5173、後者はproduction preview 4173を使います。合成認識と実際のMindAR入力を分けて検証します。
+先頭2つは開発サーバー5173で9枚版・4枚版を確認します。最後はproduction preview 4173で9枚の実際のMindAR処理を確認し、`--practice`を付けると4枚版を確認します。合成認識と実際のMindAR入力を分けて検証します。
 
 ## ブラウザ試験
 
@@ -130,7 +139,9 @@ node scripts/browser-errors.mjs
 
 ## 現段階の範囲
 
-捜査メモ、ヒント演算、代表回答、正誤判定、PWAオフライン起動は次の段階です。0.1.1のiPad Air 2で1枚セットのカメラ起動・H01認識・おばけ表示を実機確認済みです。0.1.2で揺れが残ることを確認済みです。0.1.3でも正面での揺れが残ると報告されています。0.1.4の揺れ改善、4枚・9枚と10分耐久は実機で未確認です。
+0.1.5の揺れ改善・9種類の読み取り、0.2.0の4枚ゲームの通し操作・再回答・メモ復元を利用者が実機確認し、受け入れ済みです。0.3.0では8ヒント、取得欄、答えの一意性と取り逃しの全256通りの検証を実装しました。どの1枚を取り逃しても残り7枚で解け、6枚では28通り中24通りで一意になります。
+
+新しい9枚ゲームの実機通し確認、複数台での相談、10分耐久、最終素材と実物アイテムとの整合、効果音、スタッフ画面、PWAオフライン起動は未完了です。詳細は[9枚ミッションの記録](docs/nine-mission-0.3.0.md)を参照してください。
 
 ## 出典
 
