@@ -1,6 +1,6 @@
 import {SETS,APP_VERSION} from '../data/sets';
 export function mount(){document.querySelector('#app')!.innerHTML=`
-<header class="header"><span class="brand">ARおばけ探偵団</span><span class="version">実機検証 / 01</span></header>
+<header class="header"><span class="brand">ARおばけ探偵団</span><a href="./" style="color:inherit">ゲームであそぶ →</a><span class="version">実機検証 / 01</span></header>
 <main class="shell">
 <div class="heading"><div><p class="eyebrow">CAMERA & IMAGE TRACKING</p><h1>マーカー検証</h1><p>カードにカメラを向けて、おばけが現れるか確かめよう。</p></div><a class="text-link" href="./print.html" target="_blank" rel="noopener">マーカーを印刷 ↗</a></div>
 <div class="workspace"><div class="main-column">

@@ -6,9 +6,9 @@ const browser=await chromium.launch({headless:true,args:['--use-gl=angle','--use
 try{
   const denied=await browser.newContext();
   await denied.addInitScript(()=>{navigator.mediaDevices.getUserMedia=async()=>{throw new DOMException('Denied for test','NotAllowedError');};});
-  const p=await denied.newPage();await p.goto('http://127.0.0.1:4173/');await p.locator('#start').click();await p.waitForFunction(()=>document.querySelector('#status').textContent==='要確認');assert.ok((await p.locator('#guidance').textContent()).includes('許可'));assert.equal(await p.locator('iframe').count(),0);assert.equal(await p.locator('#overlay-title').textContent(),'カメラを開始できませんでした');assert.ok(await p.locator('#start').isEnabled());await denied.close();
-  const missing=await browser.newContext();const m=await missing.newPage();await m.route('**/targets/one.mind',route=>route.fulfill({status:503,body:'Unavailable for test'}));await m.goto('http://127.0.0.1:4173/');await m.locator('#start').click();await m.waitForFunction(()=>document.querySelector('#status').textContent==='要確認');assert.equal(await m.locator('iframe').count(),0);assert.ok((await m.locator('#guidance').textContent()).includes('503'));await missing.close();
-  const valid=await browser.newContext();const v=await valid.newPage();await v.goto('http://127.0.0.1:4173/');await v.locator('#start').click();await v.waitForFunction(()=>document.querySelector('#status').textContent==='認識中');await v.locator('#trial-start').click();await v.waitForFunction(()=>document.querySelector('#trial-result').textContent.includes('10秒以内'),{},{timeout:15000});assert.ok((await v.locator('#trial-summary').textContent()).includes('未検出 1回'));
+  const p=await denied.newPage();await p.goto('http://127.0.0.1:4173/lab.html');await p.locator('#start').click();await p.waitForFunction(()=>document.querySelector('#status').textContent==='要確認');assert.ok((await p.locator('#guidance').textContent()).includes('許可'));assert.equal(await p.locator('iframe').count(),0);assert.equal(await p.locator('#overlay-title').textContent(),'カメラを開始できませんでした');assert.ok(await p.locator('#start').isEnabled());await denied.close();
+  const missing=await browser.newContext();const m=await missing.newPage();await m.route('**/targets/one.mind',route=>route.fulfill({status:503,body:'Unavailable for test'}));await m.goto('http://127.0.0.1:4173/lab.html');await m.locator('#start').click();await m.waitForFunction(()=>document.querySelector('#status').textContent==='要確認');assert.equal(await m.locator('iframe').count(),0);assert.ok((await m.locator('#guidance').textContent()).includes('503'));await missing.close();
+  const valid=await browser.newContext();const v=await valid.newPage();await v.goto('http://127.0.0.1:4173/lab.html');await v.locator('#start').click();await v.waitForFunction(()=>document.querySelector('#status').textContent==='認識中');await v.locator('#trial-start').click();await v.waitForFunction(()=>document.querySelector('#trial-result').textContent.includes('10秒以内'),{},{timeout:15000});assert.ok((await v.locator('#trial-summary').textContent()).includes('未検出 1回'));
   await v.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});assert.equal(await v.locator('iframe').count(),0);assert.ok(await v.locator('#start').isEnabled());await valid.close();
   // Reproduce Safari playback failures after capture permission has succeeded.
   async function playbackCase(mode, stopInstead = false) {
@@ -31,7 +31,7 @@ try{
       };
     }, {mode});
     const page = await context.newPage();
-    await page.goto('http://127.0.0.1:4173/');
+    await page.goto('http://127.0.0.1:4173/lab.html');
     await page.locator('#start').click();
     if (mode === 'tap') {
       await page.waitForFunction(() => document.querySelector('#status').textContent === '映像の再生待ち');

@@ -1,0 +1,13 @@
+{
+  "testedAt": "2026-09-11T12:29:11.824Z",
+  "environment": "Chromium, development-only simulated recognition; actual MindAR tested separately",
+  "passed": [
+    "stable hint requires explicit collection; loss and stop hide unrecorded hint; duplicate collection prevented; early ANSWER does not skip consultation",
+    "memo inference, three-clue solution, reload restoration, and isolated device storage",
+    "ANSWER gate, required selections, memo from confirmation, wrong answer and retry, correct answer and persisted completion",
+    "reset confirmation and preservation of laboratory records",
+    "incompatible save retained pending explicit reset; no horizontal overflow at 390, 768, 1024",
+    "storage quota warning and mission loading failure"
+  ],
+  "pageErrors": []
+}

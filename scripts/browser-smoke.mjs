@@ -18,7 +18,7 @@ const browser=await chromium.launch({headless:true,args:['--use-gl=angle','--use
 try{
   const context=await browser.newContext({viewport:{width:1100,height:1000},permissions:['camera']});
   const page=await context.newPage();page.on('pageerror',e=>{errors.push(e.message);console.log('PAGE ERROR',e.message);});page.on('console',m=>{if(m.type()==='error'){consoleErrors.push(m.text());console.log('CONSOLE ERROR',m.text().slice(0,200));}});
-  await page.goto('http://127.0.0.1:4173/');await page.screenshot({path:path.join(root,'desktop.png'),fullPage:true});
+  await page.goto('http://127.0.0.1:4173/lab.html');await page.screenshot({path:path.join(root,'desktop.png'),fullPage:true});
   await page.locator('#device-note').fill('AUTOMATED Chromium / synthetic video / NOT Air 2');
   const results=[];
   assert.equal(await page.locator('#tracking-mode').inputValue(),'stable');

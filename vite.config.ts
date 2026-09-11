@@ -6,6 +6,6 @@ export default defineConfig({
     target: ['safari15', 'ios15'],
     cssTarget: 'safari15',
     chunkSizeWarningLimit: 2200,
-    rollupOptions: { input: { main: 'index.html', ar: 'ar.html' } },
+    rollupOptions: { input: { main: 'index.html', lab: 'lab.html', ar: 'ar.html' } },
   },
 });

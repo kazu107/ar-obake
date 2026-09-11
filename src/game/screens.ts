@@ -1,0 +1,38 @@
+import type { Answer, Mission } from './mission';
+import { candidates, memoMark, type Progress } from './progress';
+import { escape as e, icon } from './ui';
+const symbols={yes:'○',no:'×',unknown:'？'}, meanings={yes:'これだ！',no:'ちがう',unknown:'まだ わからない'};
+export function memo(m:Mission,p:Progress,compact=false):string {
+  const remaining=candidates(m,p.markerIds);
+  const fields=(['color','item'] as const).map(field=>`<section class="memo-field"><h3>${field==='color'?'なにいろ？':'どんなアイテム？'}</h3><div class="memo-options">${(field==='color'?m.colors:m.items).map(c=>{
+    const mark=memoMark(remaining,field,c.id);
+    return `<div class="memo-option ${mark}" aria-label="${e(c.label)}：${meanings[mark]}">${'hex' in c?`<span class="color-dot" style="background:${c.hex}"></span>`:icon(c.icon)}<span class="choice-label">${e(c.label)}</span><strong class="mark">${symbols[mark]}</strong></div>`;
+  }).join('')}</div></section>`).join('');
+  return `<div class="notebook ${compact?'compact':''}"><div class="notebook-top"><span>${icon('note')}そうさメモ</span><strong>${p.markerIds.length} / ${m.hints.length}</strong></div>${fields}${compact?'<button class="text-button" data-action="memo">メモを おおきく見る →</button>':`<p class="legend">○ これだ！　× ちがう　？ まだ わからない</p><p class="small">このiPadで あつめた ヒントだけが のっているよ。</p>`}</div>`;
+}
+export function hintList(m:Mission,p:Progress):string {
+  const hints=m.hints.filter(h=>p.markerIds.includes(h.markerId));
+  return `<section class="clue-list"><h2>あつめた ヒント <span class="badge">${hints.length}こ</span></h2>${hints.length?hints.map(h=>`<article class="saved-clue"><span class="badge">${e(h.markerId)}</span><div><h3>${e(h.speaker)}</h3><p>${e(h.text).replace(/\n/g,'<br>')}</p></div></article>`).join(''):'<p class="empty">まだ ヒントは ないよ。おばけのカードを さがそう！</p>'}</section>`;
+}
+export function scan(m:Mission,p:Progress,answerMode:boolean):string {
+  return `<div class="screen-top"><div><p class="kicker">${answerMode?'みんなの こたえを とどけよう':'ヒントを あつめよう'}</p><h1 tabindex="-1">${answerMode?'ANSWERを よもう':'おばけを さがそう'}</h1></div><button class="secondary" data-action="${answerMode?'share':'home'}">${answerMode?'そうだんに もどる':'おやすみする'}</button></div><div class="play-layout"><div class="scan-column"><section class="scanner" aria-label="ARカメラ"><div class="scanner-top"><span>${answerMode?'こたえのカード / ANSWER':'H01・H02・H03'}</span><span id="scan-status" role="status">カメラの開始待ち</span></div><div class="game-camera" id="game-camera"><div class="camera-cover" id="camera-cover"><div class="scan-symbol">${icon('scan')}</div><h2 id="camera-title">カードを うつしてね</h2><p id="camera-message">カメラの きょかが出たら「許可」をおしてね。</p></div></div><p class="scanner-guidance" id="scan-message" role="status">カードの ぜんたいを うつしてね。</p></section><div class="camera-buttons"><button class="secondary" id="camera-action" data-action="camera">カメラを開始</button><button class="text-button" id="camera-stop" data-action="stop-camera" disabled>カメラを とめる</button></div></div><aside class="memo-column"><div id="hint-panel" class="hint-panel" aria-live="polite"></div><div id="mini-memo">${memo(m,p,true)}</div>${answerMode?'<p class="small">ヒントのカードでは こたえられないよ。<br>ANSWERの カードを さがしてね。</p>':'<button class="primary" data-action="share">みんなと そうだんする →</button><p class="small">ぜんぶ あつめなくても、そうだんできるよ。</p>'}</aside></div>`;
+}
+export function share(m:Mission,p:Progress):string {
+  return `<div class="screen-top"><div><p class="kicker">カメラは おやすみ中</p><h1 tabindex="-1">メモを 見せあおう</h1></div><button class="secondary" data-action="explore">もっと さがす</button></div><div class="sharing-intro"><span>${icon('chat')}</span><p>きみの ヒントと、みんなの ヒント。<br><strong>あわせたら、なにが わかるかな？</strong></p></div><div class="share-layout">${memo(m,p)}${hintList(m,p)}</div><div class="representative card"><div><h2>こたえが きまったら</h2><p>だいひょうの ひとりが、ANSWERの カードを よんでね。</p></div><button class="primary" data-action="answer-scan">回答マーカーを読む →</button></div>`;
+}
+export function choose(m:Mission,field:'color'|'item',selected:Partial<Answer>):string {
+  return `<section class="answer-screen"><p class="kicker">こたえを えらぼう　${field==='color'?'1':'2'} / 2</p><h1 tabindex="-1">${field==='color'?'アイテムは なにいろ？':'どんな アイテム？'}</h1><p>みんなと そうだんした こたえを おしてね。</p><div class="answer-options">${(field==='color'?m.colors:m.items).map(c=>`<button class="answer-option ${selected[field]===c.id?'selected':''}" data-${field}="${e(c.id)}" aria-pressed="${selected[field]===c.id}">${'hex' in c?`<span class="color-dot" style="background:${c.hex}"></span>`:icon(c.icon)}<strong>${e(c.label)}</strong></button>`).join('')}</div><div class="button-row"><button class="secondary" data-action="${field==='color'?'share':'back-color'}">${field==='color'?'そうだんに もどる':'色を えらびなおす'}</button><button class="primary" id="answer-next" data-action="${field==='color'?'next-item':'confirm-answer'}" ${selected[field]?'':'disabled'}>${field==='color'?'つぎへ':'こたえを かくにん'} →</button></div></section>`;
+}
+export function answerCard(m:Mission,a:Answer):string {
+  const color=m.colors.find(c=>c.id===a.color)!,item=m.items.find(i=>i.id===a.item)!;
+  return `<div class="answer-picture" style="color:${color.hex}">${icon(item.icon)}</div><p class="answer-name"><span class="color-dot" style="background:${color.hex}"></span>${e(color.label)}の ${e(item.label)}</p>`;
+}
+export function confirm(m:Mission,a:Answer):string {
+  return `<section class="centered card"><p class="kicker">みんなの こたえ</p><h1 tabindex="-1">これで いいかな？</h1>${answerCard(m,a)}<div class="button-row"><button class="secondary" data-action="back-item">えらびなおす</button><button class="primary" data-action="submit-answer">このこたえに する！</button></div></section>`;
+}
+export function wrong(m:Mission,a:Answer):string {
+  return `<section class="centered card"><p class="kicker">もういちど かんがえよう</p><h1 tabindex="-1">ちょっと ちがうみたい</h1>${answerCard(m,a)}<p>そうさメモを 見て、みんなと そうだんしよう。<br>なんどでも こたえられるよ。</p><div class="button-row"><button class="secondary" data-action="share">そうだんに もどる</button><button class="primary" data-action="retry-answer">もういちど こたえる</button></div></section>`;
+}
+export function win(m:Mission):string {
+  return `<section class="centered success"><p class="success-seal">○</p><p class="kicker">みんなの すいり、だいせいこう！</p><h1 tabindex="-1">せいかい！</h1>${answerCard(m,m.answer)}<p>おばけの ひみつが わかったね。<br><strong>スタッフに せいかいの画面を 見せよう！</strong></p><p class="small">つぎの ボールでの おばけたいじは、スタッフの あんないを きいてね。</p><div class="button-row"><button class="secondary" data-action="memo">あつめた メモを見る</button><button class="primary" data-action="reset">もういちど あそぶ</button></div></section>`;
+}
