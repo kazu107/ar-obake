@@ -1,0 +1,383 @@
+{
+  "analyzedAt": "2026-09-11T07:04:36.061Z",
+  "method": "Replay retained input samples, hold between samples, render at 60Hz; discard first 2s. Missing intermediate recognition updates cannot be recovered. Replay is not physical-device validation.",
+  "records": [
+    {
+      "appVersion": "0.1.3",
+      "mode": "stable",
+      "sampleCount": 80,
+      "approximateNotificationHz": 22.955092221331196,
+      "observedInput": {
+        "logDepthStepPercent": {
+          "mean": 1.4839830319581304,
+          "p95": 3.3807972260905594,
+          "max": 3.8997790026919055
+        },
+        "rotationStepDegrees": {
+          "mean": 3.2605142377430583,
+          "p95": 6.988411674658747,
+          "max": 8.416674099910445
+        },
+        "centerStepVideoPixels": {
+          "mean": 4.396817021030451,
+          "p95": 9.792879198049741,
+          "max": 13.185052150417276
+        },
+        "centerDifferenceVideoPixels": {
+          "mean": 0,
+          "p95": 0,
+          "max": 0
+        }
+      },
+      "observedDisplayed": {
+        "logDepthStepPercent": {
+          "mean": 0.4345842711042623,
+          "p95": 1.0420142430271895,
+          "max": 1.3502003503976012
+        },
+        "rotationStepDegrees": {
+          "mean": 0.3914716183314241,
+          "p95": 0.8653781979055135,
+          "max": 1.4590292399399625
+        },
+        "centerStepVideoPixels": {
+          "mean": 1.7254993219361396,
+          "p95": 3.8820932053558956,
+          "max": 5.188839789125757
+        },
+        "centerDifferenceVideoPixels": {
+          "mean": 2.560735563295663,
+          "p95": 4.46709610627548,
+          "max": 7.05749075253112
+        }
+      },
+      "replayPrevious": {
+        "logDepthStepPercent": {
+          "mean": 0.6578367252499389,
+          "p95": 1.4841554240726418,
+          "max": 1.8484486145951329
+        },
+        "rotationStepDegrees": {
+          "mean": 0.5033859164138985,
+          "p95": 1.2350795143061255,
+          "max": 2.2003883395781876
+        },
+        "centerStepVideoPixels": {
+          "mean": 2.1089834942978536,
+          "p95": 4.321837847064684,
+          "max": 7.85057920389051
+        },
+        "centerDifferenceVideoPixels": {
+          "mean": 3.684521563225234,
+          "p95": 6.665374380033321,
+          "max": 11.12789009505927
+        }
+      },
+      "replayCurrent": {
+        "logDepthStepPercent": {
+          "mean": 0.1210382275843217,
+          "p95": 0.29888300867576545,
+          "max": 0.4056701021904585
+        },
+        "rotationStepDegrees": {
+          "mean": 0.2961260967066003,
+          "p95": 0.7137690152117688,
+          "max": 1.3449305981731665
+        },
+        "centerStepVideoPixels": {
+          "mean": 2.5215550514113727,
+          "p95": 5.788845945473367,
+          "max": 8.96945773895416
+        },
+        "centerDifferenceVideoPixels": {
+          "mean": 3.456237130389471,
+          "p95": 7.212244534274731,
+          "max": 9.38032234829962
+        }
+      },
+      "replayHold": {
+        "logDepthStepPercent": {
+          "mean": 0.1210382275843217,
+          "p95": 0.29888300867576545,
+          "max": 0.4056701021904585
+        },
+        "rotationStepDegrees": {
+          "mean": 0.2961260967068076,
+          "p95": 0.7137690152117688,
+          "max": 1.3449305981731665
+        },
+        "centerStepVideoPixels": {
+          "mean": 2.5215550514113727,
+          "p95": 5.788845945473367,
+          "max": 8.96945773895416
+        },
+        "centerDifferenceVideoPixels": {
+          "mean": 3.456237130389471,
+          "p95": 7.212244534274731,
+          "max": 9.38032234829962
+        }
+      },
+      "holdTransitions": [
+        {
+          "atMs": 8,
+          "state": "following"
+        }
+      ],
+      "replayMeanDepthStepReduction": 0.8160056698896913
+    },
+    {
+      "appVersion": "0.1.4",
+      "mode": "stable",
+      "sampleCount": 82,
+      "approximateNotificationHz": 23.74723284363051,
+      "observedInput": {
+        "logDepthStepPercent": {
+          "mean": 0.09686105870501147,
+          "p95": 0.34958846284502965,
+          "max": 1.7835667312242176
+        },
+        "rotationStepDegrees": {
+          "mean": 0.4365955491087395,
+          "p95": 1.612792469890069,
+          "max": 6.278969070222643
+        },
+        "centerStepVideoPixels": {
+          "mean": 0.21537890702304632,
+          "p95": 0.8720516095023219,
+          "max": 3.6808423561051975
+        },
+        "centerDifferenceVideoPixels": {
+          "mean": 0,
+          "p95": 0,
+          "max": 0
+        }
+      },
+      "observedDisplayed": {
+        "logDepthStepPercent": {
+          "mean": 0.012806277726054756,
+          "p95": 0.048590370814949324,
+          "max": 0.07711343548273408
+        },
+        "rotationStepDegrees": {
+          "mean": 0.10204899521378041,
+          "p95": 0.450187711608206,
+          "max": 0.825354411995458
+        },
+        "centerStepVideoPixels": {
+          "mean": 0.2158357633306245,
+          "p95": 1.3067726350058548,
+          "max": 2.3370308037017016
+        },
+        "centerDifferenceVideoPixels": {
+          "mean": 0.6103854082685933,
+          "p95": 0.9300165638378903,
+          "max": 2.0725992346989415
+        }
+      },
+      "replayPrevious": {
+        "logDepthStepPercent": {
+          "mean": 0.04421906496310524,
+          "p95": 0.1721428633134292,
+          "max": 0.7776326590586025
+        },
+        "rotationStepDegrees": {
+          "mean": 0.0708350303219259,
+          "p95": 0.2696142599547281,
+          "max": 1.4722626067667561
+        },
+        "centerStepVideoPixels": {
+          "mean": 0.08142382082540622,
+          "p95": 0.26564537211704486,
+          "max": 1.418859951064468
+        },
+        "centerDifferenceVideoPixels": {
+          "mean": 0.3940519026322048,
+          "p95": 0.7430915944495078,
+          "max": 2.7720319052675664
+        }
+      },
+      "replayCurrent": {
+        "logDepthStepPercent": {
+          "mean": 0.002429245710180994,
+          "p95": 0.010418639145903796,
+          "max": 0.018101184533614312
+        },
+        "rotationStepDegrees": {
+          "mean": 0.06573879433433123,
+          "p95": 0.2425709179093905,
+          "max": 0.7996226532477265
+        },
+        "centerStepVideoPixels": {
+          "mean": 0.06555249830662123,
+          "p95": 0.19250153483997665,
+          "max": 1.4666589232040466
+        },
+        "centerDifferenceVideoPixels": {
+          "mean": 0.6261303076624557,
+          "p95": 0.8470474106328406,
+          "max": 2.429020986219135
+        }
+      },
+      "replayHold": {
+        "logDepthStepPercent": {
+          "mean": 0,
+          "p95": 0,
+          "max": 0
+        },
+        "rotationStepDegrees": {
+          "mean": 0,
+          "p95": 0,
+          "max": 0
+        },
+        "centerStepVideoPixels": {
+          "mean": 0,
+          "p95": 0,
+          "max": 0
+        },
+        "centerDifferenceVideoPixels": {
+          "mean": 0.9112201063313602,
+          "p95": 1.0879339208877872,
+          "max": 2.695389289362261
+        }
+      },
+      "holdTransitions": [
+        {
+          "atMs": 8,
+          "state": "following"
+        },
+        {
+          "atMs": 1736,
+          "state": "held"
+        }
+      ],
+      "replayMeanDepthStepReduction": 0.9450633858448191
+    },
+    {
+      "appVersion": "0.1.4",
+      "mode": "stable",
+      "sampleCount": 77,
+      "approximateNotificationHz": 25.445577850016814,
+      "observedInput": {
+        "logDepthStepPercent": {
+          "mean": 0.4709863551865497,
+          "p95": 1.797334393340555,
+          "max": 2.271185357860639
+        },
+        "rotationStepDegrees": {
+          "mean": 2.0217109082068885,
+          "p95": 7.040726755010711,
+          "max": 8.680802456924022
+        },
+        "centerStepVideoPixels": {
+          "mean": 1.058337246583261,
+          "p95": 3.8328774810193247,
+          "max": 5.05634331559107
+        },
+        "centerDifferenceVideoPixels": {
+          "mean": 0,
+          "p95": 0,
+          "max": 0
+        }
+      },
+      "observedDisplayed": {
+        "logDepthStepPercent": {
+          "mean": 0.023049913127434887,
+          "p95": 0.06572891799202507,
+          "max": 0.09220799454175976
+        },
+        "rotationStepDegrees": {
+          "mean": 0.17849113340918202,
+          "p95": 0.46673362260735834,
+          "max": 0.6474871156052504
+        },
+        "centerStepVideoPixels": {
+          "mean": 0.478680915997972,
+          "p95": 1.8442455135255922,
+          "max": 2.166247103248883
+        },
+        "centerDifferenceVideoPixels": {
+          "mean": 0.8807872738926044,
+          "p95": 1.3748779873917143,
+          "max": 2.221043895076303
+        }
+      },
+      "replayPrevious": {
+        "logDepthStepPercent": {
+          "mean": 0.21441205917127745,
+          "p95": 0.682107345115468,
+          "max": 1.1788033085857186
+        },
+        "rotationStepDegrees": {
+          "mean": 0.34780088030836787,
+          "p95": 1.30991000815184,
+          "max": 1.774310689845848
+        },
+        "centerStepVideoPixels": {
+          "mean": 0.46230666895865524,
+          "p95": 1.5615064910238672,
+          "max": 2.489966633561577
+        },
+        "centerDifferenceVideoPixels": {
+          "mean": 0.9841858799756357,
+          "p95": 2.8666891743006317,
+          "max": 4.045413426385294
+        }
+      },
+      "replayCurrent": {
+        "logDepthStepPercent": {
+          "mean": 0.02042612488557643,
+          "p95": 0.07919044390686247,
+          "max": 0.13007109289278063
+        },
+        "rotationStepDegrees": {
+          "mean": 0.21652793414495136,
+          "p95": 0.7899806972150271,
+          "max": 0.9467397501089112
+        },
+        "centerStepVideoPixels": {
+          "mean": 0.4476363911176615,
+          "p95": 2.0379175416676913,
+          "max": 2.515996153263693
+        },
+        "centerDifferenceVideoPixels": {
+          "mean": 1.0216995430599067,
+          "p95": 2.9776786036178704,
+          "max": 3.4335780854185773
+        }
+      },
+      "replayHold": {
+        "logDepthStepPercent": {
+          "mean": 0.004688269556698312,
+          "p95": 0,
+          "max": 0.1174374381341603
+        },
+        "rotationStepDegrees": {
+          "mean": 0.009351414330390358,
+          "p95": 0,
+          "max": 0.31664259707434816
+        },
+        "centerStepVideoPixels": {
+          "mean": 0.012670230725494848,
+          "p95": 0,
+          "max": 0.5075041248003628
+        },
+        "centerDifferenceVideoPixels": {
+          "mean": 1.3108975248296775,
+          "p95": 3.049186902927492,
+          "max": 4.160596179431151
+        }
+      },
+      "holdTransitions": [
+        {
+          "atMs": 977,
+          "state": "following"
+        },
+        {
+          "atMs": 2474,
+          "state": "held"
+        }
+      ],
+      "replayMeanDepthStepReduction": 0.9047342534532559
+    }
+  ]
+}

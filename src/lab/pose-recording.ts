@@ -3,6 +3,7 @@ export interface PoseSample {
   inputAtMs: number;
   updateIndex: number;
   targetId: string;
+  stabilizationState?: 'held' | 'following';
   // Position in marker widths, followed by quaternion x/y/z/w. No images.
   input: number[];
   displayed: number[];
@@ -19,6 +20,7 @@ export function appendPoseSample(recording: PoseRecording, sample: PoseSample): 
       !Number.isFinite(sample.inputAtMs) || sample.inputAtMs < 0 ||
       !Number.isInteger(sample.updateIndex) || sample.updateIndex < 1 ||
       typeof sample.targetId !== 'string' || sample.targetId.length > 20 ||
+      (sample.stabilizationState !== undefined && sample.stabilizationState !== 'held' && sample.stabilizationState !== 'following') ||
       !Array.isArray(sample.input) || !Array.isArray(sample.displayed) ||
       sample.input.length !== 7 || sample.displayed.length !== 7 ||
       ![...sample.input, ...sample.displayed].every(Number.isFinite)) return false;

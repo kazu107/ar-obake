@@ -38,20 +38,20 @@ try{
       await page.locator('#pose-start').click();
       await page.waitForFunction(()=>document.querySelector('#pose-result').textContent.includes('揺れを記録しました'),{},{timeout:15000});
       const recording=await page.evaluate(()=>JSON.parse(localStorage.getItem('ar-obake-lab-v1')).sessions.at(-1).poseRecordings.at(-1));
-      assert.equal(recording.status,'completed');assert.ok(recording.samples.length>0&&recording.samples.length<=110);
+      assert.equal(recording.status,'completed');assert.ok(recording.samples.some(s=>s.stabilizationState==='held'));for(let i=1;i<recording.samples.length;i++){const a=recording.samples[i-1],b=recording.samples[i];if(a.stabilizationState==='held'&&b.stabilizationState==='held')assert.deepEqual(a.displayed,b.displayed);}assert.ok(recording.samples.length>0&&recording.samples.length<=110);
       for(const sample of recording.samples){assert.equal(sample.input.length,7);assert.equal(sample.displayed.length,7);assert.ok([...sample.input,...sample.displayed].every(Number.isFinite));}
     }
     await page.locator('#stop').click();assert.equal(await page.locator('iframe').count(),0);
-    const session=await page.evaluate(()=>JSON.parse(localStorage.getItem('ar-obake-lab-v1')).sessions.at(-1));assert.equal(session.appVersion,appVersion);assert.equal(session.tracking.mode,'stable');assert.equal(session.tracking.ghostMotion,'still');assert.equal(session.tracking.poseStabilization.algorithm,'projection-depth-v2');assert.ok(session.events.some(e=>e.message.startsWith('追従設定 ')));assert.ok(await page.locator('#tracking-mode').isEnabled());results.push({set,tracking:session.tracking,recognized:expectedIds,trackingInitMs:session.trackingInitMs,foundCount:session.foundCount,elapsedSeconds:session.elapsedSeconds,fpsAverage:session.fpsAverage});console.log(`RECOGNIZED ${set}: ${expectedIds.join(',')}`);
+    const session=await page.evaluate(()=>JSON.parse(localStorage.getItem('ar-obake-lab-v1')).sessions.at(-1));assert.equal(session.appVersion,appVersion);assert.equal(session.tracking.mode,'stable');assert.equal(session.tracking.ghostMotion,'still');assert.equal(session.tracking.poseStabilization.algorithm,'stationary-hold-v3');assert.ok(session.events.some(e=>e.message.startsWith('追従設定 ')));assert.ok(await page.locator('#tracking-mode').isEnabled());results.push({set,tracking:session.tracking,recognized:expectedIds,trackingInitMs:session.trackingInitMs,foundCount:session.foundCount,elapsedSeconds:session.elapsedSeconds,fpsAverage:session.fpsAverage});console.log(`RECOGNIZED ${set}: ${expectedIds.join(',')}`);
   }
   // Verify that both comparison controls reach the AR frame and exported session.
   await page.locator('[data-set=one]').click();
-  await page.locator('#tracking-mode').selectOption('previous');
+  await page.locator('#tracking-mode').selectOption('depth');
   await page.locator('#ghost-motion').selectOption('float');
   await page.locator('#start').click();
   await page.waitForFunction(()=>document.querySelector('#status').textContent==='認識中',{},{timeout:90000});
   const comparison=await page.evaluate(()=>JSON.parse(localStorage.getItem('ar-obake-lab-v1')).sessions.at(-1));
-  assert.equal(comparison.tracking.mode,'previous');assert.equal(comparison.tracking.poseStabilization.algorithm,'pose-deadband-v1');assert.equal(comparison.tracking.filterBeta,1000);assert.equal(comparison.tracking.ghostMotion,'float');
+  assert.equal(comparison.tracking.mode,'depth');assert.equal(comparison.tracking.poseStabilization.algorithm,'projection-depth-v2');assert.equal(comparison.tracking.filterBeta,1000);assert.equal(comparison.tracking.ghostMotion,'float');
   assert.ok(comparison.events.some(e=>e.message.startsWith('追従設定 ')));
   await page.waitForFunction(()=>!document.querySelector('#found-badge').hidden,{},{timeout:65000});
   await page.locator('#pose-start').click();

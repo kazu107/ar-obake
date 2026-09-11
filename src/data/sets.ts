@@ -5,5 +5,5 @@ export const SETS = {
 } as const;
 export type SetId = keyof typeof SETS;
 export function isSetId(value: unknown): value is SetId { return typeof value === 'string' && Object.hasOwnProperty.call(SETS, value); }
-export const APP_VERSION = '0.1.4';
+export const APP_VERSION = '0.1.5';
 export const ASSET_VERSION = 'calibration-v1';

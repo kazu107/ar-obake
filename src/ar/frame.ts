@@ -6,6 +6,7 @@ import { startCameraPreview, mediaError } from './camera-preview';
 import { trackingConfig } from './tracking-config';
 import { PoseStabilizer } from './pose-stabilizer';
 import { ProjectedPoseStabilizer } from './projected-pose-stabilizer';
+import { StationaryPoseStabilizer } from './stationary-pose-stabilizer';
 
 // A disposable browsing context owns camera, TensorFlow, worker and WebGL resources.
 // Removing this frame tears down the entire AR runtime, including upstream workers.
@@ -101,7 +102,7 @@ async function start() {
   renderer.setClearColor(0x000000,0); document.body.append(renderer.domElement);
   renderer.domElement.addEventListener('webglcontextlost', event => { event.preventDefault(); fail(new Error('描画が中断されました。カメラを開始し直してください。')); });
   const scene = new Scene(), camera = new PerspectiveCamera();
-  const anchors = SETS[setId].ids.map(id => { const group = new Group(); group.matrixAutoUpdate = false; group.visible = false; const model = ghost.clone(true); model.position.z = .1; group.add(model); scene.add(group); return { id, group, model, post: new Matrix4(), input: new Matrix4(), pose: tracking.poseStabilization?.algorithm==='projection-depth-v2' ? new ProjectedPoseStabilizer() : new PoseStabilizer(), markerWidth: 1, inputAtMs: 0, updateIndex: 0 }; });
+  const anchors = SETS[setId].ids.map(id => { const group = new Group(); group.matrixAutoUpdate = false; group.visible = false; const model = ghost.clone(true); model.position.z = .1; group.add(model); scene.add(group); return { id, group, model, post: new Matrix4(), input: new Matrix4(), pose: tracking.poseStabilization?.algorithm==='stationary-hold-v3' ? new StationaryPoseStabilizer() : tracking.poseStabilization?.algorithm==='projection-depth-v2' ? new ProjectedPoseStabilizer() : new PoseStabilizer(), markerWidth: 1, inputAtMs: 0, updateIndex: 0 }; });
   send('tracking-config', { config: tracking });
   controller = new Controller({ inputWidth: width, inputHeight: height, maxTrack: 1, warmupTolerance: 3, missTolerance: 5,
     filterMinCF: tracking.filterMinCF, filterBeta: tracking.filterBeta,
@@ -164,10 +165,10 @@ async function start() {
     renderer.render(scene,camera);frames++;
     if(now-recordingStarted<=10000 && now-lastPoseSample>=100) {
       const a=anchors.find(anchor=>anchor.group.visible);
-      if(a) send('pose-sample',{sample:{atMs:Math.round(now-recordingStarted),inputAtMs:Math.max(0,Math.round(a.inputAtMs-recordingStarted)),updateIndex:a.updateIndex,targetId:a.id,input:readPose(a.input,a.markerWidth),displayed:readPose(a.group.matrix,a.markerWidth)}});
+      if(a) send('pose-sample',{sample:{atMs:Math.round(now-recordingStarted),inputAtMs:Math.max(0,Math.round(a.inputAtMs-recordingStarted)),updateIndex:a.updateIndex,targetId:a.id,stabilizationState:a.pose instanceof StationaryPoseStabilizer ? a.pose.state : 'following',input:readPose(a.input,a.markerWidth),displayed:readPose(a.group.matrix,a.markerWidth)}});
       lastPoseSample=now;
     }
-    if(now-fpsTime>=1000){send('fps',{value:frames*1000/(now-fpsTime)});frames=0;fpsTime=now;}
+    if(now-fpsTime>=1000){const a=anchors.find(a=>a.group.visible);send('fps',{value:frames*1000/(now-fpsTime),stabilizationState:a ? a.pose instanceof StationaryPoseStabilizer ? a.pose.state : 'following' : 'searching'});frames=0;fpsTime=now;}
   });
   currentStage = 'tracking';
   send('ready',{width,height,trackingInitMs:performance.now()-gpuStart,targetCount:dimensions.length});

@@ -11,9 +11,9 @@ if(!inputPath)throw new Error('Usage: node scripts/replay-pose-recording.mjs INP
 const temporary=path.join(root,'.artifacts','pose-replay');
 await mkdir(temporary,{recursive:true});
 const entry=path.join(temporary,'entry.ts'), compiled=path.join(temporary,'comparison.mjs');
-await writeFile(entry,`export {PoseStabilizer as Previous} from ${JSON.stringify(path.join(root,'src/ar/pose-stabilizer.ts'))};\nexport {ProjectedPoseStabilizer as Current} from ${JSON.stringify(path.join(root,'src/ar/projected-pose-stabilizer.ts'))};\n`);
+await writeFile(entry,`export {PoseStabilizer as Previous} from ${JSON.stringify(path.join(root,'src/ar/pose-stabilizer.ts'))};\nexport {ProjectedPoseStabilizer as Current} from ${JSON.stringify(path.join(root,'src/ar/projected-pose-stabilizer.ts'))};\nexport {StationaryPoseStabilizer as Hold} from ${JSON.stringify(path.join(root,'src/ar/stationary-pose-stabilizer.ts'))};\n`);
 await build({entryPoints:[entry],outfile:compiled,bundle:true,platform:'node',format:'esm',external:['three'],logLevel:'silent'});
-const {Previous,Current}=await import(pathToFileURL(compiled).href);
+const {Previous,Current,Hold}=await import(pathToFileURL(compiled).href);
 const log=JSON.parse(await readFile(inputPath,'utf8'));
 const quaternion=p=>new Quaternion(...p.slice(3)).normalize();
 const asMatrix=p=>new Matrix4().compose(new Vector3(...p.slice(0,3)),quaternion(p),new Vector3(1,1,1));
@@ -24,7 +24,7 @@ function replay(samples,Filter){
     const sample=samples[i];
     if(i)for(let t=samples[i-1].atMs+1000/60;t<sample.atMs;t+=1000/60)filter.render(t,1,output);
     filter.update(asMatrix(sample.input),1,sample.atMs);filter.render(sample.atMs,1,output);
-    result.push({...sample,displayed:asPose(output)});
+    result.push({...sample,displayed:asPose(output),stabilizationState:filter.state??'following'});
   }
   return result;
 }
@@ -38,6 +38,7 @@ function metrics(samples,field,focalPixels){
   return {
     logDepthStepPercent:summary(poses.slice(1).map((p,i)=>100*Math.abs(Math.log(-p[2])-Math.log(-poses[i][2])))),
     rotationStepDegrees:summary(poses.slice(1).map((p,i)=>quaternion(p).angleTo(quaternion(poses[i]))*180/Math.PI)),
+    centerStepVideoPixels:summary(poses.slice(1).map((p,i)=>focalPixels*Math.hypot(p[0]/-p[2]-poses[i][0]/-poses[i][2],p[1]/-p[2]-poses[i][1]/-poses[i][2]))),
     // Difference from the latest MindAR centre, not from ground truth or DOM pixels.
     centerDifferenceVideoPixels:summary(rows.map(s=>focalPixels*Math.hypot(s[field][0]/-s[field][2]-s.input[0]/-s.input[2],s[field][1]/-s[field][2]-s.input[1]/-s.input[2]))),
   };
@@ -50,10 +51,13 @@ for(const session of log.sessions??[])for(const recording of session.poseRecordi
   if(!(height>0))continue;
   const focalPixels=height/2/Math.tan(Math.PI/8);
   const previous=metrics(replay(samples,Previous),'displayed',focalPixels),current=metrics(replay(samples,Current),'displayed',focalPixels);
+  const held=replay(samples,Hold);
   records.push({appVersion:session.appVersion,mode:session.tracking?.mode,sampleCount:samples.length,
     approximateNotificationHz:1000*(samples.at(-1).updateIndex-samples[0].updateIndex)/(samples.at(-1).atMs-samples[0].atMs),
     observedInput:metrics(samples,'input',focalPixels),observedDisplayed:metrics(samples,'displayed',focalPixels),
     replayPrevious:previous,replayCurrent:current,
+    replayHold:metrics(held,'displayed',focalPixels),
+    holdTransitions:held.filter((s,i)=>!i||s.stabilizationState!==held[i-1].stabilizationState).map(s=>({atMs:s.atMs,state:s.stabilizationState})),
     replayMeanDepthStepReduction:1-current.logDepthStepPercent.mean/previous.logDepthStepPercent.mean});
 }
 if(!records.length)throw new Error('No completed valid pose recordings found');

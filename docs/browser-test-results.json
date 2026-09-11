@@ -1,5 +1,5 @@
 {
-  "testedAt": "2026-09-10T19:44:10.555Z",
+  "testedAt": "2026-09-11T07:07:20.699Z",
   "environment": "Playwright Chromium with SwiftShader and synthetic Y4M video; not physical camera or Air 2",
   "results": [
     {
@@ -9,23 +9,34 @@
         "filterMinCF": 0.001,
         "filterBeta": 1000,
         "poseStabilization": {
-          "algorithm": "projection-depth-v2",
-          "centerDeadband": 0.0008,
-          "depthLogDeadband": 0.01,
-          "rotationDeadbandRadians": 0.04363323129985824,
-          "centerTimeConstantMs": 45,
-          "depthTimeConstantMs": 420,
-          "rotationTimeConstantMs": 240
+          "algorithm": "stationary-hold-v3",
+          "moving": {
+            "algorithm": "projection-depth-v2",
+            "centerDeadband": 0.0008,
+            "depthLogDeadband": 0.01,
+            "rotationDeadbandRadians": 0.04363323129985824,
+            "centerTimeConstantMs": 45,
+            "depthTimeConstantMs": 420,
+            "rotationTimeConstantMs": 240
+          },
+          "settleMs": 650,
+          "centerSettleRadius": 0.0015,
+          "depthSettleRadius": 0.008,
+          "rotationSettleRadians": 0.05235987755982988,
+          "centerReleaseRadius": 0.004,
+          "depthReleaseRadius": 0.035,
+          "rotationReleaseRadians": 0.17453292519943295,
+          "releaseMs": 180
         },
         "ghostMotion": "still"
       },
       "recognized": [
         "H01"
       ],
-      "trackingInitMs": 1260.9000000059605,
+      "trackingInitMs": 884.3000000002794,
       "foundCount": 1,
-      "elapsedSeconds": 15.188,
-      "fpsAverage": 40.025350030703756
+      "elapsedSeconds": 14.529200000000186,
+      "fpsAverage": 54.64281274903912
     },
     {
       "set": "four",
@@ -34,13 +45,24 @@
         "filterMinCF": 0.001,
         "filterBeta": 1000,
         "poseStabilization": {
-          "algorithm": "projection-depth-v2",
-          "centerDeadband": 0.0008,
-          "depthLogDeadband": 0.01,
-          "rotationDeadbandRadians": 0.04363323129985824,
-          "centerTimeConstantMs": 45,
-          "depthTimeConstantMs": 420,
-          "rotationTimeConstantMs": 240
+          "algorithm": "stationary-hold-v3",
+          "moving": {
+            "algorithm": "projection-depth-v2",
+            "centerDeadband": 0.0008,
+            "depthLogDeadband": 0.01,
+            "rotationDeadbandRadians": 0.04363323129985824,
+            "centerTimeConstantMs": 45,
+            "depthTimeConstantMs": 420,
+            "rotationTimeConstantMs": 240
+          },
+          "settleMs": 650,
+          "centerSettleRadius": 0.0015,
+          "depthSettleRadius": 0.008,
+          "rotationSettleRadians": 0.05235987755982988,
+          "centerReleaseRadius": 0.004,
+          "depthReleaseRadius": 0.035,
+          "rotationReleaseRadians": 0.17453292519943295,
+          "releaseMs": 180
         },
         "ghostMotion": "still"
       },
@@ -50,10 +72,10 @@
         "H03",
         "ANSWER"
       ],
-      "trackingInitMs": 1348,
+      "trackingInitMs": 884.2999999998137,
       "foundCount": 4,
-      "elapsedSeconds": 58.364699999988076,
-      "fpsAverage": 43.56922923529504
+      "elapsedSeconds": 58.614299999999815,
+      "fpsAverage": 52.86814233378297
     },
     {
       "set": "nine",
@@ -62,13 +84,24 @@
         "filterMinCF": 0.001,
         "filterBeta": 1000,
         "poseStabilization": {
-          "algorithm": "projection-depth-v2",
-          "centerDeadband": 0.0008,
-          "depthLogDeadband": 0.01,
-          "rotationDeadbandRadians": 0.04363323129985824,
-          "centerTimeConstantMs": 45,
-          "depthTimeConstantMs": 420,
-          "rotationTimeConstantMs": 240
+          "algorithm": "stationary-hold-v3",
+          "moving": {
+            "algorithm": "projection-depth-v2",
+            "centerDeadband": 0.0008,
+            "depthLogDeadband": 0.01,
+            "rotationDeadbandRadians": 0.04363323129985824,
+            "centerTimeConstantMs": 45,
+            "depthTimeConstantMs": 420,
+            "rotationTimeConstantMs": 240
+          },
+          "settleMs": 650,
+          "centerSettleRadius": 0.0015,
+          "depthSettleRadius": 0.008,
+          "rotationSettleRadians": 0.05235987755982988,
+          "centerReleaseRadius": 0.004,
+          "depthReleaseRadius": 0.035,
+          "rotationReleaseRadians": 0.17453292519943295,
+          "releaseMs": 180
         },
         "ghostMotion": "still"
       },
@@ -83,10 +116,10 @@
         "H08",
         "ANSWER"
       ],
-      "trackingInitMs": 1933.0999999940395,
+      "trackingInitMs": 1029.7000000001863,
       "foundCount": 9,
-      "elapsedSeconds": 57.77579999998212,
-      "fpsAverage": 39.95929260061606
+      "elapsedSeconds": 58.5215,
+      "fpsAverage": 50.438431827241416
     }
   ],
   "passed": [
