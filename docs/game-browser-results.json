@@ -1,8 +1,8 @@
 {
-  "testedAt": "2026-09-11T12:55:21.070Z",
+  "testedAt": "2026-09-12T23:30:51.526Z",
   "environment": "Chromium, development-only simulated recognition; actual MindAR tested separately",
   "passed": [
-    "stable hint requires explicit collection; loss and stop hide unrecorded hint; duplicate collection prevented; early ANSWER does not skip consultation",
+    "stable recognition records a hint automatically; brief recognition and loss do not record; duplicate collection prevented; early ANSWER does not skip consultation",
     "memo inference, three-clue solution, reload restoration, and isolated device storage",
     "ANSWER gate, required selections, memo from confirmation, wrong answer and retry, correct answer and persisted completion",
     "reset confirmation and preservation of laboratory records",

@@ -65,6 +65,6 @@ describe('mission selection and eight-hint memo',()=>{
   });
   it('takes title, card range, and total from the selected mission',()=>{
     expect(hintMarkerLabel(mission)).toBe('H01〜H08');expect(hintMarkerLabel(practice)).toBe('H01・H02・H03');
-    expect(welcome(mission)).toContain('9枚のカードを印刷');expect(welcome(mission)).toContain(mission.title);expect(welcome(practice)).toContain('4枚のカードを印刷');
+    expect(welcome(mission)).toContain('9枚のカードを印刷');expect(welcome(mission)).toContain(mission.title);expect(welcome(mission)).toContain('じどうでメモ');expect(welcome(mission)).toContain('ARのふきだし');expect(welcome(practice)).toContain('4枚のカードを印刷');
   });
 });

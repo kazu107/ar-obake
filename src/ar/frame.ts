@@ -7,12 +7,14 @@ import { trackingConfig } from './tracking-config';
 import { PoseStabilizer } from './pose-stabilizer';
 import { ProjectedPoseStabilizer } from './projected-pose-stabilizer';
 import { StationaryPoseStabilizer } from './stationary-pose-stabilizer';
+import { parseMission, type Mission } from '../game/mission';
 
 // A disposable browsing context owns camera, TensorFlow, worker and WebGL resources.
 // Removing this frame tears down the entire AR runtime, including upstream workers.
 const query = new URLSearchParams(location.search);
 const requested = query.get('set');
 const setId = isSetId(requested) ? requested : 'one';
+const missionName = query.get('mission');
 const tracking = trackingConfig(query.get('tracking'), query.get('motion'));
 const send = (type: string, data: Record<string, unknown> = {}) => parent.postMessage({ channel: 'obake-lab', type, ...data }, location.origin);
 let stopped = false;
@@ -74,6 +76,11 @@ async function resource(path: string) {
   if (!response.ok) throw new Error(`素材を読み込めません: ${path} (${response.status})`);
   return response.arrayBuffer();
 }
+async function missionResource(path: string): Promise<Mission> {
+  const response = await fetch(new URL(path, document.baseURI), { signal: abort.signal });
+  if (!response.ok) throw new Error(`問題を読み込めません: ${path} (${response.status})`);
+  return parseMission(await response.json());
+}
 
 async function start() {
   if (parent === window) throw new Error('トップページからカメラを開始してください。');
@@ -93,7 +100,9 @@ async function start() {
   send('camera', { width, height });
   send('loading', { stage: '認識データとおばけを準備しています' });
   currentStage = 'assets-loading';
-  const [targetBuffer, ghostBuffer] = await Promise.all([resource(`./targets/${setId}.mind`), resource('./models/ghost.glb')]);
+  const missionPromise = missionName==='main' ? missionResource('./missions/main.json') : missionName==='practice' ? missionResource('./missions/prototype.json') : Promise.resolve(undefined);
+  const [targetBuffer, ghostBuffer, mission] = await Promise.all([resource(`./targets/${setId}.mind`), resource('./models/ghost.glb'), missionPromise]);
+  if (mission && mission.markerSet!==setId) throw new Error('問題とマーカーセットが一致しません。');
   const ghost = (await new GLTFLoader().parseAsync(ghostBuffer, './')).scene;
   if (stopped) return;
   currentStage = 'tracking-initialization';
@@ -103,6 +112,10 @@ async function start() {
   renderer.domElement.addEventListener('webglcontextlost', event => { event.preventDefault(); fail(new Error('描画が中断されました。カメラを開始し直してください。')); });
   const scene = new Scene(), camera = new PerspectiveCamera();
   const anchors = SETS[setId].ids.map(id => { const group = new Group(); group.matrixAutoUpdate = false; group.visible = false; const model = ghost.clone(true); model.position.z = .1; group.add(model); scene.add(group); return { id, group, model, post: new Matrix4(), input: new Matrix4(), pose: tracking.poseStabilization?.algorithm==='stationary-hold-v3' ? new StationaryPoseStabilizer() : tracking.poseStabilization?.algorithm==='projection-depth-v2' ? new ProjectedPoseStabilizer() : new PoseStabilizer(), markerWidth: 1, inputAtMs: 0, updateIndex: 0 }; });
+  const speech=document.createElement('div');speech.className='ar-speech';speech.hidden=true;speech.setAttribute('role','status');speech.setAttribute('aria-live','polite');
+  const speechSpeaker=document.createElement('strong'),speechText=document.createElement('span');speech.append(speechSpeaker,speechText);document.body.append(speech);
+  const speechById=new Map(mission ? [...mission.hints.map(h=>[h.markerId,{speaker:h.speaker,text:h.text}] as const),[mission.answerMarker.markerId,{speaker:'ANSWERの おばけ',text:'みんなの こたえを おしえて！'}] as const] : []);
+  let spokenId='';const speechPoint=new Vector3();
   send('tracking-config', { config: tracking });
   controller = new Controller({ inputWidth: width, inputHeight: height, maxTrack: 1, warmupTolerance: 3, missTolerance: 5,
     filterMinCF: tracking.filterMinCF, filterBeta: tracking.filterBeta,
@@ -162,6 +175,15 @@ async function start() {
     const now=performance.now();
     for(const a of anchors) if(a.group.visible && tracking.poseStabilization) a.pose.render(now,a.markerWidth,a.group.matrix);
     if(tracking.ghostMotion==='float') for(const a of anchors) if(a.group.visible) {a.model.position.y=Math.sin(time/650)*.025;a.model.rotation.y=Math.sin(time/1100)*.08;}
+    const speaking=anchors.find(a=>a.group.visible),copy=speaking?speechById.get(speaking.id):undefined;
+    if(speaking&&copy){
+      if(spokenId!==speaking.id){spokenId=speaking.id;speechSpeaker.textContent=copy.speaker;speechText.textContent=copy.text;send('speech-visible',{id:speaking.id});}
+      speechPoint.set(0,.67,.05).applyMatrix4(speaking.group.matrix).project(camera);
+      const edge=Math.min(160,innerWidth*.39);
+      const x=Math.min(innerWidth-edge,Math.max(edge,(speechPoint.x*.5+.5)*innerWidth));
+      const y=Math.min(innerHeight-18,Math.max(130,(-speechPoint.y*.5+.5)*innerHeight));
+      speech.style.left=`${x}px`;speech.style.top=`${y}px`;speech.hidden=speechPoint.z < -1 || speechPoint.z > 1;
+    }else{speech.hidden=true;spokenId='';}
     renderer.render(scene,camera);frames++;
     if(now-recordingStarted<=10000 && now-lastPoseSample>=100) {
       const a=anchors.find(anchor=>anchor.group.visible);

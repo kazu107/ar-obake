@@ -1,11 +1,12 @@
 {
-  "testedAt": "2026-09-11T12:57:13.313Z",
-  "appVersion": "0.3.0",
+  "testedAt": "2026-09-12T23:40:00.741Z",
+  "appVersion": "0.4.0",
   "missionId": "obake-mission-01",
   "environment": "Chromium SwiftShader with synthetic Y4M input; actual MindAR pipeline, not physical iPad",
   "passed": [
     "production build ignores simulate query",
-    "real MindAR recognized H01/H02/H03/H04/H05/H06/H07/H08 and all hints saved",
+    "real MindAR recognized H01/H02/H03/H04/H05/H06/H07/H08 and automatically saved all hints",
+    "AR speech bubble follows the recognized ghost, shows mission copy, and remains inside an iPad portrait viewport",
     "memo and consultation stop camera",
     "ANSWER recognition opens colour and item selection",
     "correct answer completes game",

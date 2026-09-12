@@ -14,17 +14,16 @@ try{
   const noOverflow=async()=>assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   await page.goto(url);await action('new').waitFor();await noOverflow();
   await page.screenshot({path:'.artifacts/game/welcome.png',fullPage:true});
-  await action('new').click();await marker('H01');
+  await action('new').click();await page.locator('[data-sim="H01"]').click();await page.waitForTimeout(150);await page.locator('[data-sim="なし"]').click();await page.waitForTimeout(500);
   assert.equal((await saved()).markerIds.length,0);
-  await marker('なし');assert.equal(await action('collect').count(),0);
-  await marker('H01');await action('collect').click();assert.deepEqual((await saved()).markerIds,['H01']);assert.ok(await action('collect').isDisabled());
+  await marker('H01');assert.deepEqual((await saved()).markerIds,['H01']);assert.equal(await action('collect').count(),0);assert.ok((await page.locator('.auto-recorded').innerText()).includes('自動'));
   assert.equal(await page.locator('.memo-option.no').count(),2);
   await action('stop-camera').click();assert.equal(await action('collect').count(),0);await action('camera').click();
   await marker('ANSWER');assert.ok((await page.locator('#hint-panel').innerText()).includes('そうだん'));assert.equal(await page.locator('[data-color]').count(),0);
   await page.screenshot({path:'.artifacts/game/explore.png',fullPage:true});
-  passed.push('stable hint requires explicit collection; loss and stop hide unrecorded hint; duplicate collection prevented; early ANSWER does not skip consultation');
+  passed.push('stable recognition records a hint automatically; brief recognition and loss do not record; duplicate collection prevented; early ANSWER does not skip consultation');
   await action('memo').click();assert.ok((await page.locator('.saved-clue').innerText()).includes('あかい'));await noOverflow();await action('memo-back').click();
-  for(const id of ['H02','H03']){await marker(id);await action('collect').click();}
+  for(const id of ['H02','H03'])await marker(id);
   assert.equal(await page.locator('.memo-option.yes').count(),2);
   await page.reload();await action('continue').click();assert.deepEqual((await saved()).markerIds,['H01','H02','H03']);
   const another=await browser.newContext(),second=await another.newPage();await second.goto(url);await second.locator('[data-action="new"]').waitFor();assert.equal(await second.evaluate(k=>localStorage.getItem(k),key),null);await another.close();

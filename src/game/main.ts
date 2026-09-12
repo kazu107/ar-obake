@@ -7,6 +7,7 @@ import { loadProgress, saveProgress, type LoadResult } from '../storage/game-sto
 import { ScanGate } from './scan-gate';
 import { escape as e, shell as pageShell, welcome } from './ui';
 import * as views from './screens';
+import { playRecordedSound, playSuccessSound, primeSound } from './sound';
 
 type Screen='home'|'explore'|'memo'|'share'|'answer-scan'|'color'|'item'|'confirm'|'wrong'|'win'|'reset';
 const app=document.querySelector<HTMLDivElement>('#app')!;
@@ -84,7 +85,7 @@ function startCamera() {
   if(import.meta.env.DEV && simulation){simulating=true;ready=true;cameraStatus('開発用の認識','下の開発用ボタンで認識を再現します。',true);return;}
   if(!isSecureContext||!navigator.mediaDevices?.getUserMedia){cameraStatus('カメラを使えません','HTTPSのURLを、iPadのSafariで ひらいてね。',true);return;}
   frame=document.createElement('iframe');frame.title='おばけをさがすカメラ';frame.allow='camera; autoplay';
-  frame.src=`./ar.html?set=${mission.markerSet}&resolution=960&tracking=stable&motion=still&v=${APP_VERSION}`;
+  frame.src=`./ar.html?set=${mission.markerSet}&mission=${practice?'practice':'main'}&resolution=960&tracking=stable&motion=still&v=${APP_VERSION}`;
   byId('game-camera')!.prepend(frame);cameraStatus('じゅんび中','カメラの きょかが出たら「許可」をおしてね。',true);
 }
 function updateHint(force=false) {
@@ -100,11 +101,17 @@ function updateHint(force=false) {
   }
   if(marker===mission.answerMarker.markerId){panel.innerHTML='<p class="hint-placeholder">これは こたえのカードだよ。<br>「みんなと そうだんする」から すすんでね。</p>';return;}
   const hint=mission.hints.find(h=>h.markerId===marker);if(!hint)return;
-  const obtained=progress.markerIds.includes(marker);
-  panel.innerHTML=`<section class="hint-bubble ${obtained?'recorded':''}"><span class="badge">${e(marker)}</span><h2>${e(hint.speaker)}</h2><p class="hint-text">${e(hint.text).replace(/\n/g,'<br>')}</p><button class="primary" data-action="collect" ${obtained?'disabled':''}>${obtained?'✓ メモに 記録ずみ':'ヒントを記録する'}</button></section>`;
+  const alreadyRecorded=progress.markerIds.includes(marker);
+  if(!alreadyRecorded){
+    persist(collect(mission,progress,marker));playRecordedSound();
+    byId('mini-memo')!.innerHTML=views.memo(mission,progress,true);
+    const badge=document.querySelector('.memo-shortcut span');if(badge)badge.textContent=String(progress.markerIds.length);
+  }
+  panel.innerHTML=`<section class="hint-bubble recorded"><span class="badge">${e(marker)}</span><h2>${e(hint.speaker)}</h2><p class="hint-text">${e(hint.text).replace(/\n/g,'<br>')}</p><p class="auto-recorded">${alreadyRecorded?'✓ メモに 記録ずみ':'♪ メモに 自動で記録したよ'}</p></section>`;
 }
 app.addEventListener('click',event=>{
   const button=(event.target as Element).closest<HTMLButtonElement>('button');if(!button||button.disabled||!mission)return;
+  primeSound();
   try{
     if(import.meta.env.DEV && simulation && button.dataset.sim && simulating){gate.reset();if(button.dataset.sim!=='なし')gate.found(button.dataset.sim,performance.now());shownMarker=undefined;updateHint(true);return;}
     if(button.dataset.color&&screen==='color'&&answerUnlocked&&mission.colors.some(c=>c.id===button.dataset.color)){selected.color=button.dataset.color;render();return;}
@@ -119,7 +126,6 @@ app.addEventListener('click',event=>{
       case 'explore':if(hasGame&&progress.phase!=='complete'){answerUnlocked=false;persist({...progress,phase:'exploring'});go('explore',true);}break;
       case 'camera':startCamera();break;
       case 'stop-camera':pauseCamera('また さがすときは「カメラを開始」をおしてね。');break;
-      case 'collect':{if(screen!=='explore'||!ready)break;const id=gate.eligible(performance.now());if(!id||!mission.hints.some(h=>h.markerId===id))break;persist(collect(mission,progress,id));byId('mini-memo')!.innerHTML=views.memo(mission,progress,true);const badge=document.querySelector('.memo-shortcut span');if(badge)badge.textContent=String(progress.markerIds.length);shownMarker=undefined;updateHint();break;}
       case 'memo':if(hasGame&&screen!=='memo'){memoReturn=screen;go('memo');}break;
       case 'memo-back':go(memoReturn,isScanScreen(memoReturn));break;
       case 'share':if(hasGame&&progress.phase!=='complete'){answerUnlocked=false;persist({...progress,phase:'sharing'});go('share');}break;
@@ -128,7 +134,7 @@ app.addEventListener('click',event=>{
       case 'confirm-answer':if(screen==='item'&&answerUnlocked&&selected.color&&selected.item)go('confirm');break;
       case 'back-color':if(answerUnlocked)go('color');break;
       case 'back-item':if(answerUnlocked)go('item');break;
-      case 'submit-answer':if(screen==='confirm'&&answerUnlocked){persist(submitAnswer(mission,progress,selected as Answer));go(correct(mission,selected as Answer)?'win':'wrong');}break;
+      case 'submit-answer':if(screen==='confirm'&&answerUnlocked){const solved=correct(mission,selected as Answer);persist(submitAnswer(mission,progress,selected as Answer));if(solved)playSuccessSound();go(solved?'win':'wrong');}break;
       case 'retry-answer':if(screen==='wrong'&&answerUnlocked){selected={};go('color');}break;
     }
   }catch{stopCamera();app.innerHTML=shell('<section class="centered card"><h1>メモを ひらけませんでした</h1><p>スタッフに つたえてね。前の保存は のこっています。</p><a class="secondary" href="'+homeUrl+'">はじめの画面に もどる</a></section>');}

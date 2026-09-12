@@ -20,15 +20,18 @@ for(const id of [...hintIds,mission.answerMarker.markerId]){
 const browser=await chromium.launch({headless:true,args:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader','--use-fake-ui-for-media-stream','--use-fake-device-for-media-stream',`--use-file-for-fake-video-capture=${filePath}`]});
 const errors=[],passed=[];
 try{
-  const context=await browser.newContext({viewport:{width:1024,height:768},permissions:['camera']});const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
+  const context=await browser.newContext({viewport:{width:768,height:1024},permissions:['camera']});const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
   const action=name=>page.locator(`[data-action="${name}"]`).first();
   await page.goto('http://127.0.0.1:4173/'+query);await action('new').click();assert.equal(await page.locator('[data-sim]').count(),0);
   await page.waitForFunction(()=>document.querySelector('#scan-status')?.textContent==='さがしています',{},{timeout:90000});
   assert.ok((await page.locator('iframe').getAttribute('src')).includes('tracking=stable&motion=still'));
   for(const id of hintIds){
+    const arSpeech=page.frameLocator('iframe').locator('.ar-speech');
     await page.waitForFunction(id=>document.querySelector('#hint-panel .badge')?.textContent===id,id,{timeout:70000});
+    await arSpeech.waitFor({state:'visible',timeout:5000});const hint=mission.hints.find(h=>h.markerId===id),spoken=(await arSpeech.innerText()).replace(/\s+/g,' ');assert.ok(spoken.includes(hint.speaker));assert.ok(spoken.includes(hint.text.replace(/\n/g,' ')));
+    const bounds=await arSpeech.evaluate(element=>{const r=element.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:innerWidth,height:innerHeight};});assert.ok(bounds.left>=0&&bounds.top>=0&&bounds.right<=bounds.width&&bounds.bottom<=bounds.height);
     if(id==='H01')await page.screenshot({path:path.join(directory,'real-hint.png'),fullPage:true});
-    await action('collect').click();console.log('COLLECTED '+id);
+    await page.waitForFunction(({key,id})=>JSON.parse(localStorage.getItem(key)).markerIds.includes(id),{key:storageKey,id},{timeout:5000});console.log('AUTO_COLLECTED '+id);
   }
   const ids=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)).markerIds,storageKey);assert.deepEqual(ids,hintIds);
   await action('memo').click();assert.equal(await page.locator('iframe').count(),0);assert.equal(await page.locator('.memo-option.yes').count(),2);assert.equal(await page.locator('.hint-stamps .obtained').count(),hintIds.length);
@@ -36,7 +39,7 @@ try{
   await page.locator('[data-color="blue"]').waitFor({timeout:90000});assert.equal(await page.locator('iframe').count(),0);
   await page.locator('[data-color="blue"]').click();await action('next-item').click();await page.locator('[data-item="hat"]').click();await action('confirm-answer').click();await action('submit-answer').click();
   assert.equal(await page.locator('h1').innerText(),'せいかい！');
-  passed.push('production build ignores simulate query',`real MindAR recognized ${hintIds.join('/')} and all hints saved`,'memo and consultation stop camera','ANSWER recognition opens colour and item selection','correct answer completes game');
+  passed.push('production build ignores simulate query',`real MindAR recognized ${hintIds.join('/')} and automatically saved all hints`,'AR speech bubble follows the recognized ghost, shows mission copy, and remains inside an iPad portrait viewport','memo and consultation stop camera','ANSWER recognition opens colour and item selection','correct answer completes game');
   await page.goto('http://127.0.0.1:4173/lab.html');assert.ok(await page.locator('#start').isEnabled());await page.locator('#start').click();await page.waitForFunction(()=>document.querySelector('#status')?.textContent==='認識中',{},{timeout:90000});await page.locator('#stop').click();assert.equal(await page.locator('iframe').count(),0);passed.push('retained laboratory page starts and stops AR');
   // Reuse the Safari playback-recovery implementation through the game's own cover.
   const denied=await browser.newContext();await denied.addInitScript(()=>{navigator.mediaDevices.getUserMedia=async()=>{throw new DOMException('test denied','NotAllowedError');};});const d=await denied.newPage();await d.goto('http://127.0.0.1:4173/'+query);await d.locator('[data-action="new"]').click();await d.getByText('カメラを使えませんでした。Safariの設定でカメラを許可して、もういちど開始してね。').first().waitFor();assert.equal(await d.locator('iframe').count(),0);assert.ok(await d.locator('#camera-action').isEnabled());await denied.close();passed.push('camera denial offers restart without discarding progress');
