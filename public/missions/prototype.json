@@ -1,6 +1,6 @@
 {
   "id": "obake-prototype", "version": 1,
-  "title": "おばけのひみつを あばけ！", "markerSet": "four", "assetVersion": "calibration-v1",
+  "title": "おばけのひみつを あばけ！", "markerSet": "four", "assetVersion": "tutorial-v1",
   "colors": [
     {"id":"red","label":"あか","hex":"#db4c58"},
     {"id":"blue","label":"あお","hex":"#337cce"},

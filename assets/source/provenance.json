@@ -1,10 +1,11 @@
 {
-  "version": 1,
+  "version": 2,
   "markers": {
     "creator": "Original procedural calibration patterns",
     "source": "scripts/generate-assets.mjs",
     "seed": 260910,
-    "license": "CC0-1.0"
+    "license": "CC0-1.0",
+    "tutorialMarker": "TUTORIAL appended without changing the original nine marker seeds"
   },
   "ghost": {
     "creator": "Original procedural low-poly test model",
@@ -12,5 +13,5 @@
     "license": "CC0-1.0",
     "bytes": 43700
   },
-  "note": "Provisional calibration assets. Not the final event artwork."
+  "note": "Functional event prototype assets. The tutorial marker is part of tutorial-v1; the 3D ghost remains the accepted lightweight model."
 }

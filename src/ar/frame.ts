@@ -1,5 +1,5 @@
 import { Controller } from 'mind-ar/dist/mindar-image.prod.js';
-import { Group, Matrix4, PerspectiveCamera, Quaternion, Scene, WebGLRenderer, SRGBColorSpace, Vector3 } from 'three';
+import { CanvasTexture, Group, LinearFilter, Matrix4, Mesh, MeshBasicMaterial, PerspectiveCamera, PlaneGeometry, Quaternion, Scene, WebGLRenderer, SRGBColorSpace, Vector3 } from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { isSetId, SETS } from '../data/sets';
 import { startCameraPreview, mediaError } from './camera-preview';
@@ -82,6 +82,29 @@ async function missionResource(path: string): Promise<Mission> {
   return parseMission(await response.json());
 }
 
+function createSpeechBubble() {
+  const canvas=document.createElement('canvas');canvas.width=768;canvas.height=360;
+  const context=canvas.getContext('2d')!;
+  const texture=new CanvasTexture(canvas);texture.colorSpace=SRGBColorSpace;texture.minFilter=LinearFilter;texture.magFilter=LinearFilter;
+  const mesh=new Mesh(new PlaneGeometry(.72,.337),new MeshBasicMaterial({map:texture,transparent:true,depthTest:false,depthWrite:false}));
+  // Keep the bubble inside a portrait camera crop while it remains attached to
+  // and rotates with the recognized marker.
+  mesh.position.set(.1,.36,.2);mesh.renderOrder=2;mesh.visible=false;
+  const draw=(speaker:string,text:string)=>{
+    context.clearRect(0,0,canvas.width,canvas.height);
+    const x=12,y=12,w=744,h=282,r=34;
+    context.beginPath();context.moveTo(x+r,y);context.lineTo(x+w-r,y);context.quadraticCurveTo(x+w,y,x+w,y+r);
+    context.lineTo(x+w,y+h-r);context.quadraticCurveTo(x+w,y+h,x+w-r,y+h);context.lineTo(446,y+h);context.lineTo(386,348);context.lineTo(342,y+h);
+    context.lineTo(x+r,y+h);context.quadraticCurveTo(x,y+h,x,y+h-r);context.lineTo(x,y+r);context.quadraticCurveTo(x,y,x+r,y);context.closePath();
+    context.fillStyle='#ffffff';context.fill();context.lineWidth=12;context.strokeStyle='#101c35';context.stroke();
+    context.fillStyle='#246b5a';context.font='700 30px -apple-system, BlinkMacSystemFont, "Yu Gothic UI", sans-serif';context.fillText(speaker,50,72);
+    context.fillStyle='#101c35';context.font='700 42px -apple-system, BlinkMacSystemFont, "Yu Gothic UI", sans-serif';
+    text.split('\n').slice(0,2).forEach((line,index)=>context.fillText(line,50,142+index*62));
+    texture.needsUpdate=true;
+  };
+  return {mesh,draw};
+}
+
 async function start() {
   if (parent === window) throw new Error('トップページからカメラを開始してください。');
   send('loading', { stage: 'カメラの許可を確認しています' });
@@ -111,11 +134,15 @@ async function start() {
   renderer.setClearColor(0x000000,0); document.body.append(renderer.domElement);
   renderer.domElement.addEventListener('webglcontextlost', event => { event.preventDefault(); fail(new Error('描画が中断されました。カメラを開始し直してください。')); });
   const scene = new Scene(), camera = new PerspectiveCamera();
-  const anchors = SETS[setId].ids.map(id => { const group = new Group(); group.matrixAutoUpdate = false; group.visible = false; const model = ghost.clone(true); model.position.z = .1; group.add(model); scene.add(group); return { id, group, model, post: new Matrix4(), input: new Matrix4(), pose: tracking.poseStabilization?.algorithm==='stationary-hold-v3' ? new StationaryPoseStabilizer() : tracking.poseStabilization?.algorithm==='projection-depth-v2' ? new ProjectedPoseStabilizer() : new PoseStabilizer(), markerWidth: 1, inputAtMs: 0, updateIndex: 0 }; });
-  const speech=document.createElement('div');speech.className='ar-speech';speech.hidden=true;speech.setAttribute('role','status');speech.setAttribute('aria-live','polite');
-  const speechSpeaker=document.createElement('strong'),speechText=document.createElement('span');speech.append(speechSpeaker,speechText);document.body.append(speech);
-  const speechById=new Map(mission ? [...mission.hints.map(h=>[h.markerId,{speaker:h.speaker,text:h.text}] as const),[mission.answerMarker.markerId,{speaker:'ANSWERの おばけ',text:'みんなの こたえを おしえて！'}] as const] : []);
-  let spokenId='';const speechPoint=new Vector3();
+  const anchors = SETS[setId].ids.map(id => {
+    const group = new Group();group.matrixAutoUpdate=false;group.visible=false;
+    const model=ghost.clone(true);model.position.z=.1;
+    if(id==='TUTORIAL')model.traverse(object=>{if(object instanceof Mesh&&object.material instanceof MeshBasicMaterial&&object.material.color.getHex()===0xf7fcff){const material=object.material.clone();material.color.setHex(0xdff9ef);object.material=material;}});
+    group.add(model);scene.add(group);
+    return {id,group,model,post:new Matrix4(),input:new Matrix4(),pose:tracking.poseStabilization?.algorithm==='stationary-hold-v3'?new StationaryPoseStabilizer():tracking.poseStabilization?.algorithm==='projection-depth-v2'?new ProjectedPoseStabilizer():new PoseStabilizer(),markerWidth:1,inputAtMs:0,updateIndex:0};
+  });
+  const speechById=new Map(mission ? [...mission.hints.map(h=>[h.markerId,{speaker:h.speaker,text:h.text}] as const),[mission.answerMarker.markerId,{speaker:'ANSWERの おばけ',text:'みんなの こたえを おしえて！'}] as const,...(mission.tutorialMarker?[[mission.tutorialMarker.markerId,{speaker:mission.tutorialMarker.speaker,text:mission.tutorialMarker.text}] as const]:[])] : []);
+  const speechBubble=createSpeechBubble();let spokenId='';
   send('tracking-config', { config: tracking });
   controller = new Controller({ inputWidth: width, inputHeight: height, maxTrack: 1, warmupTolerance: 3, missTolerance: 5,
     filterMinCF: tracking.filterMinCF, filterBeta: tracking.filterBeta,
@@ -177,13 +204,10 @@ async function start() {
     if(tracking.ghostMotion==='float') for(const a of anchors) if(a.group.visible) {a.model.position.y=Math.sin(time/650)*.025;a.model.rotation.y=Math.sin(time/1100)*.08;}
     const speaking=anchors.find(a=>a.group.visible),copy=speaking?speechById.get(speaking.id):undefined;
     if(speaking&&copy){
-      if(spokenId!==speaking.id){spokenId=speaking.id;speechSpeaker.textContent=copy.speaker;speechText.textContent=copy.text;send('speech-visible',{id:speaking.id});}
-      speechPoint.set(0,.67,.05).applyMatrix4(speaking.group.matrix).project(camera);
-      const edge=Math.min(160,innerWidth*.39);
-      const x=Math.min(innerWidth-edge,Math.max(edge,(speechPoint.x*.5+.5)*innerWidth));
-      const y=Math.min(innerHeight-18,Math.max(130,(-speechPoint.y*.5+.5)*innerHeight));
-      speech.style.left=`${x}px`;speech.style.top=`${y}px`;speech.hidden=speechPoint.z < -1 || speechPoint.z > 1;
-    }else{speech.hidden=true;spokenId='';}
+      if(speechBubble.mesh.parent!==speaking.group)speaking.group.add(speechBubble.mesh);
+      if(spokenId!==speaking.id){spokenId=speaking.id;speechBubble.draw(copy.speaker,copy.text);document.body.dataset.speechId=speaking.id;document.body.dataset.speechCopy=`${copy.speaker}\n${copy.text}`;send('speech-visible',{id:speaking.id,rendering:'three-mesh'});}
+      speechBubble.mesh.visible=true;
+    }else{speechBubble.mesh.visible=false;spokenId='';delete document.body.dataset.speechId;delete document.body.dataset.speechCopy;}
     renderer.render(scene,camera);frames++;
     if(now-recordingStarted<=10000 && now-lastPoseSample>=100) {
       const a=anchors.find(anchor=>anchor.group.visible);

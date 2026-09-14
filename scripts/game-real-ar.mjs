@@ -9,13 +9,14 @@ const hintIds=mission.hints.map(h=>h.markerId);
 const storageKey=practice?'ar-obake-game-v1':`ar-obake-game-v1:${mission.id}`;
 const query=practice?'?mission=practice&simulate=1':'?simulate=1';
 const directory=path.resolve(practice?'.artifacts/game':'.artifacts/nine-game');await mkdir(directory,{recursive:true});
-const width=640,height=480,filePath=path.join(directory,practice?'four.y4m':'nine.y4m');
+const width=640,height=480,filePath=path.join(directory,practice?'four.y4m':'ten.y4m');
 function yuv(data){const y=Buffer.alloc(width*height),u=Buffer.alloc(width*height/4),v=Buffer.alloc(width*height/4);for(let row=0;row<height;row++)for(let col=0;col<width;col++){const i=row*width+col,j=i*4,r=data[j],g=data[j+1],b=data[j+2];y[i]=Math.round(16+.257*r+.504*g+.098*b);if(row%2===0&&col%2===0){const k=row/2*(width/2)+col/2;u[k]=Math.round(128-.148*r-.291*g+.439*b);v[k]=Math.round(128+.439*r-.368*g-.071*b);}}return Buffer.concat([Buffer.from('FRAME\n'),y,u,v]);}
 const video=await open(filePath,'w');await video.write(`YUV4MPEG2 W${width} H${height} F10:1 Ip A1:1 C420jpeg\n`);
-for(const id of [...hintIds,mission.answerMarker.markerId]){
+const scanIds=[...(mission.tutorialMarker?[mission.tutorialMarker.markerId]:[]),...hintIds,mission.answerMarker.markerId];
+for(const id of scanIds){
   const canvas=createCanvas(width,height),ctx=canvas.getContext('2d');ctx.fillStyle='#686f78';ctx.fillRect(0,0,width,height);
   const blank=yuv(ctx.getImageData(0,0,width,height).data);for(let i=0;i<10;i++)await video.write(blank);
-  ctx.drawImage(await loadImage(`public/markers/${id}.png`),128,48,384,384);const card=yuv(ctx.getImageData(0,0,width,height).data);for(let i=0;i<(id==='H01'?120:60);i++)await video.write(card);
+  ctx.drawImage(await loadImage(`public/markers/${id}.png`),128,48,384,384);const card=yuv(ctx.getImageData(0,0,width,height).data);for(let i=0;i<(id==='TUTORIAL'?200:id==='H01'?120:60);i++)await video.write(card);
 }await video.close();
 const browser=await chromium.launch({headless:true,args:['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader','--use-fake-ui-for-media-stream','--use-fake-device-for-media-stream',`--use-file-for-fake-video-capture=${filePath}`]});
 const errors=[],passed=[];
@@ -25,21 +26,24 @@ try{
   await page.goto('http://127.0.0.1:4173/'+query);await action('new').click();assert.equal(await page.locator('[data-sim]').count(),0);
   await page.waitForFunction(()=>document.querySelector('#scan-status')?.textContent==='さがしています',{},{timeout:90000});
   assert.ok((await page.locator('iframe').getAttribute('src')).includes('tracking=stable&motion=still'));
+  if(mission.tutorialMarker){
+    const tutorialBody=page.frameLocator('iframe').locator(`body[data-speech-id="${mission.tutorialMarker.markerId}"]`);await tutorialBody.waitFor({timeout:70000});assert.equal(await tutorialBody.getAttribute('data-speech-copy'),`${mission.tutorialMarker.speaker}\n${mission.tutorialMarker.text}`);await page.screenshot({path:path.join(directory,'real-tutorial.png'),fullPage:true});
+    await page.waitForFunction(key=>JSON.parse(localStorage.getItem(key)).tutorialComplete,storageKey,{timeout:5000});assert.deepEqual(await page.evaluate(key=>JSON.parse(localStorage.getItem(key)).markerIds,storageKey),[]);
+    await page.locator('.hud-memo').waitFor({timeout:15000});await page.waitForFunction(()=>document.querySelector('#scan-status')?.textContent==='さがしています',{},{timeout:90000});
+  }
+  const cameraBounds=await page.locator('.game-camera').evaluate(element=>{const r=element.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height,viewportWidth:innerWidth,viewportHeight:innerHeight};});assert.deepEqual(cameraBounds,{x:0,y:0,width:cameraBounds.viewportWidth,height:cameraBounds.viewportHeight,viewportWidth:cameraBounds.viewportWidth,viewportHeight:cameraBounds.viewportHeight});assert.equal(await page.locator('.game-header,.game-footer').count(),0);
   for(const id of hintIds){
-    const arSpeech=page.frameLocator('iframe').locator('.ar-speech');
-    await page.waitForFunction(id=>document.querySelector('#hint-panel .badge')?.textContent===id,id,{timeout:70000});
-    await arSpeech.waitFor({state:'visible',timeout:5000});const hint=mission.hints.find(h=>h.markerId===id),spoken=(await arSpeech.innerText()).replace(/\s+/g,' ');assert.ok(spoken.includes(hint.speaker));assert.ok(spoken.includes(hint.text.replace(/\n/g,' ')));
-    const bounds=await arSpeech.evaluate(element=>{const r=element.getBoundingClientRect();return {left:r.left,top:r.top,right:r.right,bottom:r.bottom,width:innerWidth,height:innerHeight};});assert.ok(bounds.left>=0&&bounds.top>=0&&bounds.right<=bounds.width&&bounds.bottom<=bounds.height);
+    const hint=mission.hints.find(h=>h.markerId===id),speechBody=page.frameLocator('iframe').locator(`body[data-speech-id="${id}"]`);await speechBody.waitFor({timeout:70000});assert.equal(await speechBody.getAttribute('data-speech-copy'),`${hint.speaker}\n${hint.text}`);assert.equal(await page.frameLocator('iframe').locator('.ar-speech').count(),0);
     if(id==='H01')await page.screenshot({path:path.join(directory,'real-hint.png'),fullPage:true});
     await page.waitForFunction(({key,id})=>JSON.parse(localStorage.getItem(key)).markerIds.includes(id),{key:storageKey,id},{timeout:5000});console.log('AUTO_COLLECTED '+id);
   }
   const ids=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)).markerIds,storageKey);assert.deepEqual(ids,hintIds);
-  await action('memo').click();assert.equal(await page.locator('iframe').count(),0);assert.equal(await page.locator('.memo-option.yes').count(),2);assert.equal(await page.locator('.hint-stamps .obtained').count(),hintIds.length);
-  await action('share').click();await action('answer-scan').click();
+  assert.equal(await page.locator('.saved-clue,.hint-bubble,.hint-stamps,.auto-recorded').count(),0);assert.equal(await page.locator('.hud-memo-option.yes').count(),2);
+  await action('share').click();assert.equal(await page.locator('iframe').count(),0);assert.equal(await page.locator('.memo-option.yes').count(),2);assert.equal(await page.locator('.hint-stamps .obtained').count(),hintIds.length);await action('answer-scan').click();
   await page.locator('[data-color="blue"]').waitFor({timeout:90000});assert.equal(await page.locator('iframe').count(),0);
   await page.locator('[data-color="blue"]').click();await action('next-item').click();await page.locator('[data-item="hat"]').click();await action('confirm-answer').click();await action('submit-answer').click();
   assert.equal(await page.locator('h1').innerText(),'せいかい！');
-  passed.push('production build ignores simulate query',`real MindAR recognized ${hintIds.join('/')} and automatically saved all hints`,'AR speech bubble follows the recognized ghost, shows mission copy, and remains inside an iPad portrait viewport','memo and consultation stop camera','ANSWER recognition opens colour and item selection','correct answer completes game');
+  passed.push('production build ignores simulate query','tutorial marker shows a separate ghost and 3D speech bubble before exploration without entering the clue memo',`real MindAR recognized ${hintIds.join('/')} and automatically saved all hints`,'speech copy is drawn inside the Three.js canvas with no DOM speech bubble','camera fills the viewport with no page header or footer and only a compact colour/item memo','consultation stops camera and retains the full memo','ANSWER recognition opens colour and item selection','correct answer completes game');
   await page.goto('http://127.0.0.1:4173/lab.html');assert.ok(await page.locator('#start').isEnabled());await page.locator('#start').click();await page.waitForFunction(()=>document.querySelector('#status')?.textContent==='認識中',{},{timeout:90000});await page.locator('#stop').click();assert.equal(await page.locator('iframe').count(),0);passed.push('retained laboratory page starts and stops AR');
   // Reuse the Safari playback-recovery implementation through the game's own cover.
   const denied=await browser.newContext();await denied.addInitScript(()=>{navigator.mediaDevices.getUserMedia=async()=>{throw new DOMException('test denied','NotAllowedError');};});const d=await denied.newPage();await d.goto('http://127.0.0.1:4173/'+query);await d.locator('[data-action="new"]').click();await d.getByText('カメラを使えませんでした。Safariの設定でカメラを許可して、もういちど開始してね。').first().waitFor();assert.equal(await d.locator('iframe').count(),0);assert.ok(await d.locator('#camera-action').isEnabled());await denied.close();passed.push('camera denial offers restart without discarding progress');

@@ -1,7 +1,7 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
-const url='http://127.0.0.1:5173/?mission=practice&simulate=1';
+const url='http://127.0.0.1:5173/?mission=practice&simulate=1&windowed=1';
 const key='ar-obake-game-v1',errors=[],passed=[];
 await mkdir('.artifacts/game',{recursive:true});
 const browser=await chromium.launch({headless:true});
@@ -16,15 +16,15 @@ try{
   await page.screenshot({path:'.artifacts/game/welcome.png',fullPage:true});
   await action('new').click();await page.locator('[data-sim="H01"]').click();await page.waitForTimeout(150);await page.locator('[data-sim="なし"]').click();await page.waitForTimeout(500);
   assert.equal((await saved()).markerIds.length,0);
-  await marker('H01');assert.deepEqual((await saved()).markerIds,['H01']);assert.equal(await action('collect').count(),0);assert.ok((await page.locator('.auto-recorded').innerText()).includes('自動'));
-  assert.equal(await page.locator('.memo-option.no').count(),2);
+  await marker('H01');assert.deepEqual((await saved()).markerIds,['H01']);assert.equal(await action('collect').count(),0);assert.equal(await page.locator('.auto-recorded,.hint-bubble').count(),0);
+  assert.equal(await page.locator('.hud-memo-option.no').count(),2);
   await action('stop-camera').click();assert.equal(await action('collect').count(),0);await action('camera').click();
   await marker('ANSWER');assert.ok((await page.locator('#hint-panel').innerText()).includes('そうだん'));assert.equal(await page.locator('[data-color]').count(),0);
   await page.screenshot({path:'.artifacts/game/explore.png',fullPage:true});
   passed.push('stable recognition records a hint automatically; brief recognition and loss do not record; duplicate collection prevented; early ANSWER does not skip consultation');
-  await action('memo').click();assert.ok((await page.locator('.saved-clue').innerText()).includes('あかい'));await noOverflow();await action('memo-back').click();
+  await action('share').click();assert.ok((await page.locator('.saved-clue').innerText()).includes('あかい'));await noOverflow();await action('explore').click();
   for(const id of ['H02','H03'])await marker(id);
-  assert.equal(await page.locator('.memo-option.yes').count(),2);
+  assert.equal(await page.locator('.hud-memo-option.yes').count(),2);
   await page.reload();await action('continue').click();assert.deepEqual((await saved()).markerIds,['H01','H02','H03']);
   const another=await browser.newContext(),second=await another.newPage();await second.goto(url);await second.locator('[data-action="new"]').waitFor();assert.equal(await second.evaluate(k=>localStorage.getItem(k),key),null);await another.close();
   passed.push('memo inference, three-clue solution, reload restoration, and isolated device storage');
@@ -42,7 +42,7 @@ try{
   await action('reset').click();await action('cancel-reset').click();assert.equal((await saved()).phase,'complete');await action('reset').click();await action('confirm-reset').click();assert.equal((await saved()).markerIds.length,0);assert.equal(await page.evaluate(()=>localStorage.getItem('ar-obake-lab-v1')),'preserved test log');
   passed.push('reset confirmation and preservation of laboratory records');
   for(const [width,height] of [[768,1024],[1024,768],[390,844]]){
-    await page.setViewportSize({width,height});await noOverflow();await marker('H01');await noOverflow();await page.screenshot({path:`.artifacts/game/scan-${width}.png`,fullPage:true});await action('memo').click();await noOverflow();await action('memo-back').click();
+    await page.evaluate(async()=>{if(document.fullscreenElement)await document.exitFullscreen();});await page.setViewportSize({width,height});await noOverflow();await marker('H01');await noOverflow();await page.screenshot({path:`.artifacts/game/scan-${width}.png`,fullPage:true});await action('share').click();await noOverflow();await action('explore').click();
   }
   const invalid='{"schemaVersion":1,"missionId":"another","missionVersion":7}';
   await page.evaluate(({key,invalid})=>localStorage.setItem(key,invalid),{key,invalid});await page.reload();await action('new').waitFor();assert.equal(await page.evaluate(k=>localStorage.getItem(k),key),invalid);await action('new').click();await action('cancel-reset').click();assert.equal(await page.evaluate(k=>localStorage.getItem(k),key),invalid);

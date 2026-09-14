@@ -1,5 +1,5 @@
 {
-  "version": "calibration-v1",
+  "version": "tutorial-v1",
   "mindar": "1.2.5",
   "markers": [
     {
@@ -64,6 +64,13 @@
       "width": 800,
       "height": 800,
       "sha256": "e1614416065fb0659e65703b1c67f3ea3108c127bfedf89b8bb70262a0eee0e5"
+    },
+    {
+      "id": "TUTORIAL",
+      "file": "markers/TUTORIAL.png",
+      "width": 800,
+      "height": 800,
+      "sha256": "4770b02456c900ac3c824f830171f2302fc68de45bd34377d076d3c58c86ba14"
     }
   ],
   "sets": {
@@ -86,6 +93,18 @@
       "H07",
       "H08",
       "ANSWER"
+    ],
+    "ten": [
+      "H01",
+      "H02",
+      "H03",
+      "H04",
+      "H05",
+      "H06",
+      "H07",
+      "H08",
+      "ANSWER",
+      "TUTORIAL"
     ]
   }
 }

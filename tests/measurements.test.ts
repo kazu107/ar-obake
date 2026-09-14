@@ -6,5 +6,5 @@ describe('recognition measurements',()=>{
   it('includes timeouts in the denominator and excludes cancellations',()=>{const a=observeTrial(beginTrial('H01',0),'H01',2000),b=finishTrial(beginTrial('H01',0),10000,'timeout'),c=finishTrial(beginTrial('H01',0),1000,'cancelled');expect(summarizeTrials([a,b,c])).toEqual({attempts:2,success:1,within3s:1,timeouts:1,wrongDetections:0});});
   it('a late detection cannot turn a timeout into a success',()=>{const t=observeTrial(beginTrial('H01',0),'H01',10001);expect(t.outcome).toBe('timeout');expect(observeTrial(t,'H01',11000)).toBe(t);});
   it('finished trials are immutable',()=>{const t=observeTrial(beginTrial('H01',0),'H01',200);expect(finishTrial(t,800,'cancelled')).toBe(t);});
-  it('maps ANSWER to index 3 in the four set and index 8 in the nine set',()=>{expect(SETS.four.ids[3]).toBe('ANSWER');expect(SETS.nine.ids[8]).toBe('ANSWER');expect(isSetId('__proto__')).toBe(false);expect(isSetId('one')).toBe(true);});
+  it('keeps existing marker indexes and appends the tutorial card to the ten-card set',()=>{expect(SETS.four.ids[3]).toBe('ANSWER');expect(SETS.nine.ids[8]).toBe('ANSWER');expect(SETS.ten.ids[8]).toBe('ANSWER');expect(SETS.ten.ids[9]).toBe('TUTORIAL');expect(isSetId('__proto__')).toBe(false);expect(isSetId('ten')).toBe(true);});
 });

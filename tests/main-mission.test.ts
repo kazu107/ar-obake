@@ -3,14 +3,14 @@ import mainData from '../public/missions/main.json';
 import practiceData from '../public/missions/prototype.json';
 import {parseMission} from '../src/game/mission';
 import {analyzeBalance,checkMainMissionBalance} from '../src/game/balance';
-import {newProgress,collect,candidates,memoMark} from '../src/game/progress';
+import {newProgress,collect,candidates,memoMark,parseProgress} from '../src/game/progress';
 import {gameStorageKey,GAME_STORAGE_KEY,loadProgress,saveProgress} from '../src/storage/game-storage';
 import {hintMarkerLabel,welcome} from '../src/game/ui';
 import {memo} from '../src/game/screens';
 const mission=parseMission(mainData),practice=parseMission(practiceData),report=analyzeBalance(mission);
 describe('eight-hint content and omission tolerance',()=>{
-  it('uses all eight existing hint cards and ANSWER at index eight',()=>{
-    expect(mission.markerSet).toBe('nine');expect(mission.hints.map(h=>h.targetIndex)).toEqual([0,1,2,3,4,5,6,7]);expect(mission.answerMarker).toEqual({markerId:'ANSWER',targetIndex:8});
+  it('uses all eight existing hint cards, ANSWER, and a separate tutorial marker',()=>{
+    expect(mission.markerSet).toBe('ten');expect(mission.hints.map(h=>h.targetIndex)).toEqual([0,1,2,3,4,5,6,7]);expect(mission.answerMarker).toEqual({markerId:'ANSWER',targetIndex:8});expect(mission.tutorialMarker).toEqual({markerId:'TUTORIAL',targetIndex:9,speaker:'れんしゅうの おばけ',text:'こんにちは！\nカードを しばらく うつしてね。'});
   });
   it('retains the intended meaning of each written hint',()=>{
     const expected=[
@@ -65,6 +65,10 @@ describe('mission selection and eight-hint memo',()=>{
   });
   it('takes title, card range, and total from the selected mission',()=>{
     expect(hintMarkerLabel(mission)).toBe('H01〜H08');expect(hintMarkerLabel(practice)).toBe('H01・H02・H03');
-    expect(welcome(mission)).toContain('9枚のカードを印刷');expect(welcome(mission)).toContain(mission.title);expect(welcome(mission)).toContain('じどうでメモ');expect(welcome(mission)).toContain('ARのふきだし');expect(welcome(practice)).toContain('4枚のカードを印刷');
+    expect(welcome(mission)).toContain('10枚のカードを印刷');expect(welcome(mission)).toContain(mission.title);expect(welcome(mission)).toContain('れんしゅうを はじめる');expect(welcome(mission)).toContain('TUTORIAL');expect(welcome(practice)).toContain('4枚のカードを印刷');
+  });
+  it('migrates existing progress past the tutorial without discarding its clues',()=>{
+    const old={schemaVersion:1,missionId:mission.id,missionVersion:mission.version,markerIds:['H01'],phase:'exploring',attempts:[]};
+    expect(parseProgress(old,mission)).toMatchObject({markerIds:['H01'],tutorialComplete:true});expect(newProgress(mission).tutorialComplete).toBe(false);expect(newProgress(practice).tutorialComplete).toBe(true);
   });
 });

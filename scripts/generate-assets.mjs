@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 
 for (const dir of ['public/markers', 'public/models', 'public/targets', 'assets/source']) await mkdir(dir, { recursive: true });
-const ids = ['H01','H02','H03','H04','H05','H06','H07','H08','ANSWER'];
+const ids = ['H01','H02','H03','H04','H05','H06','H07','H08','ANSWER','TUTORIAL'];
 const metadata = [];
 for (let index = 0; index < ids.length; index++) {
   let seed = 260910 + index * 7919;
@@ -27,7 +27,7 @@ for (let index = 0; index < ids.length; index++) {
   }
   ctx.fillStyle='#fff';ctx.fillRect(225,317,350,155);
   ctx.strokeStyle='#101c35';ctx.lineWidth=5;ctx.strokeRect(235,327,330,135);
-  ctx.fillStyle='#101c35';ctx.font=`bold ${index===8?64:95}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(ids[index],400,400);
+  ctx.fillStyle='#101c35';ctx.font=`bold ${ids[index]==='TUTORIAL'?42:index===8?64:95}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(ids[index],400,400);
   ctx.fillStyle='#101c35';ctx.font='bold 20px sans-serif';ctx.fillText(`AR OBAKE / TEST CARD ${String(index+1).padStart(2,'0')}`,400,778);
   const png = canvas.toBuffer('image/png');
   await writeFile(`public/markers/${ids[index]}.png`,png);
@@ -61,6 +61,6 @@ for(const x of [-.24,.24]) {const arm=new THREE.Mesh(sphere,white);arm.scale.set
 const badge=new THREE.Mesh(new THREE.CircleGeometry(.035,5),gold);badge.position.set(.12,-.105,.219);ghost.add(badge);
 const model=await new GLTFExporter().parseAsync(ghost,{binary:true});
 await writeFile('public/models/ghost.glb',Buffer.from(model));
-await writeFile('public/targets/manifest.json',JSON.stringify({version:'calibration-v1',mindar:'1.2.5',markers:metadata,sets:{one:['H01'],four:['H01','H02','H03','ANSWER'],nine:ids}},null,2)+'\n');
-await writeFile('assets/source/provenance.json',JSON.stringify({version:1,markers:{creator:'Original procedural calibration patterns',source:'scripts/generate-assets.mjs',seed:260910,license:'CC0-1.0'},ghost:{creator:'Original procedural low-poly test model',source:'scripts/generate-assets.mjs',license:'CC0-1.0',bytes:model.byteLength},note:'Provisional calibration assets. Not the final event artwork.'},null,2)+'\n');
+await writeFile('public/targets/manifest.json',JSON.stringify({version:'tutorial-v1',mindar:'1.2.5',markers:metadata,sets:{one:['H01'],four:['H01','H02','H03','ANSWER'],nine:ids.slice(0,9),ten:ids}},null,2)+'\n');
+await writeFile('assets/source/provenance.json',JSON.stringify({version:2,markers:{creator:'Original procedural calibration patterns',source:'scripts/generate-assets.mjs',seed:260910,license:'CC0-1.0',tutorialMarker:'TUTORIAL appended without changing the original nine marker seeds'},ghost:{creator:'Original procedural low-poly test model',source:'scripts/generate-assets.mjs',license:'CC0-1.0',bytes:model.byteLength},note:'Functional event prototype assets. The tutorial marker is part of tutorial-v1; the 3D ghost remains the accepted lightweight model.'},null,2)+'\n');
 console.log(`Generated ${ids.length} markers; ghost.glb ${model.byteLength} bytes.`);

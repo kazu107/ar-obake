@@ -1,14 +1,15 @@
 {
-  "testedAt": "2026-09-12T23:30:50.856Z",
+  "testedAt": "2026-09-14T18:58:22.384Z",
   "environment": "Chromium, development-only simulated recognition; physical iPad not tested",
   "passed": [
-    "nine-card home and eight acquired-status indicators",
+    "ten-card home starts with a tutorial marker and advances without recording it",
+    "full-viewport camera hides page chrome and only shows the compact deduction memo",
     "stable recognition automatically records hints; duplicates and early ANSWER rejected",
-    "reload restores nine-card progress independently of legacy four-card progress",
+    "reload restores tutorial and clue progress independently of legacy four-card progress",
     "seven hints excluding H04 identify both answer components",
     "seven clues displayed in consultation at 390/768/1024 without overflow",
     "ANSWER, correct answer, completion restore, and confirmed reset",
-    "reset of nine-card mission preserves original four-card save"
+    "reset of ten-card mission preserves original four-card save"
   ],
   "pageErrors": []
 }

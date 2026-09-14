@@ -9,24 +9,26 @@ import { escape as e, shell as pageShell, welcome } from './ui';
 import * as views from './screens';
 import { playRecordedSound, playSuccessSound, primeSound } from './sound';
 
-type Screen='home'|'explore'|'memo'|'share'|'answer-scan'|'color'|'item'|'confirm'|'wrong'|'win'|'reset';
+type Screen='home'|'tutorial'|'explore'|'memo'|'share'|'answer-scan'|'color'|'item'|'confirm'|'wrong'|'win'|'reset';
 const app=document.querySelector<HTMLDivElement>('#app')!;
 const params=new URLSearchParams(location.search);
 const practice=params.get('mission')==='practice';
 const missionFile=practice?'./missions/prototype.json':'./missions/main.json';
 const homeUrl=practice?'./?mission=practice':'./';
 const simulation=import.meta.env.DEV && params.has('simulate');
+const requestBrowserFullscreen=!import.meta.env.DEV||!params.has('windowed');
 let mission:Mission, progress:Progress, gate:ScanGate, loaded:LoadResult, hasGame=false;
 let screen:Screen='home',memoReturn:Screen='explore',resetReturn:Screen='home';
 let selected:Partial<Answer>={},answerUnlocked=false,saveFailed=false;
 let frame:HTMLIFrameElement|undefined,ready=false,simulating=false,openedAt=0,lastFrameAt=0;
 let shownMarker:string|undefined;
+let tutorialTimer:number|undefined;
 let storage:Pick<Storage,'getItem'|'setItem'>;
 try{storage=window.localStorage;}catch{storage={getItem(){throw Error('Storage unavailable');},setItem(){throw Error('Storage unavailable');}};}
 const byId=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id) as T|null;
-const isScan=()=>screen==='explore'||screen==='answer-scan';
-const isScanScreen=(s:Screen)=>s==='explore'||s==='answer-scan';
-const shell=(content:string,count=0,active=false)=>pageShell(content,count,active,mission,practice);
+const isScan=()=>isScanScreen(screen);
+const isScanScreen=(s:Screen)=>s==='tutorial'||s==='explore'||s==='answer-scan';
+const shell=(content:string,count=0,active=false)=>pageShell(content,count,active,mission,practice,isScan());
 
 function persist(next:Progress) {
   progress=next;hasGame=true;saveFailed=!saveProgress(storage,mission,progress);showSaveWarning();
@@ -36,10 +38,13 @@ function showSaveWarning() {
   notice.textContent='このiPadに メモを ほぞんできません。あそぶことはできますが、ページをとじると メモがきえることがあります。スタッフに つたえてね。';
 }
 function stopCamera() {
+  if(tutorialTimer!==undefined){clearTimeout(tutorialTimer);tutorialTimer=undefined;}
   frame?.remove();frame=undefined;ready=false;simulating=false;shownMarker=undefined;gate?.reset();
 }
+function enterFullscreen(){const root=document.documentElement;if(requestBrowserFullscreen&&!document.fullscreenElement&&root.requestFullscreen)void root.requestFullscreen().catch(()=>{});}
+function leaveFullscreen(){if(document.fullscreenElement&&document.exitFullscreen)void document.exitFullscreen().catch(()=>{});}
 function go(next:Screen,activateCamera=false) {
-  stopCamera();screen=next;render();if(activateCamera&&isScan())startCamera();
+  const leavingCamera=isScan()&&!isScanScreen(next);stopCamera();screen=next;if(leavingCamera)leaveFullscreen();render();if(activateCamera&&isScan())startCamera();
   byId('game-main')?.querySelector<HTMLElement>('h1')?.focus({preventScroll:true});window.scrollTo(0,0);
 }
 function loadNotice() {
@@ -51,7 +56,7 @@ function render() {
   let content='';
   switch(screen){
     case 'home':content=loadNotice()+welcome(mission,hasGame,progress.phase==='complete');break;
-    case 'explore':case 'answer-scan':content=views.scan(mission,progress,screen==='answer-scan');break;
+    case 'tutorial':case 'explore':case 'answer-scan':content=views.scan(mission,progress,screen);break;
     case 'memo':content=`<div class="screen-top"><div><p class="kicker">きみだけの ヒント</p><h1 tabindex="-1">そうさメモ</h1></div></div><div class="memo-page-layout">${views.memo(mission,progress)}${views.hintList(mission,progress)}</div><div class="button-row memo-back"><button class="secondary" data-action="memo-back">もとの画面に もどる</button>${progress.phase!=='complete'?'<button class="primary" data-action="share">みんなと そうだんする →</button>':''}</div>`;break;
     case 'share':content=views.share(mission,progress);break;
     case 'color':case 'item':content=views.choose(mission,screen,selected);break;
@@ -60,8 +65,9 @@ function render() {
     case 'win':content=views.win(mission);break;
     case 'reset':content='<section class="centered card"><h1 tabindex="-1">さいしょから あそぶ？</h1><p>このiPadの ゲームのメモと こたえを けして、<br>あたらしく はじめるよ。</p><div class="button-row"><button class="secondary" data-action="cancel-reset">もどる</button><button class="danger" data-action="confirm-reset">メモをけして はじめる</button></div></section>';break;
   }
+  document.body.classList.toggle('camera-mode',isScan());
   app.innerHTML=shell(`<div id="save-warning" class="notice" role="alert" hidden></div>${content}`,progress.markerIds.length,hasGame&&screen!=='home'&&screen!=='reset'&&screen!=='memo');
-  byId('game-version')!.textContent=APP_VERSION;showSaveWarning();if(isScan())updateHint();
+  const version=byId('game-version');if(version)version.textContent=APP_VERSION;showSaveWarning();if(isScan())updateHint();
   if(import.meta.env.DEV && simulation && isScan()){
     const panel=document.createElement('details');panel.className='dev-controls';panel.open=true;
     panel.innerHTML='<summary>開発用：認識の代わり（実機試験ではありません）</summary>'+[...SETS[mission.markerSet].ids,'なし'].map(id=>`<button data-sim="${id}">${id}</button>`).join('');
@@ -81,6 +87,7 @@ function pauseCamera(message:string) {
 }
 function startCamera() {
   if(!isScan()||frame||simulating)return;
+  enterFullscreen();
   gate.reset();shownMarker=undefined;openedAt=lastFrameAt=performance.now();
   if(import.meta.env.DEV && simulation){simulating=true;ready=true;cameraStatus('開発用の認識','下の開発用ボタンで認識を再現します。',true);return;}
   if(!isSecureContext||!navigator.mediaDevices?.getUserMedia){cameraStatus('カメラを使えません','HTTPSのURLを、iPadのSafariで ひらいてね。',true);return;}
@@ -93,7 +100,14 @@ function updateHint(force=false) {
   const marker=ready?gate.eligible(performance.now()):undefined;
   if(!force&&marker===shownMarker&&byId('hint-panel')!.innerHTML)return;shownMarker=marker;
   const panel=byId('hint-panel')!;
-  if(!marker){panel.innerHTML=`<p class="hint-placeholder">${screen==='answer-scan'?'ANSWERの カードを しばらく うつしてね。':'カードを しばらく うつすと、ヒントが出るよ。'}</p>`;return;}
+  if(!marker){panel.textContent=screen==='tutorial'?'TUTORIALのカードを しばらく うつしてね。':screen==='answer-scan'?'ANSWERのカードを しばらく うつしてね。':'カードを しばらく うつしてね。';return;}
+  if(screen==='tutorial'){
+    if(marker===mission.tutorialMarker?.markerId&&!progress.tutorialComplete&&tutorialTimer===undefined){
+      persist({...progress,tutorialComplete:true});playRecordedSound();panel.textContent='れんしゅう成功。たんけんを始めます。';
+      tutorialTimer=window.setTimeout(()=>{tutorialTimer=undefined;if(screen==='tutorial')go('explore',true);},1500);
+    }
+    return;
+  }
   if(screen==='answer-scan'){
     if(marker===mission.answerMarker.markerId){answerUnlocked=true;selected={};go('color');}
     else panel.innerHTML='<p class="hint-placeholder">これは ヒントのカードだよ。ANSWERを さがしてね。</p>';
@@ -104,10 +118,10 @@ function updateHint(force=false) {
   const alreadyRecorded=progress.markerIds.includes(marker);
   if(!alreadyRecorded){
     persist(collect(mission,progress,marker));playRecordedSound();
-    byId('mini-memo')!.innerHTML=views.memo(mission,progress,true);
+    byId('mini-memo')!.innerHTML=views.scanMemo(mission,progress);
     const badge=document.querySelector('.memo-shortcut span');if(badge)badge.textContent=String(progress.markerIds.length);
   }
-  panel.innerHTML=`<section class="hint-bubble recorded"><span class="badge">${e(marker)}</span><h2>${e(hint.speaker)}</h2><p class="hint-text">${e(hint.text).replace(/\n/g,'<br>')}</p><p class="auto-recorded">${alreadyRecorded?'✓ メモに 記録ずみ':'♪ メモに 自動で記録したよ'}</p></section>`;
+  panel.textContent=alreadyRecorded?'記録ずみのヒントです。':'ヒントを自動記録しました。';
 }
 app.addEventListener('click',event=>{
   const button=(event.target as Element).closest<HTMLButtonElement>('button');if(!button||button.disabled||!mission)return;
@@ -117,12 +131,12 @@ app.addEventListener('click',event=>{
     if(button.dataset.color&&screen==='color'&&answerUnlocked&&mission.colors.some(c=>c.id===button.dataset.color)){selected.color=button.dataset.color;render();return;}
     if(button.dataset.item&&screen==='item'&&answerUnlocked&&mission.items.some(c=>c.id===button.dataset.item)){selected.item=button.dataset.item;render();return;}
     switch(button.dataset.action){
-      case 'new':if(screen!=='home')break;if(loaded.kind==='invalid'||loaded.kind==='incompatible'){resetReturn='home';go('reset');}else{persist(newProgress(mission));loaded={kind:'missing'};go('explore',true);}break;
-      case 'continue':if(screen==='home'&&hasGame)go(progress.phase==='complete'?'win':progress.phase==='sharing'?'share':'explore',progress.phase==='exploring');break;
+      case 'new':if(screen!=='home')break;if(loaded.kind==='invalid'||loaded.kind==='incompatible'){resetReturn='home';go('reset');}else{persist(newProgress(mission));loaded={kind:'missing'};go(mission.tutorialMarker?'tutorial':'explore',true);}break;
+      case 'continue':if(screen==='home'&&hasGame){const next=progress.phase==='complete'?'win':progress.phase==='sharing'?'share':progress.tutorialComplete?'explore':'tutorial';go(next,progress.phase==='exploring');}break;
       case 'home':go('home');break;
       case 'reset':resetReturn=screen;go('reset');break;
       case 'cancel-reset':go(resetReturn,isScanScreen(resetReturn));break;
-      case 'confirm-reset':if(screen==='reset'){selected={};answerUnlocked=false;loaded={kind:'missing'};persist(newProgress(mission));go('explore',true);}break;
+      case 'confirm-reset':if(screen==='reset'){selected={};answerUnlocked=false;loaded={kind:'missing'};persist(newProgress(mission));go(mission.tutorialMarker?'tutorial':'explore',true);}break;
       case 'explore':if(hasGame&&progress.phase!=='complete'){answerUnlocked=false;persist({...progress,phase:'exploring'});go('explore',true);}break;
       case 'camera':startCamera();break;
       case 'stop-camera':pauseCamera('また さがすときは「カメラを開始」をおしてね。');break;

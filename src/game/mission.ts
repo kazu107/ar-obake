@@ -6,9 +6,10 @@ export interface Answer { color: string; item: string }
 export type Condition = { op: 'is' | 'not'; field: 'color' | 'item'; value: string } |
   { op: 'all' | 'any'; conditions: Condition[] };
 export interface Hint { id: string; markerId: string; targetIndex: number; speaker: string; text: string; condition: Condition }
+export interface TutorialMarker { markerId: string; targetIndex: number; speaker: string; text: string }
 export interface Mission {
   id: string; version: number; title: string; markerSet: SetId; assetVersion: string;
-  colors: Color[]; items: Item[]; answer: Answer; answerMarker: { markerId: string; targetIndex: number }; hints: Hint[];
+  colors: Color[]; items: Item[]; answer: Answer; answerMarker: { markerId: string; targetIndex: number }; tutorialMarker?: TutorialMarker; hints: Hint[];
 }
 function requireValue(value: unknown, message: string): asserts value { if (!value) throw new Error(message); }
 function object(value: unknown): Record<string,unknown> { requireValue(value && typeof value === 'object' && !Array.isArray(value),'問題データの形式が違います。'); return value as Record<string,unknown>; }
@@ -49,12 +50,14 @@ export function parseMission(raw: unknown): Mission {
   };
   const marker=(value:unknown)=>{const c=object(value),markerId=id(c.markerId);requireValue(Number.isInteger(c.targetIndex),'マーカー番号が不正です。');const targetIndex=c.targetIndex as number;requireValue((SETS[markerSet].ids as readonly string[])[targetIndex]===markerId,'印刷カードと認識データの対応が違います。');return {markerId,targetIndex};};
   const hints=list(m.hints,1,8).map(v=>{const h=object(v);return {...marker(h),id:id(h.id),speaker:text(h.speaker,40),text:text(h.text,300),condition:parseCondition(h.condition)};});
-  const answerMarker=marker(m.answerMarker);unique(hints.map(h=>h.id));unique([...hints.map(h=>h.markerId),answerMarker.markerId]);
-  requireValue(hints.length+1===SETS[markerSet].ids.length,'ヒントの枚数とマーカーセットが違います。');
+  const answerMarker=marker(m.answerMarker);
+  const tutorialMarker=m.tutorialMarker===undefined?undefined:(()=>{const t=object(m.tutorialMarker);return {...marker(t),speaker:text(t.speaker,40),text:text(t.text,300)};})();
+  unique(hints.map(h=>h.id));unique([...hints.map(h=>h.markerId),answerMarker.markerId,...(tutorialMarker?[tutorialMarker.markerId]:[])]);
+  requireValue(hints.length+1+(tutorialMarker?1:0)===SETS[markerSet].ids.length,'ヒントの枚数とマーカーセットが違います。');
   requireValue(m.assetVersion===ASSET_VERSION,'認識素材の版が違います。');
   requireValue(Number.isInteger(m.version) && (m.version as number)>0,'問題の版が不正です。');
   const a=object(m.answer),answer={color:id(a.color),item:id(a.item)};
-  const result:Mission={id:id(m.id),version:m.version as number,title:text(m.title,80),markerSet,assetVersion:ASSET_VERSION,colors,items,answer,answerMarker,hints};
+  const result:Mission={id:id(m.id),version:m.version as number,title:text(m.title,80),markerSet,assetVersion:ASSET_VERSION,colors,items,answer,answerMarker,...(tutorialMarker?{tutorialMarker}:{}),hints};
   requireValue(isAnswer(result,answer),'正解の選択肢がありません。');
   requireValue(hints.every(h=>matches(answer,h.condition)),'正解とヒントが矛盾しています。');
   requireValue(allCandidates(result).filter(a=>hints.every(h=>matches(a,h.condition))).length===1,'全ヒントから正解を1つに決められません。');

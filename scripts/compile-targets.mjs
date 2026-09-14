@@ -20,12 +20,12 @@ try {
     await compiler.compileImageTargets(images,progress=>{const n=Math.floor(progress/10)*10;if(n!==last){last=n;window.reportCompile(n);}});
     const bytes=compiler.exportData();let binary='';for(const byte of bytes)binary+=String.fromCharCode(byte);return btoa(binary);
   });
-  const nine=decode(Buffer.from(compiled,'base64'));
-  if(nine.v!==2||nine.dataList.length!==9)throw Error('Invalid compiled output');
+  const master=decode(Buffer.from(compiled,'base64'));
+  if(master.v!==2||master.dataList.length!==10)throw Error('Invalid compiled output');
   await mkdir('public/targets',{recursive:true});
-  const sets={one:[0],four:[0,1,2,8],nine:[0,1,2,3,4,5,6,7,8]};
+  const sets={one:[0],four:[0,1,2,8],nine:[0,1,2,3,4,5,6,7,8],ten:[0,1,2,3,4,5,6,7,8,9]};
   for(const [name,indexes]of Object.entries(sets)) {
-    const data=encode({v:nine.v,dataList:indexes.map(i=>nine.dataList[i])});
+    const data=encode({v:master.v,dataList:indexes.map(i=>master.dataList[i])});
     await writeFile(`public/targets/${name}.mind`,data);
     console.log(`${name}: ${indexes.length} targets, ${data.length} bytes`);
   }

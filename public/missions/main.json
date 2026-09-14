@@ -2,8 +2,14 @@
   "id": "obake-mission-01",
   "version": 1,
   "title": "8にんの おばけのひみつ",
-  "markerSet": "nine",
-  "assetVersion": "calibration-v1",
+  "markerSet": "ten",
+  "assetVersion": "tutorial-v1",
+  "tutorialMarker": {
+    "markerId": "TUTORIAL",
+    "targetIndex": 9,
+    "speaker": "れんしゅうの おばけ",
+    "text": "こんにちは！\nカードを しばらく うつしてね。"
+  },
   "colors": [
     {
       "id": "red",
