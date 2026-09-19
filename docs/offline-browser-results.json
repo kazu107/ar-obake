@@ -1,0 +1,9 @@
+{
+  "testedAt": "2026-09-19T10:16:45.404Z",
+  "environment": "Playwright Chromium production preview with network disabled after explicit preparation",
+  "passed": [
+    "staff screen downloads and verifies the complete offline game bundle",
+    "offline reload restores the staff page, Mission v2, AR runtime bundle, ten-marker target data, and ghost model"
+  ],
+  "pageErrors": []
+}

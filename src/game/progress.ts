@@ -2,8 +2,9 @@ import { allCandidates, correct, isAnswer, matches, type Answer, type Mission } 
 export interface Progress {
   schemaVersion: 1; missionId: string; missionVersion: number;
   markerIds: string[]; phase: 'exploring' | 'sharing' | 'complete'; attempts: Answer[]; tutorialComplete: boolean;
+  startedAt: number; updatedAt: number;
 }
-export function newProgress(m:Mission):Progress { return {schemaVersion:1,missionId:m.id,missionVersion:m.version,markerIds:[],phase:'exploring',attempts:[],tutorialComplete:!m.tutorialMarker}; }
+export function newProgress(m:Mission):Progress { const now=Date.now();return {schemaVersion:1,missionId:m.id,missionVersion:m.version,markerIds:[],phase:'exploring',attempts:[],tutorialComplete:!m.tutorialMarker,startedAt:now,updatedAt:now}; }
 export function candidates(m:Mission, ids:string[]):Answer[] {
   if(ids.some(id=>!m.hints.some(h=>h.markerId===id)))throw new Error('未知のヒントです。');
   const hints=m.hints.filter(h=>ids.includes(h.markerId));
@@ -34,10 +35,13 @@ export function parseProgress(raw:unknown,m:Mission):Progress {
   if(!Array.isArray(p.markerIds)||p.markerIds.length>m.hints.length||new Set(p.markerIds).size!==p.markerIds.length||
       !p.markerIds.every(v=>typeof v==='string')||!['exploring','sharing','complete'].includes(p.phase)||
       !Array.isArray(p.attempts)||p.attempts.length>20||!p.attempts.every(v=>isAnswer(m,v))||
-      (p.tutorialComplete!==undefined&&typeof p.tutorialComplete!=='boolean'))throw Error('invalid');
+      (p.tutorialComplete!==undefined&&typeof p.tutorialComplete!=='boolean')||
+      (p.startedAt!==undefined&&(!Number.isFinite(p.startedAt)||p.startedAt<=0))||
+      (p.updatedAt!==undefined&&(!Number.isFinite(p.updatedAt)||p.updatedAt<=0)))throw Error('invalid');
   candidates(m,p.markerIds);
   const won=p.attempts.some(a=>correct(m,a));
   if((p.phase==='complete')!==won || (won&&!correct(m,p.attempts[p.attempts.length-1])))throw Error('invalid');
   const tutorialComplete=p.tutorialComplete??(!m.tutorialMarker||p.markerIds.length>0||p.phase!=='exploring'||p.attempts.length>0);
-  return {schemaVersion:1,missionId:m.id,missionVersion:m.version,markerIds:m.hints.map(h=>h.markerId).filter(id=>p.markerIds.includes(id)),phase:p.phase,attempts:p.attempts.map(a=>({color:a.color,item:a.item})),tutorialComplete};
+  const startedAt=typeof p.startedAt==='number'?p.startedAt:Date.now(),updatedAt=typeof p.updatedAt==='number'?p.updatedAt:startedAt;
+  return {schemaVersion:1,missionId:m.id,missionVersion:m.version,markerIds:m.hints.map(h=>h.markerId).filter(id=>p.markerIds.includes(id)),phase:p.phase,attempts:p.attempts.map(a=>({color:a.color,item:a.item})),tutorialComplete,startedAt,updatedAt};
 }

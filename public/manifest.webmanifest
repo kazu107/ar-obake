@@ -1,0 +1,12 @@
+{
+  "name": "ARおばけ探偵団",
+  "short_name": "おばけ探偵団",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101c35",
+  "theme_color": "#101c35",
+  "icons": [
+    {"src":"./markers/TUTORIAL.png","sizes":"any","type":"image/png","purpose":"any"}
+  ]
+}

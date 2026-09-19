@@ -14,10 +14,10 @@ describe('eight-hint content and omission tolerance',()=>{
   });
   it('retains the intended meaning of each written hint',()=>{
     const expected=[
-      (c:string,_i:string)=>c==='blue'||c==='purple',(_c:string,i:string)=>i==='hat'||i==='ribbon',
-      (c:string,_i:string)=>c!=='yellow',(_c:string,i:string)=>i!=='tie',
-      (c:string,_i:string)=>c==='blue'||c==='yellow',(_c:string,i:string)=>i==='hat'||i==='tie',
-      (c:string,i:string)=>c!=='red'&&i!=='ribbon',(c:string,i:string)=>c!=='purple'&&i!=='glasses',
+      (c:string,_i:string)=>c==='blue'||c==='pink',(_c:string,i:string)=>i==='hat'||i==='ribbon',
+      (c:string,_i:string)=>c!=='yellow',(_c:string,i:string)=>i!=='gloves',
+      (c:string,_i:string)=>c==='blue'||c==='yellow',(_c:string,i:string)=>i==='hat'||i==='gloves',
+      (c:string,i:string)=>c!=='green'&&i!=='ribbon',(c:string,i:string)=>c!=='pink'&&i!=='glasses',
     ];
     mission.hints.forEach((h,index)=>{
       const remaining=candidates(mission,[h.markerId]);
@@ -60,7 +60,7 @@ describe('mission selection and eight-hint memo',()=>{
   });
   it('does not mistake a two-colour positive hint for a confirmed colour',()=>{
     const p=collect(mission,newProgress(mission),'H01'),left=candidates(mission,p.markerIds);
-    expect(memoMark(left,'color','blue')).toBe('unknown');expect(memoMark(left,'color','purple')).toBe('unknown');expect(memoMark(left,'color','yellow')).toBe('no');
+    expect(memoMark(left,'color','blue')).toBe('unknown');expect(memoMark(left,'color','pink')).toBe('unknown');expect(memoMark(left,'color','yellow')).toBe('no');
     const html=memo(mission,p);expect(html).toContain('1 / 8');expect(html.match(/class="obtained"/g)).toHaveLength(1);expect(html.match(/class="missing"/g)).toHaveLength(7);
   });
   it('takes title, card range, and total from the selected mission',()=>{

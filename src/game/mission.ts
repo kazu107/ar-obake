@@ -37,7 +37,7 @@ export function parseMission(raw: unknown): Mission {
   requireValue(isSetId(m.markerSet),'マーカーセットがありません。');
   const markerSet=m.markerSet;
   const colors=list(m.colors,2,8).map(v=>{const c=object(v),hex=text(c.hex,7);requireValue(/^#[0-9a-f]{6}$/i.test(hex),'色の指定が不正です。');return {id:id(c.id),label:text(c.label,30),hex};});
-  const items=list(m.items,2,8).map(v=>{const c=object(v),kind=text(c.icon,20);requireValue(['hat','glasses','tie','ribbon'].includes(kind),'アイコンがありません。');return {id:id(c.id),label:text(c.label,30),icon:kind};});
+  const items=list(m.items,2,8).map(v=>{const c=object(v),kind=text(c.icon,20);requireValue(['hat','glasses','tie','ribbon','gloves'].includes(kind),'アイコンがありません。');return {id:id(c.id),label:text(c.label,30),icon:kind};});
   unique(colors.map(c=>c.id));unique(items.map(c=>c.id));
   let conditionNodes=0;
   const parseCondition=(value:unknown,depth=0):Condition=>{

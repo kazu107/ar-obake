@@ -1,5 +1,5 @@
 {
-  "testedAt": "2026-09-14T18:58:22.384Z",
+  "testedAt": "2026-09-19T10:14:32.692Z",
   "environment": "Chromium, development-only simulated recognition; physical iPad not tested",
   "passed": [
     "ten-card home starts with a tutorial marker and advances without recording it",

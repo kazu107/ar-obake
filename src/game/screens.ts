@@ -1,6 +1,7 @@
 import type { Answer, Mission } from './mission';
 import { candidates, memoMark, type Progress } from './progress';
 import { escape as e, icon, hintMarkerLabel } from './ui';
+import type { OfflineStatus } from './offline';
 const symbols={yes:'○',no:'×',unknown:'？'}, meanings={yes:'これだ！',no:'ちがう',unknown:'まだ わからない'};
 export function memo(m:Mission,p:Progress,compact=false):string {
   const remaining=candidates(m,p.markerIds);
@@ -41,6 +42,14 @@ export function wrong(m:Mission,a:Answer):string {
 }
 export function win(m:Mission):string {
   return `<section class="centered success"><p class="success-seal">○</p><p class="kicker">みんなの すいり、だいせいこう！</p><h1 tabindex="-1">せいかい！</h1>${answerCard(m,m.answer)}<p>おばけの ひみつが わかったね。<br><strong>スタッフに せいかいの画面を 見せよう！</strong></p><p class="small">つぎの ボールでの おばけたいじは、スタッフの あんないを きいてね。</p><div class="button-row"><button class="secondary" data-action="memo">あつめた メモを見る</button><button class="primary" data-action="reset">もういちど あそぶ</button></div></section>`;
+}
+
+export function staff(m:Mission,p:Progress,appVersion:string,offline:OfflineStatus,online:boolean):string {
+  const phase={exploring:'探索中',sharing:'相談中',complete:'正解済み'}[p.phase];
+  const started=new Date(p.startedAt).toLocaleString('ja-JP',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  const elapsed=Math.max(0,Math.floor((Date.now()-p.startedAt)/60000));
+  const offlineLabel={checking:'確認中',preparing:'準備中',ready:'準備完了','not-ready':'未準備',unavailable:'利用不可',error:'エラー'}[offline.state];
+  return `<section class="staff-screen"><div class="screen-top"><div><p class="kicker">STAFF</p><h1 tabindex="-1">スタッフ画面</h1></div><a class="secondary" href="./">ゲーム画面へ</a></div><div class="staff-grid"><article class="card"><h2>ゲームの状態</h2><dl class="staff-stats"><div><dt>進行</dt><dd>${phase}</dd></div><div><dt>練習</dt><dd>${p.tutorialComplete?'完了':'未完了'}</dd></div><div><dt>ヒント</dt><dd>${p.markerIds.length} / ${m.hints.length}</dd></div><div><dt>回答回数</dt><dd>${p.attempts.length}</dd></div><div><dt>開始</dt><dd>${e(started)}</dd></div><div><dt>経過</dt><dd>${elapsed}分</dd></div></dl><p class="staff-ids">${p.markerIds.length?e(p.markerIds.join('・')):'ヒント未取得'}</p></article><article class="card"><h2>端末の準備</h2><dl class="staff-stats"><div><dt>アプリ</dt><dd>${e(appVersion)}</dd></div><div><dt>Mission</dt><dd>v${m.version}</dd></div><div><dt>通信</dt><dd>${online?'オンライン':'オフライン'}</dd></div><div><dt>オフライン</dt><dd><span class="status-pill ${offline.state}">${offlineLabel}</span></dd></div></dl><p class="small">${e(offline.detail)}</p><button class="primary" data-action="prepare-offline" ${offline.state==='preparing'?'disabled':''}>${offline.state==='ready'?'オフラインデータを更新':'オフライン準備'}</button></article></div><section class="card staff-actions"><div><h2>次のグループ</h2><p>現在のヒントと回答を消し、TUTORIALから始められる状態にします。</p></div><button class="danger" data-action="staff-reset">次のグループへリセット</button></section></section>`;
 }
 
 function hintStamps(m:Mission,p:Progress):string {

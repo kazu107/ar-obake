@@ -10,7 +10,7 @@ describe('mission and deduction',()=>{
     const left=candidates(m,[]);expect(left).toHaveLength(16);expect(memoMark(left,'color','blue')).toBe('unknown');expect(memoMark(left,'item','hat')).toBe('unknown');
   });
   it('combines three clues to identify both colour and item',()=>{
-    let p=newProgress(m);p=collect(m,p,'H01');let left=candidates(m,p.markerIds);expect(left).toHaveLength(9);expect(memoMark(left,'color','red')).toBe('no');expect(memoMark(left,'item','glasses')).toBe('no');expect(memoMark(left,'color','blue')).toBe('unknown');
+    let p=newProgress(m);p=collect(m,p,'H01');let left=candidates(m,p.markerIds);expect(left).toHaveLength(9);expect(memoMark(left,'color','green')).toBe('no');expect(memoMark(left,'item','glasses')).toBe('no');expect(memoMark(left,'color','blue')).toBe('unknown');
     p=collect(m,p,'H02');expect(candidates(m,p.markerIds)).toHaveLength(4);p=collect(m,p,'H03');left=candidates(m,p.markerIds);expect(left).toEqual([{color:'blue',item:'hat'}]);expect(memoMark(left,'color','blue')).toBe('yes');expect(memoMark(left,'item','hat')).toBe('yes');
   });
   it('is independent of collection order and ignores repeated collection',()=>{
@@ -19,35 +19,35 @@ describe('mission and deduction',()=>{
     }
   });
   it('supports positive, negative, and correlated alternatives',()=>{
-    const c:Condition={op:'any',conditions:[{op:'all',conditions:[{op:'is',field:'color',value:'blue'},{op:'is',field:'item',value:'hat'}]},{op:'all',conditions:[{op:'is',field:'color',value:'red'},{op:'not',field:'item',value:'glasses'}]}]};
-    expect(matches({color:'blue',item:'hat'},c)).toBe(true);expect(matches({color:'blue',item:'ribbon'},c)).toBe(false);expect(matches({color:'red',item:'glasses'},c)).toBe(false);expect(matches({color:'red',item:'tie'},c)).toBe(true);
+    const c:Condition={op:'any',conditions:[{op:'all',conditions:[{op:'is',field:'color',value:'blue'},{op:'is',field:'item',value:'hat'}]},{op:'all',conditions:[{op:'is',field:'color',value:'green'},{op:'not',field:'item',value:'glasses'}]}]};
+    expect(matches({color:'blue',item:'hat'},c)).toBe(true);expect(matches({color:'blue',item:'ribbon'},c)).toBe(false);expect(matches({color:'green',item:'glasses'},c)).toBe(false);expect(matches({color:'green',item:'gloves'},c)).toBe(true);
   });
   it('refuses unknown markers, including the answer marker as a clue',()=>{
     expect(()=>collect(m,newProgress(m),'ANSWER')).toThrow();expect(()=>candidates(m,['H08'])).toThrow();
   });
   it('detects contradictory acquired conditions rather than generating a false memo',()=>{
-    const bad={...m,hints:m.hints.map(h=>h.markerId==='H02'?{...h,condition:{op:'is',field:'color',value:'red'} as Condition}:h)};
+    const bad={...m,hints:m.hints.map(h=>h.markerId==='H02'?{...h,condition:{op:'is',field:'color',value:'green'} as Condition}:h)};
     expect(()=>candidates(bad,['H01','H02'])).toThrow('矛盾');
   });
   it.each(['duplicate','mapping','contradiction','unknown','ambiguous'])('rejects a %s mission at load',kind=>{
     const bad=structuredClone(data);
     if(kind==='duplicate')bad.hints[1].markerId='H01';
     if(kind==='mapping')bad.answerMarker.targetIndex=0;
-    if(kind==='contradiction')bad.answer.color='red';
-    if(kind==='unknown')bad.hints[0].condition.conditions[0].value='green';
+    if(kind==='contradiction')bad.answer.color='green';
+    if(kind==='unknown')bad.hints[0].condition.conditions[0].value='orange';
     if(kind==='ambiguous')bad.hints[2].condition=structuredClone(bad.hints[1].condition);
     expect(()=>parseMission(bad)).toThrow();
   });
 });
 describe('answers and local restoration',()=>{
   it('permits a representative with partial or no local clues to answer and retry',()=>{
-    let p=newProgress(m);p=submitAnswer(m,p,{color:'red',item:'hat'});expect(p.phase).toBe('sharing');expect(p.markerIds).toEqual([]);p=submitAnswer(m,p,{color:'blue',item:'hat'});expect(p.phase).toBe('complete');expect(p.attempts).toHaveLength(2);expect(submitAnswer(m,p,{color:'red',item:'hat'})).toBe(p);
+    let p=newProgress(m);p=submitAnswer(m,p,{color:'green',item:'hat'});expect(p.phase).toBe('sharing');expect(p.markerIds).toEqual([]);p=submitAnswer(m,p,{color:'blue',item:'hat'});expect(p.phase).toBe('complete');expect(p.attempts).toHaveLength(2);expect(submitAnswer(m,p,{color:'green',item:'hat'})).toBe(p);
   });
   it('requires both components of the answer',()=>{
-    expect(correct(m,{color:'blue',item:'glasses'})).toBe(false);expect(()=>submitAnswer(m,newProgress(m),{color:'green',item:'hat'})).toThrow();
+    expect(correct(m,{color:'blue',item:'glasses'})).toBe(false);expect(()=>submitAnswer(m,newProgress(m),{color:'orange',item:'hat'})).toThrow();
   });
   it('restores from acquired marker IDs without persisting inferred memo cells',()=>{
-    let p=collect(m,collect(m,newProgress(m),'H03'),'H01');p=submitAnswer(m,p,{color:'yellow',item:'tie'});const restored=parseProgress(JSON.parse(JSON.stringify(p)),m);expect(restored).toEqual(p);expect(candidates(m,restored.markerIds)).toEqual(candidates(m,p.markerIds));
+    let p=collect(m,collect(m,newProgress(m),'H03'),'H01');p=submitAnswer(m,p,{color:'yellow',item:'gloves'});const restored=parseProgress(JSON.parse(JSON.stringify(p)),m);expect(restored).toEqual(p);expect(candidates(m,restored.markerIds)).toEqual(candidates(m,p.markerIds));
   });
   it('keeps device stores and laboratory logs separate',()=>{
     const entries=new Map<string,string>([['ar-obake-lab-v1','keep lab record']]);const store={getItem:(k:string)=>entries.get(k)??null,setItem:(k:string,v:string)=>{entries.set(k,v);}};

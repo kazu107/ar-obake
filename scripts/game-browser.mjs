@@ -22,7 +22,7 @@ try{
   await marker('ANSWER');assert.ok((await page.locator('#hint-panel').innerText()).includes('そうだん'));assert.equal(await page.locator('[data-color]').count(),0);
   await page.screenshot({path:'.artifacts/game/explore.png',fullPage:true});
   passed.push('stable recognition records a hint automatically; brief recognition and loss do not record; duplicate collection prevented; early ANSWER does not skip consultation');
-  await action('share').click();assert.ok((await page.locator('.saved-clue').innerText()).includes('あかい'));await noOverflow();await action('explore').click();
+  await action('share').click();assert.ok((await page.locator('.saved-clue').innerText()).includes('みどり'));await noOverflow();await action('explore').click();
   for(const id of ['H02','H03'])await marker(id);
   assert.equal(await page.locator('.hud-memo-option.yes').count(),2);
   await page.reload();await action('continue').click();assert.deepEqual((await saved()).markerIds,['H01','H02','H03']);
@@ -31,8 +31,8 @@ try{
   await action('share').click();await page.screenshot({path:'.artifacts/game/share.png',fullPage:true});
   await action('answer-scan').click();await marker('H01');assert.equal(await page.locator('[data-color]').count(),0);await marker('ANSWER');
   assert.ok(await page.locator('#answer-next').isDisabled());
-  await page.locator('[data-color="red"]').click();await action('next-item').click();assert.ok(await page.locator('#answer-next').isDisabled());
-  await page.locator('[data-item="glasses"]').click();await action('confirm-answer').click();await action('memo').click();await action('memo-back').click();assert.ok((await page.locator('.answer-name').innerText()).includes('あか'));await action('submit-answer').click();
+  await page.locator('[data-color="green"]').click();await action('next-item').click();assert.ok(await page.locator('#answer-next').isDisabled());
+  await page.locator('[data-item="glasses"]').click();await action('confirm-answer').click();await action('memo').click();await action('memo-back').click();assert.ok((await page.locator('.answer-name').innerText()).includes('みどり'));await action('submit-answer').click();
   assert.ok((await page.locator('h1').innerText()).includes('ちがう'));assert.equal((await saved()).attempts.length,1);assert.equal((await saved()).phase,'sharing');
   await action('retry-answer').click();await page.locator('[data-color="blue"]').click();await action('next-item').click();await page.locator('[data-item="hat"]').click();await action('confirm-answer').click();await action('submit-answer').click();
   assert.equal((await saved()).phase,'complete');await page.screenshot({path:'.artifacts/game/win.png',fullPage:true});

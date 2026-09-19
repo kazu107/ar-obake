@@ -1,29 +1,29 @@
 {
-  "id": "obake-prototype", "version": 1,
+  "id": "obake-prototype", "version": 2,
   "title": "おばけのひみつを あばけ！", "markerSet": "four", "assetVersion": "tutorial-v1",
   "colors": [
-    {"id":"red","label":"あか","hex":"#db4c58"},
+    {"id":"green","label":"みどり","hex":"#31a46c"},
+    {"id":"pink","label":"ピンク","hex":"#e768a2"},
     {"id":"blue","label":"あお","hex":"#337cce"},
-    {"id":"yellow","label":"きいろ","hex":"#f1bf31"},
-    {"id":"purple","label":"むらさき","hex":"#8f60b7"}
+    {"id":"yellow","label":"きいろ","hex":"#f1bf31"}
   ],
   "items": [
-    {"id":"hat","label":"ぼうし","icon":"hat"},
     {"id":"glasses","label":"めがね","icon":"glasses"},
-    {"id":"tie","label":"ネクタイ","icon":"tie"},
-    {"id":"ribbon","label":"リボン","icon":"ribbon"}
+    {"id":"ribbon","label":"リボン","icon":"ribbon"},
+    {"id":"hat","label":"ぼうし","icon":"hat"},
+    {"id":"gloves","label":"てぶくろ","icon":"gloves"}
   ],
   "answer": {"color":"blue","item":"hat"},
   "answerMarker": {"markerId":"ANSWER","targetIndex":3},
   "hints": [
     {"id":"hint-01","markerId":"H01","targetIndex":0,"speaker":"1ばんの おばけ",
-      "text":"あかい アイテムでは ないよ。\nめがねでも ないんだ。",
-      "condition":{"op":"all","conditions":[{"op":"not","field":"color","value":"red"},{"op":"not","field":"item","value":"glasses"}]}},
+      "text":"みどりの アイテムでは ないよ。\nめがねでも ないんだ。",
+      "condition":{"op":"all","conditions":[{"op":"not","field":"color","value":"green"},{"op":"not","field":"item","value":"glasses"}]}},
     {"id":"hint-02","markerId":"H02","targetIndex":1,"speaker":"2ばんの おばけ",
-      "text":"きいろい アイテムでは ないよ。\nネクタイでも ないんだ。",
-      "condition":{"op":"all","conditions":[{"op":"not","field":"color","value":"yellow"},{"op":"not","field":"item","value":"tie"}]}},
+      "text":"きいろい アイテムでは ないよ。\nてぶくろでも ないんだ。",
+      "condition":{"op":"all","conditions":[{"op":"not","field":"color","value":"yellow"},{"op":"not","field":"item","value":"gloves"}]}},
     {"id":"hint-03","markerId":"H03","targetIndex":2,"speaker":"3ばんの おばけ",
-      "text":"むらさきの アイテムでは ないよ。\nリボンでも ないんだ。",
-      "condition":{"op":"all","conditions":[{"op":"not","field":"color","value":"purple"},{"op":"not","field":"item","value":"ribbon"}]}}
+      "text":"ピンクの アイテムでは ないよ。\nリボンでも ないんだ。",
+      "condition":{"op":"all","conditions":[{"op":"not","field":"color","value":"pink"},{"op":"not","field":"item","value":"ribbon"}]}}
   ]
 }

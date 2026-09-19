@@ -1,6 +1,6 @@
 {
   "id": "obake-mission-01",
-  "version": 1,
+  "version": 2,
   "title": "8にんの おばけのひみつ",
   "markerSet": "ten",
   "assetVersion": "tutorial-v1",
@@ -12,9 +12,14 @@
   },
   "colors": [
     {
-      "id": "red",
-      "label": "あか",
-      "hex": "#db4c58"
+      "id": "green",
+      "label": "みどり",
+      "hex": "#31a46c"
+    },
+    {
+      "id": "pink",
+      "label": "ピンク",
+      "hex": "#e768a2"
     },
     {
       "id": "blue",
@@ -25,33 +30,28 @@
       "id": "yellow",
       "label": "きいろ",
       "hex": "#f1bf31"
-    },
-    {
-      "id": "purple",
-      "label": "むらさき",
-      "hex": "#8f60b7"
     }
   ],
   "items": [
-    {
-      "id": "hat",
-      "label": "ぼうし",
-      "icon": "hat"
-    },
     {
       "id": "glasses",
       "label": "めがね",
       "icon": "glasses"
     },
     {
-      "id": "tie",
-      "label": "ネクタイ",
-      "icon": "tie"
-    },
-    {
       "id": "ribbon",
       "label": "リボン",
       "icon": "ribbon"
+    },
+    {
+      "id": "hat",
+      "label": "ぼうし",
+      "icon": "hat"
+    },
+    {
+      "id": "gloves",
+      "label": "てぶくろ",
+      "icon": "gloves"
     }
   ],
   "answer": {
@@ -68,7 +68,7 @@
       "markerId": "H01",
       "targetIndex": 0,
       "speaker": "1ばんの おばけ",
-      "text": "あおか むらさき、\nどちらかの 色だよ。",
+      "text": "あおか ピンク、\nどちらかの 色だよ。",
       "condition": {
         "op": "any",
         "conditions": [
@@ -80,7 +80,7 @@
           {
             "op": "is",
             "field": "color",
-            "value": "purple"
+            "value": "pink"
           }
         ]
       }
@@ -124,11 +124,11 @@
       "markerId": "H04",
       "targetIndex": 3,
       "speaker": "4ばんの おばけ",
-      "text": "ネクタイでは\nないんだ。",
+      "text": "てぶくろでは\nないんだ。",
       "condition": {
         "op": "not",
         "field": "item",
-        "value": "tie"
+        "value": "gloves"
       }
     },
     {
@@ -158,7 +158,7 @@
       "markerId": "H06",
       "targetIndex": 5,
       "speaker": "6ばんの おばけ",
-      "text": "ぼうしか ネクタイ、\nどちらかの アイテムだよ。",
+      "text": "ぼうしか てぶくろ、\nどちらかの アイテムだよ。",
       "condition": {
         "op": "any",
         "conditions": [
@@ -170,7 +170,7 @@
           {
             "op": "is",
             "field": "item",
-            "value": "tie"
+            "value": "gloves"
           }
         ]
       }
@@ -180,14 +180,14 @@
       "markerId": "H07",
       "targetIndex": 6,
       "speaker": "7ばんの おばけ",
-      "text": "あかい アイテムでは ないよ。\nリボンでも ないんだ。",
+      "text": "みどりの アイテムでは ないよ。\nリボンでも ないんだ。",
       "condition": {
         "op": "all",
         "conditions": [
           {
             "op": "not",
             "field": "color",
-            "value": "red"
+            "value": "green"
           },
           {
             "op": "not",
@@ -202,14 +202,14 @@
       "markerId": "H08",
       "targetIndex": 7,
       "speaker": "8ばんの おばけ",
-      "text": "むらさきの アイテムでは ないよ。\nめがねでも ないんだ。",
+      "text": "ピンクの アイテムでは ないよ。\nめがねでも ないんだ。",
       "condition": {
         "op": "all",
         "conditions": [
           {
             "op": "not",
             "field": "color",
-            "value": "purple"
+            "value": "pink"
           },
           {
             "op": "not",

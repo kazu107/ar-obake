@@ -8,14 +8,16 @@ import { ScanGate } from './scan-gate';
 import { escape as e, shell as pageShell, welcome } from './ui';
 import * as views from './screens';
 import { playRecordedSound, playSuccessSound, primeSound } from './sound';
+import { prepareOffline, registerOffline, type OfflineStatus } from './offline';
 
-type Screen='home'|'tutorial'|'explore'|'memo'|'share'|'answer-scan'|'color'|'item'|'confirm'|'wrong'|'win'|'reset';
+type Screen='home'|'staff'|'tutorial'|'explore'|'memo'|'share'|'answer-scan'|'color'|'item'|'confirm'|'wrong'|'win'|'reset';
 const app=document.querySelector<HTMLDivElement>('#app')!;
 const params=new URLSearchParams(location.search);
 const practice=params.get('mission')==='practice';
 const missionFile=practice?'./missions/prototype.json':'./missions/main.json';
 const homeUrl=practice?'./?mission=practice':'./';
 const simulation=import.meta.env.DEV && params.has('simulate');
+const staffMode=params.has('staff');
 const requestBrowserFullscreen=!import.meta.env.DEV||!params.has('windowed');
 let mission:Mission, progress:Progress, gate:ScanGate, loaded:LoadResult, hasGame=false;
 let screen:Screen='home',memoReturn:Screen='explore',resetReturn:Screen='home';
@@ -23,6 +25,7 @@ let selected:Partial<Answer>={},answerUnlocked=false,saveFailed=false;
 let frame:HTMLIFrameElement|undefined,ready=false,simulating=false,openedAt=0,lastFrameAt=0;
 let shownMarker:string|undefined;
 let tutorialTimer:number|undefined;
+let offlineStatus:OfflineStatus={state:'checking',detail:'オフライン準備の状態を確認しています。'};
 let storage:Pick<Storage,'getItem'|'setItem'>;
 try{storage=window.localStorage;}catch{storage={getItem(){throw Error('Storage unavailable');},setItem(){throw Error('Storage unavailable');}};}
 const byId=<T extends HTMLElement=HTMLElement>(id:string)=>document.getElementById(id) as T|null;
@@ -31,7 +34,7 @@ const isScanScreen=(s:Screen)=>s==='tutorial'||s==='explore'||s==='answer-scan';
 const shell=(content:string,count=0,active=false)=>pageShell(content,count,active,mission,practice,isScan());
 
 function persist(next:Progress) {
-  progress=next;hasGame=true;saveFailed=!saveProgress(storage,mission,progress);showSaveWarning();
+  progress={...next,updatedAt:Date.now()};hasGame=true;saveFailed=!saveProgress(storage,mission,progress);showSaveWarning();
 }
 function showSaveWarning() {
   const notice=byId('save-warning');if(!notice)return;notice.hidden=!saveFailed;
@@ -56,6 +59,7 @@ function render() {
   let content='';
   switch(screen){
     case 'home':content=loadNotice()+welcome(mission,hasGame,progress.phase==='complete');break;
+    case 'staff':content=views.staff(mission,progress,APP_VERSION,offlineStatus,navigator.onLine);break;
     case 'tutorial':case 'explore':case 'answer-scan':content=views.scan(mission,progress,screen);break;
     case 'memo':content=`<div class="screen-top"><div><p class="kicker">きみだけの ヒント</p><h1 tabindex="-1">そうさメモ</h1></div></div><div class="memo-page-layout">${views.memo(mission,progress)}${views.hintList(mission,progress)}</div><div class="button-row memo-back"><button class="secondary" data-action="memo-back">もとの画面に もどる</button>${progress.phase!=='complete'?'<button class="primary" data-action="share">みんなと そうだんする →</button>':''}</div>`;break;
     case 'share':content=views.share(mission,progress);break;
@@ -63,10 +67,10 @@ function render() {
     case 'confirm':content=views.confirm(mission,selected as Answer);break;
     case 'wrong':content=views.wrong(mission,selected as Answer);break;
     case 'win':content=views.win(mission);break;
-    case 'reset':content='<section class="centered card"><h1 tabindex="-1">さいしょから あそぶ？</h1><p>このiPadの ゲームのメモと こたえを けして、<br>あたらしく はじめるよ。</p><div class="button-row"><button class="secondary" data-action="cancel-reset">もどる</button><button class="danger" data-action="confirm-reset">メモをけして はじめる</button></div></section>';break;
+    case 'reset':content=`<section class="centered card"><h1 tabindex="-1">${resetReturn==='staff'?'次のグループを始める？':'さいしょから あそぶ？'}</h1><p>このiPadの ゲームのメモと こたえを けして、<br>あたらしく はじめるよ。</p><div class="button-row"><button class="secondary" data-action="cancel-reset">もどる</button><button class="danger" data-action="confirm-reset">メモをけして はじめる</button></div></section>`;break;
   }
   document.body.classList.toggle('camera-mode',isScan());
-  app.innerHTML=shell(`<div id="save-warning" class="notice" role="alert" hidden></div>${content}`,progress.markerIds.length,hasGame&&screen!=='home'&&screen!=='reset'&&screen!=='memo');
+  app.innerHTML=shell(`<div id="save-warning" class="notice" role="alert" hidden></div>${content}`,progress.markerIds.length,hasGame&&screen!=='home'&&screen!=='staff'&&screen!=='reset'&&screen!=='memo');
   const version=byId('game-version');if(version)version.textContent=APP_VERSION;showSaveWarning();if(isScan())updateHint();
   if(import.meta.env.DEV && simulation && isScan()){
     const panel=document.createElement('details');panel.className='dev-controls';panel.open=true;
@@ -136,7 +140,9 @@ app.addEventListener('click',event=>{
       case 'home':go('home');break;
       case 'reset':resetReturn=screen;go('reset');break;
       case 'cancel-reset':go(resetReturn,isScanScreen(resetReturn));break;
-      case 'confirm-reset':if(screen==='reset'){selected={};answerUnlocked=false;loaded={kind:'missing'};persist(newProgress(mission));go(mission.tutorialMarker?'tutorial':'explore',true);}break;
+      case 'confirm-reset':if(screen==='reset'){const returnToStaff=resetReturn==='staff';selected={};answerUnlocked=false;loaded={kind:'missing'};persist(newProgress(mission));go(returnToStaff?'staff':mission.tutorialMarker?'tutorial':'explore',!returnToStaff);}break;
+      case 'staff-reset':if(screen==='staff'){resetReturn='staff';go('reset');}break;
+      case 'prepare-offline':if(screen==='staff'){offlineStatus={state:'preparing',detail:'必要なデータをこのiPadへ保存しています。'};render();void prepareOffline().then(status=>{offlineStatus=status;if(screen==='staff')render();});}break;
       case 'explore':if(hasGame&&progress.phase!=='complete'){answerUnlocked=false;persist({...progress,phase:'exploring'});go('explore',true);}break;
       case 'camera':startCamera();break;
       case 'stop-camera':pauseCamera('また さがすときは「カメラを開始」をおしてね。');break;
@@ -169,6 +175,8 @@ window.addEventListener('message',event=>{
 });
 document.addEventListener('visibilitychange',()=>{if(document.hidden)pauseCamera('画面をはなれたので、とめたよ。「カメラを開始」で つづけられるよ。');});
 window.addEventListener('pagehide',stopCamera);
+window.addEventListener('online',()=>{if(screen==='staff')render();});
+window.addEventListener('offline',()=>{if(screen==='staff')render();});
 setInterval(()=>{
   if(!isScan())return;const now=performance.now();
   if(frame&&!ready&&now-openedAt>90000)pauseCamera('じゅんびに 時間がかかっています。通信とカメラの許可を確認してね。');
@@ -181,7 +189,8 @@ async function boot(){
   try{
     const response=await fetch(new URL(missionFile,document.baseURI),{signal:abort.signal});if(!response.ok)throw Error('Mission unavailable');
     mission=parseMission(await response.json());gate=new ScanGate(SETS[mission.markerSet].ids);
-    loaded=loadProgress(storage,mission);hasGame=loaded.kind==='valid';progress=loaded.kind==='valid'?loaded.progress:newProgress(mission);render();
+    loaded=loadProgress(storage,mission);hasGame=loaded.kind==='valid';progress=loaded.kind==='valid'?loaded.progress:newProgress(mission);screen=staffMode?'staff':'home';render();
+    void registerOffline().then(status=>{offlineStatus=status;if(screen==='staff')render();});
   }catch{app.innerHTML=shell('<section class="centered card"><h1>ミッションを よみこめません</h1><p>通信を確認して、もういちど ひらいてね。<br>なおらないときは スタッフに つたえてね。</p><a class="primary" href="'+homeUrl+'">もういちど よみこむ</a></section>');}
   finally{clearTimeout(timeout);}
 }
