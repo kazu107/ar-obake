@@ -1,4 +1,4 @@
-const VERSION='0.6.0';
+const VERSION='0.6.1';
 const CACHE=`ar-obake-${VERSION}`;
 const READY=new URL('./offline-ready.json',self.registration.scope).href;
 
@@ -33,8 +33,8 @@ async function cacheTree(initial){
 
 self.addEventListener('message',event=>{
   const reply=value=>event.ports[0]?.postMessage(value);
-  if(event.data?.type==='status')event.waitUntil((async()=>reply(await (await caches.open(CACHE)).match(READY)?{state:'ready',detail:'このiPadはオフラインでも起動できます。'}:{state:'not-ready',detail:'通信があるうちに「オフライン準備」を押してください。'}))());
-  if(event.data?.type==='prepare')event.waitUntil(cacheTree(event.data.urls).then(()=>reply({state:'ready',detail:'オフライン準備が完了しました。'})).catch(()=>reply({state:'error',detail:'必要なデータを保存できませんでした。'})));
+  if(event.data?.type==='status')event.waitUntil((async()=>reply(await (await caches.open(CACHE)).match(READY)?{state:'ready',detail:'保存済みです。Wi-Fiのままカメラを開始し、映像が出てから通信を切ってください。'}:{state:'not-ready',detail:'通信があるうちに「オフライン準備」を押してください。'}))());
+  if(event.data?.type==='prepare')event.waitUntil(cacheTree(event.data.urls).then(()=>reply({state:'ready',detail:'準備完了。Wi-Fiのままカメラを開始し、映像が出てから通信を切ってください。'})).catch(()=>reply({state:'error',detail:'必要なデータを保存できませんでした。'})));
 });
 
 self.addEventListener('fetch',event=>{

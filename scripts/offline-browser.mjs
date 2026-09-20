@@ -11,9 +11,9 @@ try{
   await page.goto(origin+'?staff=1');await page.locator('.staff-screen').waitFor();
   await page.locator('[data-action="prepare-offline"]').click();
   await page.locator('.status-pill.ready').waitFor({timeout:120000});
-  assert.ok((await page.locator('.staff-screen').innerText()).includes('オフライン準備が完了しました'));
+  assert.ok((await page.locator('.staff-screen').innerText()).includes('映像が出てから通信を切ってください'));
   await page.reload();await page.locator('.status-pill.ready').waitFor();assert.equal(await page.evaluate(()=>navigator.serviceWorker.controller?.state),'activated');
-  passed.push('staff screen downloads and verifies the complete offline game bundle');
+  passed.push('staff screen downloads the complete offline game bundle and shows the accepted disconnect timing');
   await context.setOffline(true);await page.goto(origin+'?staff=1',{waitUntil:'domcontentloaded'});await page.locator('.staff-screen').waitFor();
   assert.ok((await page.locator('.staff-screen').innerText()).includes('オフライン'));
   await page.goto(origin,{waitUntil:'domcontentloaded'});await page.locator('[data-action="new"]').waitFor();
