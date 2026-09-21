@@ -1,4 +1,4 @@
-const VERSION='0.6.1';
+const VERSION='0.6.2';
 const CACHE=`ar-obake-${VERSION}`;
 const READY=new URL('./offline-ready.json',self.registration.scope).href;
 

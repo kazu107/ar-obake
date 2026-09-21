@@ -12,6 +12,9 @@ for(const [set,ids]of Object.entries(manifest.sets)){
   features.push({set,count:ids.length,bytes:(await readFile(`public/targets/${set}.mind`)).length});
 }
 const glb=await readFile('public/models/ghost.glb');assert.equal(glb.toString('ascii',0,4),'glTF');assert.equal(glb.readUInt32LE(4),2);assert.equal(glb.readUInt32LE(8),glb.length);assert.ok(glb.length<1000000);
-assert.ok((await readFile('public/markers.pdf')).length>10000);
-assert.ok((await readFile('public/tutorial-marker.pdf')).length>10000);
-console.log(JSON.stringify({status:'ASSETS_OK',sets:features,ghostBytes:glb.length},null,2));
+const pdfPages=async file=>{const pdf=await readFile(file);assert.ok(pdf.length>10000);return (pdf.toString('latin1').match(/\/Type\s*\/Page\b/g)??[]).length;};
+assert.equal(await pdfPages('public/markers.pdf'),20);
+assert.equal(await pdfPages('public/tutorial-marker.pdf'),2);
+assert.deepEqual(await readFile('public/markers.pdf'),await readFile('output/pdf/ar-obake-markers-duplex.pdf'));
+assert.deepEqual(await readFile('public/tutorial-marker.pdf'),await readFile('output/pdf/ar-obake-tutorial-duplex.pdf'));
+console.log(JSON.stringify({status:'ASSETS_OK',sets:features,ghostBytes:glb.length,pdfPages:{all:20,tutorial:2}},null,2));

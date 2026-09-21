@@ -1,6 +1,6 @@
 # ARおばけ探偵団：チュートリアル＋9枚ゲーム
 
-0.6.1で選択肢を緑・ピンク・青・黄色と、メガネ・リボン・帽子・手袋へ更新し、スタッフ画面とオフライン準備を追加したWebARゲームです。正解は青い帽子です。
+0.6.2で選択肢を緑・ピンク・青・黄色と、メガネ・リボン・帽子・手袋へ更新し、スタッフ画面、オフライン準備、利用者向け両面マーカーPDFを備えたWebARゲームです。正解は青い帽子です。
 
 - [実装計画](docs/implementation-plan.md)
 - [実機試験の記録表](docs/air2-test-checklist.md)
@@ -15,6 +15,7 @@
 - [自動記録・AR吹き出しの実装と確認手順](docs/auto-record-ar-speech-0.4.0.md)
 - [全画面AR・3D吹き出し・チュートリアルの実装と確認手順](docs/fullscreen-tutorial-0.5.0.md)
 - [色・アイテム更新／スタッフ運用／オフラインの確認手順](docs/staff-offline-0.6.0.md)
+- [利用者向け両面マーカーPDF](docs/duplex-marker-pdf-0.6.2.md)
 - [4枚試作の記録](docs/game-prototype-0.2.0.md)
 - チュートリアル＋9枚ゲーム：トップページ
 - 4枚ゲーム：`/?mission=practice`（従来のメモを保持）
@@ -76,8 +77,8 @@ npm run preview
 - `src/data/sets.ts`：1枚・4枚・9枚・10枚の対応。
 - `src/lab/measurements.ts`：計測の成功・未検出・中止・別マーカー検出。
 - `public/targets/manifest.json`：画像ID・ハッシュ・コンパイル順。
-- `public/markers.pdf`：160mm角、A4全10ページの印刷用PDF。
-- `public/tutorial-marker.pdf`：既存9枚へ追加できるTUTORIAL単独PDF。
+- `public/markers.pdf`：160mm角、A4両面用20ページの全10枚PDF。奇数ページがマーカー、偶数ページが対応する案内面。
+- `public/tutorial-marker.pdf`：既存9枚へ追加できるA4両面用2ページのTUTORIAL単独PDF。
 - `public/guide.html`：端末から読める実機手順。
 
 9枚版のメモは`ar-obake-game-v1:obake-mission-01`、4枚版は従来の`ar-obake-game-v1`へ保存し、それぞれ独立して復元・リセットします。
@@ -94,7 +95,7 @@ python scripts/print-markers.py
 npm run check:assets
 ```
 
-PDF生成にはreportlabが必要です。Windowsの游ゴシックがある場合はサブセットを埋め込みます。画像生成は`@napi-rs/canvas`、GLBはThree.jsのGLTFExporterを使います。
+PDF生成にはreportlabが必要です。Windowsの游ゴシックがある場合はサブセットを埋め込みます。`scripts/print-markers.py`は配布用PDFを`output/pdf/`へ生成し、同じ内容を公開用の`public/`へコピーします。画像生成は`@napi-rs/canvas`、GLBはThree.jsのGLTFExporterを使います。
 
 マーカーは固定seedの非対称な幾何学パターンです。H01〜H08とANSWERの既存順を保ち、末尾へTUTORIALを追加して1枚・4枚・9枚・10枚のセットを生成します。4枚セットのANSWERはindex 3、9枚セットではindex 8、10枚セットのTUTORIALはindex 9です。素材の編集後は.mindとPDFも作り直してください。
 
