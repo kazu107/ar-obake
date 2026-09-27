@@ -30,13 +30,13 @@ mission = json.loads((root / 'public' / 'missions' / 'main.json').read_text(enco
 hint_by_marker = {hint['markerId']: hint for hint in mission['hints']}
 all_ids = ['TUTORIAL'] + [f'H{i:02}' for i in range(1, 9)] + ['ANSWER']
 
-INK = HexColor('#14213B')
-MUTED = HexColor('#53627A')
-PALE = HexColor('#F4F7FB')
-LINE = HexColor('#D7DFEA')
+INK = HexColor('#17142F')
+MUTED = HexColor('#5C5870')
+PALE = HexColor('#FFF8EF')
+LINE = HexColor('#DED2E8')
 GREEN = HexColor('#31A46C')
-BLUE = HexColor('#337CCE')
-YELLOW = HexColor('#F1BF31')
+BLUE = HexColor('#6A3FB4')
+YELLOW = HexColor('#F07824')
 
 
 def marker_info(marker_id: str) -> dict:
@@ -202,7 +202,7 @@ def make_pdf(output: Path, marker_ids: list[str], title: str) -> None:
     pdf = canvas.Canvas(str(output), pagesize=A4, pageCompression=1)
     pdf.setTitle(title)
     pdf.setAuthor('ARおばけ探偵団')
-    pdf.setSubject('利用者向け両面印刷カード。奇数ページがマーカー、偶数ページが案内面。')
+    pdf.setSubject('ハロウィン仕様の利用者向け両面印刷カード。奇数ページがマーカー、偶数ページが案内面。')
     for marker_id in marker_ids:
         draw_front(pdf, marker_id)
         pdf.showPage()
@@ -215,8 +215,8 @@ output_dir = root / 'output' / 'pdf'
 output_dir.mkdir(parents=True, exist_ok=True)
 all_output = output_dir / 'ar-obake-markers-duplex.pdf'
 tutorial_output = output_dir / 'ar-obake-tutorial-duplex.pdf'
-make_pdf(all_output, all_ids, 'ARおばけ探偵団 - 両面印刷用マーカー全10枚')
-make_pdf(tutorial_output, ['TUTORIAL'], 'ARおばけ探偵団 - 両面印刷用TUTORIAL')
+make_pdf(all_output, all_ids, 'ARおばけ探偵団 - ハロウィン両面マーカー全10枚')
+make_pdf(tutorial_output, ['TUTORIAL'], 'ARおばけ探偵団 - ハロウィン両面TUTORIAL')
 shutil.copyfile(all_output, root / 'public' / 'markers.pdf')
 shutil.copyfile(tutorial_output, root / 'public' / 'tutorial-marker.pdf')
 print(all_output)

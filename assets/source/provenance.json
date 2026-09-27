@@ -1,11 +1,11 @@
 {
-  "version": 2,
+  "version": 3,
   "markers": {
-    "creator": "Original procedural calibration patterns",
+    "creator": "Original procedural Halloween calibration patterns",
     "source": "scripts/generate-assets.mjs",
-    "seed": 260910,
+    "seed": 261031,
     "license": "CC0-1.0",
-    "tutorialMarker": "TUTORIAL appended without changing the original nine marker seeds"
+    "theme": "Halloween silhouettes: pumpkins, bats, ghosts, webs, candy, moons, tombstones and stars"
   },
   "ghost": {
     "creator": "Original procedural low-poly test model",
@@ -13,5 +13,5 @@
     "license": "CC0-1.0",
     "bytes": 43700
   },
-  "note": "Functional event prototype assets. The tutorial marker is part of tutorial-v1; the 3D ghost remains the accepted lightweight model."
+  "note": "Halloween-v1 replaces all marker images while preserving marker IDs and targetIndex ordering; recognition targets and printable PDFs must be regenerated together."
 }

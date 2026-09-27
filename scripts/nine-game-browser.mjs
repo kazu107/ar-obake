@@ -1,7 +1,8 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
-import {mkdir,writeFile} from 'node:fs/promises';
+import {mkdir,writeFile,readFile} from 'node:fs/promises';
 const url='http://127.0.0.1:5173/?simulate=1&windowed=1',key='ar-obake-game-v1:obake-mission-01';
+const appVersion=JSON.parse(await readFile('package.json','utf8')).version;
 const legacyKey='ar-obake-game-v1',legacy={schemaVersion:1,missionId:'obake-prototype',missionVersion:2,markerIds:['H01'],phase:'exploring',attempts:[],tutorialComplete:true};
 const browser=await chromium.launch({headless:true}),errors=[],passed=[];
 await mkdir('.artifacts/nine-game',{recursive:true});
@@ -31,7 +32,7 @@ try{
   await page.screenshot({path:'.artifacts/nine-game/answer-colors.png',fullPage:true});
   await page.locator('[data-color="blue"]').click();await action('next-item').click();await page.screenshot({path:'.artifacts/nine-game/answer-items.png',fullPage:true});await page.locator('[data-item="hat"]').click();await action('confirm-answer').click();await action('submit-answer').click();assert.equal((await saved()).phase,'complete');
   await page.reload();await action('continue').click();assert.equal(await page.locator('h1').innerText(),'せいかい！');await action('reset').click();await action('cancel-reset').click();assert.equal((await saved()).phase,'complete');await action('reset').click();await action('confirm-reset').click();assert.deepEqual((await saved()).markerIds,[]);
-  await page.goto('http://127.0.0.1:5173/?staff=1');await page.locator('.staff-screen').waitFor();assert.ok((await page.locator('.staff-screen').innerText()).includes('0.6.0'));assert.ok((await page.locator('.staff-screen').innerText()).includes('Mission'));assert.equal(await page.locator('[data-action="staff-reset"]').count(),1);await page.screenshot({path:'.artifacts/nine-game/staff.png',fullPage:true});
+  await page.goto('http://127.0.0.1:5173/?staff=1');await page.locator('.staff-screen').waitFor();assert.ok((await page.locator('.staff-screen').innerText()).includes(appVersion));assert.ok((await page.locator('.staff-screen').innerText()).includes('Mission'));assert.equal(await page.locator('[data-action="staff-reset"]').count(),1);await page.screenshot({path:'.artifacts/nine-game/staff.png',fullPage:true});
   assert.deepEqual(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)),legacyKey),legacy);
   passed.push('ten-card home starts with a tutorial marker and advances without recording it','full-viewport camera hides page chrome and only shows the compact deduction memo','stable recognition automatically records hints; duplicates and early ANSWER rejected','reload restores tutorial and clue progress independently of legacy four-card progress','seven hints excluding H04 identify both answer components','seven clues displayed in consultation at 390/768/1024 without overflow','ANSWER, correct answer, completion restore, and confirmed reset','reset of ten-card mission preserves original four-card save');
   assert.deepEqual(errors,[]);await writeFile('docs/nine-game-browser-results.json',JSON.stringify({testedAt:new Date().toISOString(),environment:'Chromium, development-only simulated recognition; physical iPad not tested',passed,pageErrors:errors},null,2)+'\n');console.log('NINE_GAME_BROWSER_OK');

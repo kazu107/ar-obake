@@ -1,5 +1,5 @@
 {
-  "testedAt": "2026-09-20T17:14:42.055Z",
+  "testedAt": "2026-09-27T12:26:12.265Z",
   "environment": "Playwright Chromium production preview with network disabled after explicit preparation",
   "passed": [
     "staff screen downloads the complete offline game bundle and shows the accepted disconnect timing",

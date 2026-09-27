@@ -1,6 +1,6 @@
 {
-  "testedAt": "2026-09-19T10:13:13.019Z",
-  "appVersion": "0.6.0",
+  "testedAt": "2026-09-27T12:26:01.559Z",
+  "appVersion": "0.7.0",
   "missionId": "obake-mission-01",
   "environment": "Chromium SwiftShader with synthetic Y4M input; actual MindAR pipeline, not physical iPad",
   "passed": [
