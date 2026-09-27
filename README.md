@@ -1,6 +1,6 @@
 # ARおばけ探偵団：チュートリアル＋9枚ゲーム
 
-0.7.0で全10枚をハロウィン仕様のマーカーへ更新したWebARゲームです。カボチャ、コウモリ、おばけ、クモの巣などを使いながら、色とアイテムから「青い帽子」を推理するゲーム内容、スタッフ画面、オフライン準備は維持しています。
+0.7.1で全10枚をハロウィン仕様のマーカーへ更新し、両面PDFの偶数ページをスタッフ用の最小情報へ整理したWebARゲームです。カボチャ、コウモリ、おばけ、クモの巣などを使いながら、色とアイテムから「青い帽子」を推理します。
 
 - [実装計画](docs/implementation-plan.md)
 - [実機試験の記録表](docs/air2-test-checklist.md)
@@ -78,8 +78,8 @@ npm run preview
 - `src/data/sets.ts`：1枚・4枚・9枚・10枚の対応。
 - `src/lab/measurements.ts`：計測の成功・未検出・中止・別マーカー検出。
 - `public/targets/manifest.json`：画像ID・ハッシュ・コンパイル順。
-- `public/markers.pdf`：160mm角、A4両面用20ページの全10枚PDF。奇数ページがマーカー、偶数ページが対応する案内面。
-- `public/tutorial-marker.pdf`：既存9枚へ追加できるA4両面用2ページのTUTORIAL単独PDF。
+- `public/markers.pdf`：160mm角、A4両面用20ページの全10枚PDF。奇数ページがマーカー、偶数ページがスタッフ用情報。
+- `public/tutorial-marker.pdf`：A4両面用2ページのTUTORIAL単独PDF。偶数ページはスタッフ用情報。
 - `public/guide.html`：端末から読める実機手順。
 
 9枚版のメモは`ar-obake-game-v1:obake-mission-01`、4枚版は従来の`ar-obake-game-v1`へ保存し、それぞれ独立して復元・リセットします。

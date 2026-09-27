@@ -46,13 +46,7 @@ def marker_info(marker_id: str) -> dict:
             'title': 'れんしゅうカード',
             'name': mission['tutorialMarker']['speaker'],
             'accent': GREEN,
-            'steps': [
-                'ゲームの さいしょに、',
-                'このカードを カメラに うつそう。',
-                '',
-                'おばけと ふきだしが 見えたら、',
-                'れんしゅう せいこう！',
-            ],
+            'staff_use': 'ゲーム開始時の練習用',
         }
     if marker_id == 'ANSWER':
         return {
@@ -60,12 +54,7 @@ def marker_info(marker_id: str) -> dict:
             'title': 'こたえカード',
             'name': 'ANSWERの おばけ',
             'accent': YELLOW,
-            'steps': [
-                'みんなの そうさメモを 見せあおう。',
-                '',
-                'こたえが きまったら、だいひょうの 人が',
-                'このカードを カメラに うつそう。',
-            ],
+            'staff_use': '相談後の回答用',
         }
     hint = hint_by_marker[marker_id]
     return {
@@ -73,36 +62,8 @@ def marker_info(marker_id: str) -> dict:
         'title': 'ヒントカード',
         'name': hint['speaker'],
         'accent': BLUE,
-        'steps': [
-            'このカードを カメラに うつそう。',
-            '',
-            'おばけの ことばは、じどうで',
-            '「そうさメモ」に 入るよ。',
-        ],
+        'staff_use': '探索中のヒント用',
     }
-
-
-def draw_ghost(pdf: canvas.Canvas, x: float, y: float, scale: float, accent) -> None:
-    pdf.saveState()
-    pdf.translate(x, y)
-    pdf.scale(scale, scale)
-    pdf.setFillColor(accent)
-    pdf.setStrokeColor(INK)
-    pdf.setLineWidth(2.2)
-    path = pdf.beginPath()
-    path.moveTo(-27, -28)
-    path.curveTo(-34, 3, -27, 31, 0, 35)
-    path.curveTo(27, 31, 34, 3, 27, -28)
-    path.curveTo(18, -18, 10, -35, 0, -24)
-    path.curveTo(-10, -35, -18, -18, -27, -28)
-    path.close()
-    pdf.drawPath(path, fill=1, stroke=1)
-    pdf.setFillColor(INK)
-    pdf.circle(-9, 7, 3.2, fill=1, stroke=0)
-    pdf.circle(9, 7, 3.2, fill=1, stroke=0)
-    pdf.setLineWidth(2)
-    pdf.arc(-8, -10, 8, 3, startAng=200, extent=140)
-    pdf.restoreState()
 
 
 def draw_front(pdf: canvas.Canvas, marker_id: str) -> None:
@@ -133,7 +94,7 @@ def draw_front(pdf: canvas.Canvas, marker_id: str) -> None:
     pdf.drawCentredString(width / 2, 48 * mm, 'カードぜんたいを カメラに うつそう')
     pdf.setFillColor(MUTED)
     pdf.setFont(japanese, 9)
-    pdf.drawCentredString(width / 2, 39 * mm, 'うらには、このカードの つかいかたが かいてあるよ')
+    pdf.drawCentredString(width / 2, 39 * mm, 'うらめんは スタッフ用です')
 
 
 def draw_back(pdf: canvas.Canvas, marker_id: str) -> None:
@@ -156,36 +117,42 @@ def draw_back(pdf: canvas.Canvas, marker_id: str) -> None:
     pdf.setFont('Helvetica-Bold', 17)
     pdf.drawRightString(181 * mm, 255.5 * mm, marker_id)
 
-    draw_ghost(pdf, 160 * mm, 210 * mm, 1.0, info['accent'])
     pdf.setFillColor(INK)
-    pdf.setFont(japanese_bold, 28)
-    pdf.drawString(29 * mm, 214 * mm, info['title'])
-    pdf.setFont(japanese_bold, 15)
-    pdf.setFillColor(info['accent'] if marker_id != 'ANSWER' else HexColor('#A66F00'))
-    pdf.drawString(29 * mm, 197 * mm, info['name'])
+    pdf.setFont(japanese_bold, 13)
+    pdf.drawString(29 * mm, 218 * mm, 'スタッフ用')
+    pdf.setFont('Helvetica-Bold', 46)
+    pdf.drawString(29 * mm, 191 * mm, marker_id)
+    pdf.setFont(japanese_bold, 18)
+    pdf.drawString(29 * mm, 171 * mm, info['title'])
+    pdf.setFont(japanese, 13)
+    pdf.setFillColor(MUTED)
+    pdf.drawRightString(181 * mm, 171 * mm, info['name'])
 
-    pdf.setFillColor(INK)
-    pdf.setFont(japanese_bold, 17)
-    pdf.drawString(29 * mm, 171 * mm, 'このカードの つかいかた')
     pdf.setStrokeColor(info['accent'])
     pdf.setLineWidth(2)
-    pdf.line(29 * mm, 166 * mm, 181 * mm, 166 * mm)
+    pdf.line(29 * mm, 164 * mm, 181 * mm, 164 * mm)
 
-    pdf.setFont(japanese, 15)
-    y = 148 * mm
-    for line in info['steps']:
-        if line:
-            pdf.drawString(31 * mm, y, line)
-        y -= 10 * mm
-
-    pdf.setFillColor(HexColor('#EAF0F8'))
-    pdf.roundRect(29 * mm, 68 * mm, 152 * mm, 33 * mm, 5 * mm, fill=1, stroke=0)
     pdf.setFillColor(INK)
-    pdf.setFont(japanese_bold, 12)
-    pdf.drawCentredString(width / 2, 87 * mm, 'ヒントや こたえは、ARの おばけが おしえてくれるよ。')
-    pdf.setFont(japanese, 10)
+    pdf.setFont(japanese_bold, 14)
+    pdf.drawString(29 * mm, 143 * mm, '用途')
+    pdf.setFont(japanese, 14)
+    pdf.drawString(55 * mm, 143 * mm, info['staff_use'])
+
+    pdf.setFont(japanese_bold, 14)
+    pdf.drawString(29 * mm, 118 * mm, '設置場所')
+    pdf.setStrokeColor(MUTED)
+    pdf.setLineWidth(.8)
+    pdf.line(58 * mm, 116 * mm, 181 * mm, 116 * mm)
+
+    pdf.setFont(japanese_bold, 14)
+    pdf.setFillColor(INK)
+    pdf.drawString(29 * mm, 91 * mm, '確認')
+    pdf.setFont(japanese, 13)
+    pdf.drawString(55 * mm, 91 * mm, '□ 設置済み　　□ 回収済み')
+
     pdf.setFillColor(MUTED)
-    pdf.drawCentredString(width / 2, 76 * mm, 'カードの うらを見ただけでは、なぞの こたえは わかりません。')
+    pdf.setFont(japanese, 9)
+    pdf.drawString(29 * mm, 66 * mm, '表面と同じIDか確認してください。')
 
     pdf.setStrokeColor(MUTED)
     pdf.setLineWidth(.7)
@@ -202,7 +169,7 @@ def make_pdf(output: Path, marker_ids: list[str], title: str) -> None:
     pdf = canvas.Canvas(str(output), pagesize=A4, pageCompression=1)
     pdf.setTitle(title)
     pdf.setAuthor('ARおばけ探偵団')
-    pdf.setSubject('ハロウィン仕様の利用者向け両面印刷カード。奇数ページがマーカー、偶数ページが案内面。')
+    pdf.setSubject('ハロウィン仕様の両面印刷カード。奇数ページがマーカー、偶数ページがスタッフ用情報。')
     for marker_id in marker_ids:
         draw_front(pdf, marker_id)
         pdf.showPage()
