@@ -2,7 +2,8 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {writeFile} from 'node:fs/promises';
 
-const origin='http://127.0.0.1:4173/';
+const origin=process.env.AR_OBAKE_TEST_ORIGIN??'http://127.0.0.1:4173/';
+if(!origin.endsWith('/'))throw new Error('AR_OBAKE_TEST_ORIGIN must end with /');
 const browser=await chromium.launch({headless:true});
 const errors=[],passed=[];
 try{
@@ -23,6 +24,6 @@ try{
   const offlineAssets=await page.evaluate(async paths=>Promise.all(paths.map(async path=>{const response=await fetch(path);return {path,status:response.status,bytes:(await response.arrayBuffer()).byteLength};})),[arScript,'./targets/ten.mind','./models/ghost.glb']);assert.ok(offlineAssets.every(asset=>asset.status===200&&asset.bytes>1000));
   passed.push('offline reload restores the staff page, Mission v2, AR runtime bundle, ten-marker target data, and ghost model');
   assert.deepEqual(errors,[]);
-  await writeFile('docs/offline-browser-results.json',JSON.stringify({testedAt:new Date().toISOString(),environment:'Playwright Chromium production preview with network disabled after explicit preparation',passed,pageErrors:errors},null,2)+'\n');
+  await writeFile('docs/offline-browser-results.json',JSON.stringify({testedAt:new Date().toISOString(),environment:`Playwright Chromium at ${origin} with network disabled after explicit preparation`,passed,pageErrors:errors},null,2)+'\n');
   console.log('OFFLINE_BROWSER_OK');
 }finally{await browser.close();}

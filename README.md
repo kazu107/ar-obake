@@ -5,7 +5,9 @@
 - [実装計画](docs/implementation-plan.md)
 - [実機試験の記録表](docs/air2-test-checklist.md)
 - [実装と検証の状況](docs/phase-0-1-status.md)
-- 配信URL：https://ar-obake-lab.kazu107.chatgpt.site
+- 現在の非公開配信URL：https://ar-obake-lab.kazu107.chatgpt.site
+- GitHubリポジトリ：https://github.com/kazu107/ar-obake
+- [GitHub Pagesへの移行手順](docs/github-pages.md)
 
 ## ゲームで遊ぶ
 
