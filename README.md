@@ -1,6 +1,6 @@
 # ARおばけ探偵団：チュートリアル＋9枚ゲーム
 
-0.7.2ではGitHub Pagesへ公開しました。全10枚のハロウィン仕様マーカーを使い、両面PDFの偶数ページにはスタッフ用の最小情報を載せています。色とアイテムから「青い帽子」を推理するWebARゲームです。
+0.7.3ではハロウィン仕様のマーカーを190mm角へ拡大し、両面PDFのスタッフ用裏面にゲームURLとQRを追加しました。色とアイテムから「青い帽子」を推理するWebARゲームです。
 
 - [実装計画](docs/implementation-plan.md)
 - [実機試験の記録表](docs/air2-test-checklist.md)
@@ -18,7 +18,7 @@
 - [自動記録・AR吹き出しの実装と確認手順](docs/auto-record-ar-speech-0.4.0.md)
 - [全画面AR・3D吹き出し・チュートリアルの実装と確認手順](docs/fullscreen-tutorial-0.5.0.md)
 - [色・アイテム更新／スタッフ運用／オフラインの確認手順](docs/staff-offline-0.6.0.md)
-- [利用者向け両面マーカーPDF](docs/duplex-marker-pdf-0.6.2.md)
+- [両面マーカーPDF](docs/duplex-marker-pdf-0.6.2.md)
 - [ハロウィンマーカー0.7.0](docs/halloween-markers-0.7.0.md)
 - [4枚試作の記録](docs/game-prototype-0.2.0.md)
 - チュートリアル＋9枚ゲーム：トップページ
@@ -81,7 +81,7 @@ npm run preview
 - `src/data/sets.ts`：1枚・4枚・9枚・10枚の対応。
 - `src/lab/measurements.ts`：計測の成功・未検出・中止・別マーカー検出。
 - `public/targets/manifest.json`：画像ID・ハッシュ・コンパイル順。
-- `public/markers.pdf`：160mm角、A4両面用20ページの全10枚PDF。奇数ページがマーカー、偶数ページがスタッフ用情報。
+- `public/markers.pdf`：190mm角、A4両面用20ページの全10枚PDF。奇数ページがマーカー、偶数ページがURLとQR付きのスタッフ用情報。
 - `public/tutorial-marker.pdf`：A4両面用2ページのTUTORIAL単独PDF。偶数ページはスタッフ用情報。
 - `public/guide.html`：端末から読める実機手順。
 

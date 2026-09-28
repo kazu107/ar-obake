@@ -5,6 +5,9 @@ from pathlib import Path
 from reportlab.lib.colors import HexColor, white
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import mm
+from reportlab.graphics import renderPDF
+from reportlab.graphics.barcode.qr import QrCodeWidget
+from reportlab.graphics.shapes import Drawing
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.cidfonts import UnicodeCIDFont
 from reportlab.pdfbase.ttfonts import TTFont
@@ -29,6 +32,9 @@ else:
 mission = json.loads((root / 'public' / 'missions' / 'main.json').read_text(encoding='utf-8'))
 hint_by_marker = {hint['markerId']: hint for hint in mission['hints']}
 all_ids = ['TUTORIAL'] + [f'H{i:02}' for i in range(1, 9)] + ['ANSWER']
+game_url = 'https://kazu107.github.io/ar-obake/'
+marker_size = 190 * mm
+qr_size = 43 * mm
 
 INK = HexColor('#17142F')
 MUTED = HexColor('#5C5870')
@@ -83,18 +89,15 @@ def draw_front(pdf: canvas.Canvas, marker_id: str) -> None:
     pdf.drawRightString(192 * mm, 273.5 * mm, marker_id)
     pdf.drawImage(
         str(root / 'public' / 'markers' / f'{marker_id}.png'),
-        25 * mm,
-        67 * mm,
-        160 * mm,
-        160 * mm,
+        (width - marker_size) / 2,
+        58 * mm,
+        marker_size,
+        marker_size,
         preserveAspectRatio=True,
         mask='auto',
     )
     pdf.setFont(japanese_bold, 15)
-    pdf.drawCentredString(width / 2, 48 * mm, 'カードぜんたいを カメラに うつそう')
-    pdf.setFillColor(MUTED)
-    pdf.setFont(japanese, 9)
-    pdf.drawCentredString(width / 2, 39 * mm, 'うらめんは スタッフ用です')
+    pdf.drawCentredString(width / 2, 42 * mm, 'カードぜんたいを カメラに うつそう')
 
 
 def draw_back(pdf: canvas.Canvas, marker_id: str) -> None:
@@ -150,9 +153,18 @@ def draw_back(pdf: canvas.Canvas, marker_id: str) -> None:
     pdf.setFont(japanese, 13)
     pdf.drawString(55 * mm, 91 * mm, '□ 設置済み　　□ 回収済み')
 
-    pdf.setFillColor(MUTED)
-    pdf.setFont(japanese, 9)
-    pdf.drawString(29 * mm, 66 * mm, '表面と同じIDか確認してください。')
+    pdf.setFillColor(INK)
+    pdf.setFont(japanese_bold, 10)
+    pdf.drawString(29 * mm, 74 * mm, 'ゲームページURL')
+    pdf.setFont('Helvetica', 10)
+    pdf.drawString(29 * mm, 62 * mm, game_url)
+
+    qr = QrCodeWidget(game_url, barWidth=qr_size, barHeight=qr_size, barLevel='M')
+    qr_drawing = Drawing(qr_size, qr_size)
+    qr_drawing.add(qr)
+    pdf.setFillColor(white)
+    pdf.rect(136 * mm, 55 * mm, qr_size, qr_size, fill=1, stroke=0)
+    renderPDF.draw(qr_drawing, pdf, 136 * mm, 55 * mm)
 
     pdf.setStrokeColor(MUTED)
     pdf.setLineWidth(.7)
