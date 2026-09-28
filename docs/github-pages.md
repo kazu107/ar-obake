@@ -6,7 +6,7 @@
 
 リポジトリはPublicで作成済みで、**Settings → Pages → Build and deployment → Source** は **GitHub Actions** に設定済みです。`.github/workflows/pages.yml`が`main`へのpush時に検証、ビルド、公開を実行します。
 
-**Actions**で`Publish GitHub Pages`が成功したら、`https://kazu107.github.io/ar-obake/`をiPadのSafariで開きます。カメラを許可し、TUTORIALとH01を読み取ってください。Safariの「ホーム画面に追加」は新しいURLでやり直します。
+**Actions**の`Publish GitHub Pages`は成功し、`https://kazu107.github.io/ar-obake/`から配信中です。iPadのSafariで開いてカメラを許可し、TUTORIALとH01を読み取ってください。Safariの「ホーム画面に追加」は新しいURLでやり直します。
 
 ## 移行時の注意
 
