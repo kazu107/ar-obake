@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "markers": {
     "creator": "Original procedural Halloween calibration patterns",
     "source": "scripts/generate-assets.mjs",
@@ -9,10 +9,11 @@
     "font": "Yu Gothic Bold (locally rendered into PNG; font files are not distributed)"
   },
   "ghost": {
-    "creator": "Original procedural low-poly test model",
+    "creator": "Original procedural low-poly model with named gesture parts",
+    "file": "models/ghost-gestures-v1.glb",
     "source": "scripts/generate-assets.mjs",
     "license": "CC0-1.0",
-    "bytes": 43700
+    "bytes": 43836
   },
-  "note": "Hiragana labels replace the English marker captions while preserving marker IDs and targetIndex ordering; targets and printable PDFs are regenerated together."
+  "note": "Gesture-v1 adds named ghost parts while preserving the halloween-hiragana-v1 marker images, targetIndex ordering and printable marker PDFs."
 }

@@ -1,0 +1,44 @@
+{
+  "testedAt": "2026-09-30T07:05:48.114Z",
+  "environment": "Chromium SwiftShader; actual GLB and runtime geometry; not physical iPad",
+  "proof": [
+    {
+      "id": "TUTORIAL",
+      "kind": "greeting",
+      "rootUnchanged": true,
+      "active": false
+    },
+    {
+      "id": "H01",
+      "kind": "pumpkin",
+      "rootUnchanged": true,
+      "active": false
+    },
+    {
+      "id": "H08",
+      "kind": "surprised",
+      "rootUnchanged": true,
+      "active": false
+    },
+    {
+      "id": "TUTORIAL",
+      "kind": "greeting",
+      "rootUnchanged": true,
+      "active": true
+    },
+    {
+      "id": "H01",
+      "kind": "pumpkin",
+      "rootUnchanged": true,
+      "active": true
+    },
+    {
+      "id": "H08",
+      "kind": "surprised",
+      "rootUnchanged": true,
+      "active": true
+    }
+  ],
+  "gpuError": 0,
+  "pageErrors": []
+}

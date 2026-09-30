@@ -1,0 +1,24 @@
+{
+  "pages": 1,
+  "paper": "A4 landscape",
+  "markers": [
+    "TUTORIAL",
+    "H01",
+    "H02",
+    "H03",
+    "H04",
+    "H05",
+    "H06",
+    "H07",
+    "H08",
+    "ANSWER"
+  ],
+  "perpendicularDefaults": [
+    "H01",
+    "H02",
+    "H03"
+  ],
+  "qr": "https://kazu107.github.io/ar-obake/",
+  "originalPublicDist": "identical",
+  "imagePublicDist": "identical"
+}

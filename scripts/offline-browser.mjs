@@ -21,8 +21,8 @@ try{
   const mission=await page.evaluate(async()=>fetch('./missions/main.json').then(response=>response.json()));
   assert.deepEqual(mission.colors.map(color=>color.id),['green','pink','blue','yellow']);assert.deepEqual(mission.items.map(item=>item.id),['glasses','ribbon','hat','gloves']);assert.deepEqual(mission.answer,{color:'blue',item:'hat'});
   const arPage=await page.evaluate(async()=>fetch('./ar.html?set=ten&mission=main').then(response=>response.text()));assert.ok(arPage.includes('<title>おばけの かめら</title>'));const arScript=arPage.match(/src="([^"]*\/assets\/ar-[^"]+)"/)?.[1];assert.ok(arScript);
-  const offlineAssets=await page.evaluate(async paths=>Promise.all(paths.map(async path=>{const response=await fetch(path);return {path,status:response.status,bytes:(await response.arrayBuffer()).byteLength};})),[arScript,'./targets/ten.mind','./models/ghost.glb']);assert.ok(offlineAssets.every(asset=>asset.status===200&&asset.bytes>1000));
-  passed.push('offline reload restores the staff page, Mission v2, AR runtime bundle, ten-marker target data, and ghost model');
+  const offlineAssets=await page.evaluate(async paths=>Promise.all(paths.map(async path=>{const response=await fetch(path);return {path,status:response.status,bytes:(await response.arrayBuffer()).byteLength};})),[arScript,'./targets/ten.mind','./models/ghost-gestures-v1.glb','./staff-checklist.pdf','./ghost-variants-concept.png']);assert.ok(offlineAssets.every(asset=>asset.status===200&&asset.bytes>1000));
+  passed.push('offline reload restores the staff page, Mission v2, AR runtime bundle, ten-marker target data, gesture ghost model, staff checklist PDF, and comparison illustration');
   assert.deepEqual(errors,[]);
   await writeFile('docs/offline-browser-results.json',JSON.stringify({testedAt:new Date().toISOString(),environment:`Playwright Chromium at ${origin} with network disabled after explicit preparation`,passed,pageErrors:errors},null,2)+'\n');
   console.log('OFFLINE_BROWSER_OK');

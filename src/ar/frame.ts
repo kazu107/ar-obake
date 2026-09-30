@@ -10,6 +10,7 @@ import { StationaryPoseStabilizer } from './stationary-pose-stabilizer';
 import { parseMission, type Mission } from '../game/mission';
 import { defaultMarkerSettings, loadMarkerSettings, parseMarkerSettings } from '../storage/marker-settings';
 import { orientMarkerContent } from './marker-orientation';
+import { createGhostVariant } from './ghost-variations';
 
 // A disposable browsing context owns camera, TensorFlow, worker and WebGL resources.
 // Removing this frame tears down the entire AR runtime, including upstream workers.
@@ -131,7 +132,7 @@ async function start() {
   send('loading', { stage: '認識データとおばけを準備しています' });
   currentStage = 'assets-loading';
   const missionPromise = missionName==='main' ? missionResource('./missions/main.json') : missionName==='practice' ? missionResource('./missions/prototype.json') : Promise.resolve(undefined);
-  const [targetBuffer, ghostBuffer, mission] = await Promise.all([resource(`./targets/${setId}.mind`), resource('./models/ghost.glb'), missionPromise]);
+  const [targetBuffer, ghostBuffer, mission] = await Promise.all([resource(`./targets/${setId}.mind`), resource('./models/ghost-gestures-v1.glb'), missionPromise]);
   if (mission && mission.markerSet!==setId) throw new Error('問題とマーカーセットが一致しません。');
   const ghost = (await new GLTFLoader().parseAsync(ghostBuffer, './')).scene;
   if (stopped) return;
@@ -144,10 +145,9 @@ async function start() {
   const anchors = SETS[setId].ids.map(id => {
     const group = new Group();group.matrixAutoUpdate=false;group.visible=false;
     const content=new Group(),orientation=orientations[id];orientMarkerContent(content,orientation);
-    const model=ghost.clone(true);model.position.z=.1;
-    if(id==='TUTORIAL')model.traverse(object=>{if(object instanceof Mesh&&object.material instanceof MeshBasicMaterial&&object.material.color.getHex()===0xf7fcff){const material=object.material.clone();material.color.setHex(0xdff9ef);object.material=material;}});
+    const {model,gesture}=createGhostVariant(ghost,id);model.position.z=.1;
     content.add(model);group.add(content);scene.add(group);
-    return {id,group,content,orientation,model,post:new Matrix4(),input:new Matrix4(),pose:tracking.poseStabilization?.algorithm==='stationary-hold-v3'?new StationaryPoseStabilizer():tracking.poseStabilization?.algorithm==='projection-depth-v2'?new ProjectedPoseStabilizer():new PoseStabilizer(),markerWidth:1,inputAtMs:0,updateIndex:0};
+    return {id,group,content,orientation,model,gesture,post:new Matrix4(),input:new Matrix4(),pose:tracking.poseStabilization?.algorithm==='stationary-hold-v3'?new StationaryPoseStabilizer():tracking.poseStabilization?.algorithm==='projection-depth-v2'?new ProjectedPoseStabilizer():new PoseStabilizer(),markerWidth:1,inputAtMs:0,updateIndex:0};
   });
   const speechById=new Map(mission ? [...mission.hints.map(h=>[h.markerId,{speaker:h.speaker,text:h.text}] as const),[mission.answerMarker.markerId,{speaker:'こたえの おばけ',text:'みんなの こたえを おしえて！'}] as const,...(mission.tutorialMarker?[[mission.tutorialMarker.markerId,{speaker:mission.tutorialMarker.speaker,text:mission.tutorialMarker.text}] as const]:[])] : []);
   const speechBubble=createSpeechBubble();let spokenId='';
@@ -157,9 +157,8 @@ async function start() {
     onUpdate: event => {
       if (stopped || event.type !== 'updateMatrix') return;
       const anchor = anchors[event.targetIndex]; if (!anchor) return;
-      const visible = event.worldMatrix !== null;
+      const visible = event.worldMatrix !== null,now=performance.now();
       if (visible) {
-        const now = performance.now();
         anchor.input.fromArray(event.worldMatrix!).multiply(anchor.post);
         if (tracking.poseStabilization) {
           if (!anchor.pose.update(anchor.input, anchor.markerWidth, now)) return;
@@ -168,6 +167,7 @@ async function start() {
         anchor.inputAtMs = now; anchor.updateIndex++;
       } else anchor.pose.reset();
       if (visible !== anchor.group.visible) send(visible ? 'found' : 'lost', { id: anchor.id, targetIndex: event.targetIndex });
+      anchor.gesture.setVisible(visible,now);
       anchor.group.visible = visible;
     }
   });
@@ -209,13 +209,15 @@ async function start() {
     if(stopped||!renderer)return;
     const now=performance.now();
     for(const a of anchors) if(a.group.visible && tracking.poseStabilization) a.pose.render(now,a.markerWidth,a.group.matrix);
+    for(const a of anchors)if(a.group.visible)a.gesture.update(now);
     if(tracking.ghostMotion==='float') for(const a of anchors) if(a.group.visible) {a.model.position.y=Math.sin(time/650)*.025;a.model.rotation.y=Math.sin(time/1100)*.08;}
     const speaking=anchors.find(a=>a.group.visible),copy=speaking?speechById.get(speaking.id):undefined;
     if(speaking&&copy){
       if(speechBubble.mesh.parent!==speaking.content)speaking.content.add(speechBubble.mesh);
       if(spokenId!==speaking.id){spokenId=speaking.id;speechBubble.draw(copy.speaker,copy.text);document.body.dataset.speechId=speaking.id;document.body.dataset.speechCopy=`${copy.speaker}\n${copy.text}`;document.body.dataset.markerOrientation=speaking.orientation;send('speech-visible',{id:speaking.id,rendering:'three-mesh',orientation:speaking.orientation});}
       speechBubble.mesh.visible=true;
-    }else{speechBubble.mesh.visible=false;spokenId='';delete document.body.dataset.speechId;delete document.body.dataset.speechCopy;delete document.body.dataset.markerOrientation;}
+      document.body.dataset.ghostVariant=speaking.gesture.kind;document.body.dataset.gestureActive=String(speaking.gesture.isActive(now));
+    }else{speechBubble.mesh.visible=false;spokenId='';delete document.body.dataset.speechId;delete document.body.dataset.speechCopy;delete document.body.dataset.markerOrientation;delete document.body.dataset.ghostVariant;delete document.body.dataset.gestureActive;}
     renderer.render(scene,camera);frames++;
     if(now-recordingStarted<=10000 && now-lastPoseSample>=100) {
       const a=anchors.find(anchor=>anchor.group.visible);

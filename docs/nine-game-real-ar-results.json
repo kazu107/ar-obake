@@ -1,6 +1,6 @@
 {
-  "testedAt": "2026-09-30T06:00:21.075Z",
-  "appVersion": "0.8.0",
+  "testedAt": "2026-09-30T07:08:54.822Z",
+  "appVersion": "0.8.1",
   "missionId": "obake-mission-01",
   "environment": "Chromium SwiftShader with synthetic Y4M input; actual MindAR pipeline, not physical iPad",
   "passed": [
@@ -14,6 +14,7 @@
     "consultation stops camera and retains the full memo",
     "ANSWER recognition opens colour and item selection",
     "correct answer completes game",
+    "TUTORIAL greeting, H01 pumpkin lantern, H08 surprised face/raised arms render in the real AR frame; H01 gesture finishes and returns to rest",
     "retained laboratory page starts and stops AR",
     "camera denial offers restart without discarding progress"
   ],

@@ -82,14 +82,14 @@ for(let row=0;row<=rings;row++) {
     if(row<rings&&col<segments){const a=row*(segments+1)+col,b=a+segments+1;indices.push(a,b,a+1,b,b+1,a+1);}
   }
 }
-const body=new THREE.BufferGeometry();body.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));body.setIndex(indices);body.computeVertexNormals();ghost.add(new THREE.Mesh(body,white));
+const body=new THREE.BufferGeometry();body.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));body.setIndex(indices);body.computeVertexNormals();const bodyMesh=new THREE.Mesh(body,white);bodyMesh.name='ghost-body';ghost.add(bodyMesh);
 const sphere=new THREE.SphereGeometry(1,16,12);
-for(const x of [-.09,.09]) {const eye=new THREE.Mesh(sphere,dark);eye.scale.set(.032,.053,.021);eye.position.set(x,.18,.206);ghost.add(eye);}
-const mouth=new THREE.Mesh(sphere,dark);mouth.scale.set(.025,.03,.013);mouth.position.set(0,.07,.216);ghost.add(mouth);
-for(const x of [-.24,.24]) {const arm=new THREE.Mesh(sphere,white);arm.scale.set(.10,.065,.08);arm.position.set(x,-.035,0);arm.rotation.z=x>0?.5:-.5;ghost.add(arm);}
+for(const x of [-.09,.09]) {const eye=new THREE.Mesh(sphere,dark);eye.name=x<0?'ghost-eye-left':'ghost-eye-right';eye.scale.set(.032,.053,.021);eye.position.set(x,.18,.206);ghost.add(eye);}
+const mouth=new THREE.Mesh(sphere,dark);mouth.name='ghost-mouth';mouth.scale.set(.025,.03,.013);mouth.position.set(0,.07,.216);ghost.add(mouth);
+for(const x of [-.24,.24]) {const arm=new THREE.Mesh(sphere,white);arm.name=x<0?'ghost-arm-left':'ghost-arm-right';arm.scale.set(.10,.065,.08);arm.position.set(x,-.035,0);arm.rotation.z=x>0?.5:-.5;ghost.add(arm);}
 const badge=new THREE.Mesh(new THREE.CircleGeometry(.035,5),gold);badge.position.set(.12,-.105,.219);ghost.add(badge);
 const model=await new GLTFExporter().parseAsync(ghost,{binary:true});
-await writeFile('public/models/ghost.glb',Buffer.from(model));
+await writeFile('public/models/ghost-gestures-v1.glb',Buffer.from(model));
 await writeFile('public/targets/manifest.json',JSON.stringify({version:'halloween-hiragana-v1',mindar:'1.2.5',markers:metadata,sets:{one:['H01'],four:['H01','H02','H03','ANSWER'],nine:ids.slice(0,9),ten:ids}},null,2)+'\n');
-await writeFile('assets/source/provenance.json',JSON.stringify({version:4,markers:{creator:'Original procedural Halloween calibration patterns',source:'scripts/generate-assets.mjs',seed:261031,license:'CC0-1.0',theme:'Halloween silhouettes with hiragana participant labels',font:'Yu Gothic Bold (locally rendered into PNG; font files are not distributed)'},ghost:{creator:'Original procedural low-poly test model',source:'scripts/generate-assets.mjs',license:'CC0-1.0',bytes:model.byteLength},note:'Hiragana labels replace the English marker captions while preserving marker IDs and targetIndex ordering; targets and printable PDFs are regenerated together.'},null,2)+'\n');
-console.log(`Generated ${ids.length} markers; ghost.glb ${model.byteLength} bytes.`);
+await writeFile('assets/source/provenance.json',JSON.stringify({version:5,markers:{creator:'Original procedural Halloween calibration patterns',source:'scripts/generate-assets.mjs',seed:261031,license:'CC0-1.0',theme:'Halloween silhouettes with hiragana participant labels',font:'Yu Gothic Bold (locally rendered into PNG; font files are not distributed)'},ghost:{creator:'Original procedural low-poly model with named gesture parts',file:'models/ghost-gestures-v1.glb',source:'scripts/generate-assets.mjs',license:'CC0-1.0',bytes:model.byteLength},note:'Gesture-v1 adds named ghost parts while preserving the halloween-hiragana-v1 marker images, targetIndex ordering and printable marker PDFs.'},null,2)+'\n');
+console.log(`Generated ${ids.length} markers; ghost-gestures-v1.glb ${model.byteLength} bytes.`);

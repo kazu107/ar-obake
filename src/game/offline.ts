@@ -5,7 +5,7 @@ export interface OfflineStatus { state:OfflineState; detail:string }
 
 const requiredPaths=[
   './','./index.html','./ar.html','./manifest.webmanifest',
-  './missions/main.json','./missions/prototype.json','./models/ghost.glb',
+  './missions/main.json','./missions/prototype.json','./models/ghost-gestures-v1.glb','./staff-checklist.pdf','./ghost-variants-concept.png',
   './targets/ten.mind','./targets/four.mind',
 ];
 

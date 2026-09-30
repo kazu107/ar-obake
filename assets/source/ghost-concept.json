@@ -1,0 +1,14 @@
+{
+  "creator": "Built-in image_gen tool",
+  "createdAt": "2026-09-30",
+  "purpose": "Design comparison illustration, not an AR runtime texture",
+  "prompt": "assets/source/ghost-concept-prompt.txt",
+  "file": "output/imagegen/ghost-variants-concept-v1.png",
+  "sha256": "3332388012cd098b57b80a7d3029f660f69eefeec7704db6d675e6593299f6ab",
+  "implementedIn081": [
+    "TUTORIAL",
+    "H01",
+    "H08"
+  ],
+  "otherCards": "proposed"
+}

@@ -1,0 +1,11 @@
+Generated with the built-in image_gen tool on 2026-09-30.
+Output: output/imagegen/ghost-variants-concept-v1.png
+Purpose: design comparison illustration; not the actual WebAR model.
+
+Use case: stylized-concept
+Asset type: one landscape character comparison illustration for a Japanese children's Halloween WebAR game, showing ten proposed ghosts.
+Primary request: A beautifully composed 5-column by 2-row comparison sheet. Ten distinct friendly ghosts, consistent white rounded teardrop sheet bodies with a gently scalloped hem, two dark navy oval eyes, little arms and cute simple mouths. Soft low-poly 3D illustration with crisp silhouettes, matching a lightweight game character. Every ghost fully visible at equal scale in a separate spacious tile, no cropped props. Light warm cream background, dark navy text, restrained orange, deep purple, gray and white props.
+Text (verbatim): title "おばけたんていだん". Tile labels in exact reading order, top row "れんしゅう", "いちばん", "にばん", "さんばん", "よんばん"; bottom row "ごばん", "ろくばん", "ななばん", "はちばん", "こたえ". No other text.
+Subjects in that same order: 1 cheerful ghost waving one hand; 2 white ghost holding a SMALL orange jack-o-lantern lantern, low beside its body; 3 ghost with a tiny deep-purple bat on its shoulder; 4 sleepy half-closed eyes ghost cuddling a small gray pillow; 5 ghost offering a wrapped orange-and-white candy; 6 ghost reading a small gray book; 7 ghost holding a small white and purple bell; 8 ghost holding a small brown broom; 9 surprised ghost with round eyes and open mouth raising both little arms; 10 detective ghost holding a gray notebook, without detective hat.
+Composition: polished horizontal sheet, wide landscape, five tiles in each row, generous spacing, consistent perspective with eye-level three-quarter view, clear readable Japanese hiragana labels below figures. The illustration compares design ideas, not AR markers.
+Constraints: child-friendly, gentle and welcoming; body always white. No blue/green/pink/yellow ghost bodies, no hats, glasses, ribbons or gloves, no pumpkin head replacing the white ghost head. No Halloween scenery, no QR codes, no UI mockup, no watermark, no English letters, no Arabic numerals. Preserve the distinct props and exact ten labels.

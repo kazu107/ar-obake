@@ -18,3 +18,5 @@ select:focus-visible{outline:3px solid #347fc8;outline-offset:4px}
 .orientation-list label{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #d9e0ea}.orientation-list small{display:block;color:#55647a}
 .orientation-list select{font:inherit;max-width:65%;min-height:48px;padding:8px;border:1px solid #b4c1d2;border-radius:10px;background:#fff;color:#152443}
 @media(max-width:700px){.orientation-list{grid-template-columns:1fr}}
+
+.staff-resources{margin-top:20px}
