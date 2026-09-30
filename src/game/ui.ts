@@ -1,4 +1,5 @@
 import type { Mission } from './mission';
+import { markerLabel, numberLabel } from './participant-text';
 export const escape = (value: string) => value.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 export const icon = (kind: string) => `<svg viewBox="0 0 64 64" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">${({
   hat: '<path d="M18 39l5-23h18l5 23M9 40h46v8H9zM22 29h20"/>',
@@ -12,17 +13,17 @@ export const icon = (kind: string) => `<svg viewBox="0 0 64 64" aria-hidden="tru
 } as Record<string,string>)[kind]??''}</svg>`;
 
 export function hintMarkerLabel(m:Mission):string {
-  const ids=m.hints.map(h=>h.markerId);return ids.length<=4?ids.join('・'):`${ids[0]}〜${ids[ids.length-1]}`;
+  const ids=m.hints.map(h=>markerLabel(h.markerId));return ids.length<=4?ids.join('・'):`${ids[0]}〜${ids[ids.length-1]}`;
 }
 
-export function shell(content: string, count = 0, active = false, mission?:Mission, practice=false, immersive=false) {
+export function shell(content: string, count = 0, active = false, mission?:Mission, practice=false, immersive=false, staff=false) {
   if(immersive)return `<main id="game-main" class="game-shell immersive-shell">${content}</main>`;
   const home=practice?'./?mission=practice':'./';
   const total=mission?mission.hints.length+1+(mission.tutorialMarker?1:0):practice?4:10;
-  return `<header class="game-header"><a class="brand" href="${home}">ARおばけ探偵団</a>${active?`<button class="memo-shortcut" data-action="memo">${icon('note')}そうさメモ <span>${count}</span></button>`:`<span class="edition">${total}枚のミッション</span>`}</header><main id="game-main" class="game-shell">${content}</main><footer class="game-footer"><span>試作版 · <span id="game-version"></span></span><a href="${practice?'./':'./?mission=practice'}">${practice?'10枚であそぶ':'4枚の試作であそぶ'}</a><a href="./?staff=1">スタッフ画面</a><a href="./lab.html">カメラの検証</a><a href="./guide.html#reader" target="_blank" rel="noopener">表示でこまったら</a></footer>`;
+  return `<header class="game-header"><a class="brand" href="${home}">おばけたんていだん</a>${active?`<button class="memo-shortcut" data-action="memo">${icon('note')}そうさめも <span>${numberLabel(count)}</span></button>`:`<span class="edition">${numberLabel(total)}まいの おはなし</span>`}</header><main id="game-main" class="game-shell">${content}</main><footer class="game-footer"><span>${staff?'試作版 · <span id="game-version"></span>':'おばけたんていだん'}</span><a href="${practice?'./':'./?mission=practice'}">${practice?'じゅうまいで あそぶ':'よんまいで あそぶ'}</a><a href="./?staff=1">すたっふの がめん</a><a href="./lab.html">かめらの かくにん</a><a href="./guide.html#reader" target="_blank" rel="noopener">ひょうじで こまったら</a></footer>`;
 }
 
 export function welcome(m:Mission,hasSave = false, completed = false) {
   const first=m.tutorialMarker?'れんしゅうを はじめる':'たんけんを はじめる',total=m.hints.length+1+(m.tutorialMarker?1:0);
-  return `<section class="welcome"><div class="welcome-main"><p class="kicker">きみも、おばけたんてい。</p><h1 tabindex="-1">${escape(m.title)}</h1><p class="lead">おばけが みにつけているのは、<br><strong>なにいろの、どんなアイテム？</strong></p><p>カードの おばけから ヒントをあつめて、<br>みんなと いっしょに かんがえよう。</p><div class="start-actions"><button class="primary" data-action="${hasSave?'continue':'new'}">${hasSave?completed?'せいかいを もういちど見る':'つづきから あそぶ':first} <span aria-hidden="true">→</span></button>${hasSave?'<button class="text-button" data-action="reset">さいしょから あそぶ</button>':''}</div><p class="small">カメラの きょかが出たら「許可」をおしてね。Safariのバーまで隠す場合は、共有メニューからホーム画面に追加して開いてください。</p></div><div class="how-to"><h2>あそびかた</h2><ol class="steps"><li>${icon('scan')}<div><strong>${m.tutorialMarker?'まず れんしゅう':'カードを さがそう'}</strong><p>${m.tutorialMarker?'TUTORIALを よんで、<br>おばけの 見つけかたを ためそう。':`${escape(hintMarkerLabel(m))}を よもう。`}</p></div></li><li>${icon('note')}<div><strong>ヒントは じどうでメモ</strong><p>${escape(hintMarkerLabel(m))}を しばらくうつすと、<br>色とアイテムのメモが かわるよ。</p></div></li><li>${icon('chat')}<div><strong>みんなと そうだん</strong><p>メモを 見せあったら、<br>だいひょうが ANSWERを よもう。</p></div></li></ol><a class="print-link" href="./print.html" target="_blank" rel="noopener">スタッフの方へ：${total}枚のカードを印刷 ↗</a></div></section>`;
+  return `<section class="welcome"><div class="welcome-main"><p class="kicker">きみも、おばけたんてい。</p><h1 tabindex="-1">${escape(m.title)}</h1><p class="lead">おばけが みにつけているのは、<br><strong>なにいろの、どんな もちもの？</strong></p><p>かーどの おばけから ひんとを あつめて、<br>みんなと いっしょに かんがえよう。</p><div class="start-actions"><button class="primary" data-action="${hasSave?'continue':'new'}">${hasSave?completed?'せいかいを もういちど みる':'つづきから あそぶ':first} <span aria-hidden="true">→</span></button>${hasSave?'<button class="text-button" data-action="reset">さいしょから あそぶ</button>':''}</div><p class="small">かめらの おねがいが でたら、つかって よいほうを おしてね。がめんを おおきく したいときは、すたっふに きいてね。</p></div><div class="how-to"><h2>あそびかた</h2><ol class="steps"><li>${icon('scan')}<div><strong>${m.tutorialMarker?'まず れんしゅう':'かーどを さがそう'}</strong><p>${m.tutorialMarker?'「れんしゅう」を うつして、<br>おばけの みつけかたを ためそう。':`${escape(hintMarkerLabel(m))}を うつそう。`}</p></div></li><li>${icon('note')}<div><strong>ひんとは じどうで めも</strong><p>${escape(hintMarkerLabel(m))}を しばらく うつすと、<br>いろと もちものの めもが かわるよ。</p></div></li><li>${icon('chat')}<div><strong>みんなと そうだん</strong><p>めもを みせあったら、<br>だいひょうが「こたえ」を うつそう。</p></div></li></ol><a class="print-link" href="./print.html" target="_blank" rel="noopener">すたっふへ：${numberLabel(total)}まいの かーどを いんさつ ↗</a></div></section>`;
 }

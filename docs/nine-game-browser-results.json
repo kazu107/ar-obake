@@ -1,7 +1,11 @@
 {
-  "testedAt": "2026-09-27T12:27:54.220Z",
+  "testedAt": "2026-09-30T05:54:07.992Z",
   "environment": "Chromium, development-only simulated recognition; physical iPad not tested",
   "passed": [
+    "participant text and accessible labels use hiragana in both missions",
+    "all eight memo buttons explain possible, excluded or confirmed state; open feedback updates with new clues; toggle/close/Escape work",
+    "feedback fits 390/768/1024 viewports",
+    "staff per-marker orientations default H01-H03 to perpendicular, survive reload and game reset, and reset independently",
     "ten-card home starts with a tutorial marker and advances without recording it",
     "full-viewport camera hides page chrome and only shows the compact deduction memo",
     "stable recognition automatically records hints; duplicates and early ANSWER rejected",

@@ -1,29 +1,29 @@
 {
   "id": "obake-prototype", "version": 2,
-  "title": "おばけのひみつを あばけ！", "markerSet": "four", "assetVersion": "halloween-v1",
+  "title": "おばけのひみつを あばけ！", "markerSet": "four", "assetVersion": "halloween-hiragana-v1",
   "colors": [
     {"id":"green","label":"みどり","hex":"#31a46c"},
-    {"id":"pink","label":"ピンク","hex":"#e768a2"},
+    {"id":"pink","label":"ぴんく","hex":"#e768a2"},
     {"id":"blue","label":"あお","hex":"#337cce"},
     {"id":"yellow","label":"きいろ","hex":"#f1bf31"}
   ],
   "items": [
     {"id":"glasses","label":"めがね","icon":"glasses"},
-    {"id":"ribbon","label":"リボン","icon":"ribbon"},
+    {"id":"ribbon","label":"りぼん","icon":"ribbon"},
     {"id":"hat","label":"ぼうし","icon":"hat"},
     {"id":"gloves","label":"てぶくろ","icon":"gloves"}
   ],
   "answer": {"color":"blue","item":"hat"},
   "answerMarker": {"markerId":"ANSWER","targetIndex":3},
   "hints": [
-    {"id":"hint-01","markerId":"H01","targetIndex":0,"speaker":"1ばんの おばけ",
-      "text":"みどりの アイテムでは ないよ。\nめがねでも ないんだ。",
+    {"id":"hint-01","markerId":"H01","targetIndex":0,"speaker":"いちばんの おばけ",
+      "text":"みどりの もちものでは ないよ。\nめがねでも ないんだ。",
       "condition":{"op":"all","conditions":[{"op":"not","field":"color","value":"green"},{"op":"not","field":"item","value":"glasses"}]}},
-    {"id":"hint-02","markerId":"H02","targetIndex":1,"speaker":"2ばんの おばけ",
-      "text":"きいろい アイテムでは ないよ。\nてぶくろでも ないんだ。",
+    {"id":"hint-02","markerId":"H02","targetIndex":1,"speaker":"にばんの おばけ",
+      "text":"きいろい もちものでは ないよ。\nてぶくろでも ないんだ。",
       "condition":{"op":"all","conditions":[{"op":"not","field":"color","value":"yellow"},{"op":"not","field":"item","value":"gloves"}]}},
-    {"id":"hint-03","markerId":"H03","targetIndex":2,"speaker":"3ばんの おばけ",
-      "text":"ピンクの アイテムでは ないよ。\nリボンでも ないんだ。",
+    {"id":"hint-03","markerId":"H03","targetIndex":2,"speaker":"さんばんの おばけ",
+      "text":"ぴんくの もちものでは ないよ。\nりぼんでも ないんだ。",
       "condition":{"op":"all","conditions":[{"op":"not","field":"color","value":"pink"},{"op":"not","field":"item","value":"ribbon"}]}}
   ]
 }

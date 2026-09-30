@@ -1,12 +1,14 @@
 {
-  "testedAt": "2026-09-27T12:26:01.559Z",
-  "appVersion": "0.7.0",
+  "testedAt": "2026-09-30T06:00:21.075Z",
+  "appVersion": "0.8.0",
   "missionId": "obake-mission-01",
   "environment": "Chromium SwiftShader with synthetic Y4M input; actual MindAR pipeline, not physical iPad",
   "passed": [
     "production build ignores simulate query",
     "tutorial marker shows a separate ghost and 3D speech bubble before exploration without entering the clue memo",
     "real MindAR recognized H01/H02/H03/H04/H05/H06/H07/H08 and automatically saved all hints",
+    "H01-H03 recognized in a tilted table view and render perpendicular, other hints parallel; ghost and speech share the oriented content group",
+    "memo feedback works over the live AR frame and a tap on the frame closes it without stopping the camera",
     "speech copy is drawn inside the Three.js canvas with no DOM speech bubble",
     "camera fills the viewport with no page header or footer and only a compact colour/item memo",
     "consultation stops camera and retains the full memo",

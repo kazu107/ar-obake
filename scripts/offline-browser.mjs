@@ -20,7 +20,7 @@ try{
   await page.goto(origin,{waitUntil:'domcontentloaded'});await page.locator('[data-action="new"]').waitFor();
   const mission=await page.evaluate(async()=>fetch('./missions/main.json').then(response=>response.json()));
   assert.deepEqual(mission.colors.map(color=>color.id),['green','pink','blue','yellow']);assert.deepEqual(mission.items.map(item=>item.id),['glasses','ribbon','hat','gloves']);assert.deepEqual(mission.answer,{color:'blue',item:'hat'});
-  const arPage=await page.evaluate(async()=>fetch('./ar.html?set=ten&mission=main').then(response=>response.text()));assert.ok(arPage.includes('<title>AR camera</title>'));const arScript=arPage.match(/src="([^"]*\/assets\/ar-[^"]+)"/)?.[1];assert.ok(arScript);
+  const arPage=await page.evaluate(async()=>fetch('./ar.html?set=ten&mission=main').then(response=>response.text()));assert.ok(arPage.includes('<title>おばけの かめら</title>'));const arScript=arPage.match(/src="([^"]*\/assets\/ar-[^"]+)"/)?.[1];assert.ok(arScript);
   const offlineAssets=await page.evaluate(async paths=>Promise.all(paths.map(async path=>{const response=await fetch(path);return {path,status:response.status,bytes:(await response.arrayBuffer()).byteLength};})),[arScript,'./targets/ten.mind','./models/ghost.glb']);assert.ok(offlineAssets.every(asset=>asset.status===200&&asset.bytes>1000));
   passed.push('offline reload restores the staff page, Mission v2, AR runtime bundle, ten-marker target data, and ghost model');
   assert.deepEqual(errors,[]);

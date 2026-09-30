@@ -10,7 +10,7 @@ import {memo} from '../src/game/screens';
 const mission=parseMission(mainData),practice=parseMission(practiceData),report=analyzeBalance(mission);
 describe('eight-hint content and omission tolerance',()=>{
   it('uses all eight existing hint cards, ANSWER, and a separate tutorial marker',()=>{
-    expect(mission.markerSet).toBe('ten');expect(mission.hints.map(h=>h.targetIndex)).toEqual([0,1,2,3,4,5,6,7]);expect(mission.answerMarker).toEqual({markerId:'ANSWER',targetIndex:8});expect(mission.tutorialMarker).toEqual({markerId:'TUTORIAL',targetIndex:9,speaker:'れんしゅうの おばけ',text:'こんにちは！\nカードを しばらく うつしてね。'});
+    expect(mission.markerSet).toBe('ten');expect(mission.hints.map(h=>h.targetIndex)).toEqual([0,1,2,3,4,5,6,7]);expect(mission.answerMarker).toEqual({markerId:'ANSWER',targetIndex:8});expect(mission.tutorialMarker).toEqual({markerId:'TUTORIAL',targetIndex:9,speaker:'れんしゅうの おばけ',text:'こんにちは！\nかーどを しばらく うつしてね。'});
   });
   it('retains the intended meaning of each written hint',()=>{
     const expected=[
@@ -61,11 +61,11 @@ describe('mission selection and eight-hint memo',()=>{
   it('does not mistake a two-colour positive hint for a confirmed colour',()=>{
     const p=collect(mission,newProgress(mission),'H01'),left=candidates(mission,p.markerIds);
     expect(memoMark(left,'color','blue')).toBe('unknown');expect(memoMark(left,'color','pink')).toBe('unknown');expect(memoMark(left,'color','yellow')).toBe('no');
-    const html=memo(mission,p);expect(html).toContain('1 / 8');expect(html.match(/class="obtained"/g)).toHaveLength(1);expect(html.match(/class="missing"/g)).toHaveLength(7);
+    const html=memo(mission,p);expect(html).toContain('いち / はち');expect(html.match(/class="obtained"/g)).toHaveLength(1);expect(html.match(/class="missing"/g)).toHaveLength(7);
   });
   it('takes title, card range, and total from the selected mission',()=>{
-    expect(hintMarkerLabel(mission)).toBe('H01〜H08');expect(hintMarkerLabel(practice)).toBe('H01・H02・H03');
-    expect(welcome(mission)).toContain('10枚のカードを印刷');expect(welcome(mission)).toContain(mission.title);expect(welcome(mission)).toContain('れんしゅうを はじめる');expect(welcome(mission)).toContain('TUTORIAL');expect(welcome(practice)).toContain('4枚のカードを印刷');
+    expect(hintMarkerLabel(mission)).toBe('いちばん〜はちばん');expect(hintMarkerLabel(practice)).toBe('いちばん・にばん・さんばん');
+    expect(welcome(mission)).toContain('じゅうまいの かーどを いんさつ');expect(welcome(mission)).toContain(mission.title);expect(welcome(mission)).toContain('れんしゅうを はじめる');expect(welcome(mission)).toContain('「れんしゅう」');expect(welcome(practice)).toContain('よんまいの かーどを いんさつ');
   });
   it('migrates existing progress past the tutorial without discarding its clues',()=>{
     const old={schemaVersion:1,missionId:mission.id,missionVersion:mission.version,markerIds:['H01'],phase:'exploring',attempts:[]};

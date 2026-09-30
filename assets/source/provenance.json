@@ -1,11 +1,12 @@
 {
-  "version": 3,
+  "version": 4,
   "markers": {
     "creator": "Original procedural Halloween calibration patterns",
     "source": "scripts/generate-assets.mjs",
     "seed": 261031,
     "license": "CC0-1.0",
-    "theme": "Halloween silhouettes: pumpkins, bats, ghosts, webs, candy, moons, tombstones and stars"
+    "theme": "Halloween silhouettes with hiragana participant labels",
+    "font": "Yu Gothic Bold (locally rendered into PNG; font files are not distributed)"
   },
   "ghost": {
     "creator": "Original procedural low-poly test model",
@@ -13,5 +14,5 @@
     "license": "CC0-1.0",
     "bytes": 43700
   },
-  "note": "Halloween-v1 replaces all marker images while preserving marker IDs and targetIndex ordering; recognition targets and printable PDFs must be regenerated together."
+  "note": "Hiragana labels replace the English marker captions while preserving marker IDs and targetIndex ordering; targets and printable PDFs are regenerated together."
 }

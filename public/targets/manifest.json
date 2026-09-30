@@ -1,5 +1,5 @@
 {
-  "version": "halloween-v1",
+  "version": "halloween-hiragana-v1",
   "mindar": "1.2.5",
   "markers": [
     {
@@ -7,70 +7,70 @@
       "file": "markers/H01.png",
       "width": 800,
       "height": 800,
-      "sha256": "826d305e0a4aca451a8fd28848823af6d4e8eb6497003e682b090f62559a6e63"
+      "sha256": "a03256937629d73f3cd79cb9ede7746d5b6d4fc4c5e00891d053678251849cdd"
     },
     {
       "id": "H02",
       "file": "markers/H02.png",
       "width": 800,
       "height": 800,
-      "sha256": "e083aa59faadc85a9a4784919a112d35570d38bc2c190410479917354c3fcc01"
+      "sha256": "5ce22f71943b8e23a41d494163b0872a88808eb8846a9b3423f55fdca8f0a19e"
     },
     {
       "id": "H03",
       "file": "markers/H03.png",
       "width": 800,
       "height": 800,
-      "sha256": "a5dccb2b5dc5276c373a61c8b05c0d064844e6bc33bc5d79c04a5ce09654e202"
+      "sha256": "1908c51defe8ca3ab84f5412916d599bf4af7a52ed77af6bdb9edd6177a04abc"
     },
     {
       "id": "H04",
       "file": "markers/H04.png",
       "width": 800,
       "height": 800,
-      "sha256": "10699055d31063265093bb3bd221f43f6f685aa6e4e3a2418d4e1ee6a48df7f3"
+      "sha256": "ff1f0c41a7784e99e7f46c36b5763d866490c193b8383ad33739e3bea3cb35ef"
     },
     {
       "id": "H05",
       "file": "markers/H05.png",
       "width": 800,
       "height": 800,
-      "sha256": "ed2aacda2b440144c08d90a243c929c956dbb33a0b1482267a0a639084865a60"
+      "sha256": "ff4ccebd4ecfecf57ffbf7ab26bce1007fe49db94872ac05bd254ea23bc9f741"
     },
     {
       "id": "H06",
       "file": "markers/H06.png",
       "width": 800,
       "height": 800,
-      "sha256": "d29aa3c16a87f57c590905ff9fb7b6d6c66a4e163c9e51ad6c20c34be3c237d0"
+      "sha256": "8271131cdf43ec090129bb351e469a7d9d89e09353d8f3dde9f639404201d02e"
     },
     {
       "id": "H07",
       "file": "markers/H07.png",
       "width": 800,
       "height": 800,
-      "sha256": "485c25b87b909a1a90452588255ac9f2053410032701bcc04d5b4fb67828e160"
+      "sha256": "39fb5c8647ce9f8635d86afb5952fe7400dd6f2167904b21f5fd2ee37e9c68fa"
     },
     {
       "id": "H08",
       "file": "markers/H08.png",
       "width": 800,
       "height": 800,
-      "sha256": "9bf25f98b5b5e34aed2d2591c43436f8874b1e8508c437ff6608894e7297ed93"
+      "sha256": "df1dcfd87d42f5fb8d1078efdb9c59e5bef0fa64463d49b0c8b5cde64f4511c1"
     },
     {
       "id": "ANSWER",
       "file": "markers/ANSWER.png",
       "width": 800,
       "height": 800,
-      "sha256": "6b690d7145bf127a094a177f6e6ab6515a1fe119648b8ccc9bdaaf5f348b3b9d"
+      "sha256": "39d98033b2e4987b4d322a4c512cc8af18b105524eda67ac8f8db16d7595231d"
     },
     {
       "id": "TUTORIAL",
       "file": "markers/TUTORIAL.png",
       "width": 800,
       "height": 800,
-      "sha256": "2374df6ced551e0033b529787cd89069c98fb165a553f7d2843266abc0953fad"
+      "sha256": "440eeba1d57b42b3243e51bd623f4e12c3d03152a0c29dd02d51609fee422a5f"
     }
   ],
   "sets": {

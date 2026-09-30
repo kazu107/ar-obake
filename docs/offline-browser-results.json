@@ -1,6 +1,6 @@
 {
-  "testedAt": "2026-09-28T03:17:25.994Z",
-  "environment": "Playwright Chromium at http://127.0.0.1:4188/ar-obake/ with network disabled after explicit preparation",
+  "testedAt": "2026-09-30T06:00:22.968Z",
+  "environment": "Playwright Chromium at http://127.0.0.1:4173/ with network disabled after explicit preparation",
   "passed": [
     "staff screen downloads the complete offline game bundle and shows the accepted disconnect timing",
     "offline reload restores the staff page, Mission v2, AR runtime bundle, ten-marker target data, and ghost model"

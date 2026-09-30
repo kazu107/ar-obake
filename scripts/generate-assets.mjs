@@ -1,4 +1,4 @@
-import { createCanvas } from '@napi-rs/canvas';
+import { createCanvas, GlobalFonts } from '@napi-rs/canvas';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import * as THREE from 'three';
@@ -7,6 +7,9 @@ import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
 for (const dir of ['public/markers', 'public/models', 'public/targets', 'assets/source']) await mkdir(dir, { recursive: true });
 const ids = ['H01','H02','H03','H04','H05','H06','H07','H08','ANSWER','TUTORIAL'];
 const metadata = [];
+// Embed Japanese glyphs in the marker bitmap rather than relying on browser fonts.
+if(!GlobalFonts.registerFromPath('C:/Windows/Fonts/YuGothB.ttc','MarkerJapanese'))throw Error('Japanese marker font unavailable');
+const markerNames=['いちばん','にばん','さんばん','よんばん','ごばん','ろくばん','ななばん','はちばん','こたえ','れんしゅう'];
 
 const markerPalette=['#17142f','#34245f','#f07824','#6a3fb4','#526476','#51915d'];
 function drawBat(ctx,size){
@@ -53,8 +56,8 @@ for (let index = 0; index < ids.length; index++) {
   ctx.strokeStyle='#17142f';ctx.lineWidth=10;ctx.strokeRect(14,14,772,772);
   ctx.fillStyle='#fffaf2';ctx.fillRect(214,310,372,170);
   ctx.strokeStyle=index===8?'#f07824':index===9?'#51915d':'#6a3fb4';ctx.lineWidth=11;ctx.strokeRect(226,322,348,146);
-  ctx.fillStyle='#17142f';ctx.font=`bold ${ids[index]==='TUTORIAL'?42:index===8?64:95}px sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(ids[index],400,397);
-  ctx.fillStyle='#17142f';ctx.font='bold 20px sans-serif';ctx.fillText(`AR OBAKE / HALLOWEEN CARD ${String(index+1).padStart(2,'0')}`,400,767);
+  ctx.fillStyle='#17142f';ctx.font='bold 58px MarkerJapanese';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(markerNames[index],400,397);
+  ctx.fillStyle='#17142f';ctx.font='bold 24px MarkerJapanese';ctx.fillText('おばけたんていだん',400,762);
   const png = canvas.toBuffer('image/png');
   await writeFile(`public/markers/${ids[index]}.png`,png);
   metadata.push({id:ids[index],file:`markers/${ids[index]}.png`,width:800,height:800,sha256:createHash('sha256').update(png).digest('hex')});
@@ -87,6 +90,6 @@ for(const x of [-.24,.24]) {const arm=new THREE.Mesh(sphere,white);arm.scale.set
 const badge=new THREE.Mesh(new THREE.CircleGeometry(.035,5),gold);badge.position.set(.12,-.105,.219);ghost.add(badge);
 const model=await new GLTFExporter().parseAsync(ghost,{binary:true});
 await writeFile('public/models/ghost.glb',Buffer.from(model));
-await writeFile('public/targets/manifest.json',JSON.stringify({version:'halloween-v1',mindar:'1.2.5',markers:metadata,sets:{one:['H01'],four:['H01','H02','H03','ANSWER'],nine:ids.slice(0,9),ten:ids}},null,2)+'\n');
-await writeFile('assets/source/provenance.json',JSON.stringify({version:3,markers:{creator:'Original procedural Halloween calibration patterns',source:'scripts/generate-assets.mjs',seed:261031,license:'CC0-1.0',theme:'Halloween silhouettes: pumpkins, bats, ghosts, webs, candy, moons, tombstones and stars'},ghost:{creator:'Original procedural low-poly test model',source:'scripts/generate-assets.mjs',license:'CC0-1.0',bytes:model.byteLength},note:'Halloween-v1 replaces all marker images while preserving marker IDs and targetIndex ordering; recognition targets and printable PDFs must be regenerated together.'},null,2)+'\n');
+await writeFile('public/targets/manifest.json',JSON.stringify({version:'halloween-hiragana-v1',mindar:'1.2.5',markers:metadata,sets:{one:['H01'],four:['H01','H02','H03','ANSWER'],nine:ids.slice(0,9),ten:ids}},null,2)+'\n');
+await writeFile('assets/source/provenance.json',JSON.stringify({version:4,markers:{creator:'Original procedural Halloween calibration patterns',source:'scripts/generate-assets.mjs',seed:261031,license:'CC0-1.0',theme:'Halloween silhouettes with hiragana participant labels',font:'Yu Gothic Bold (locally rendered into PNG; font files are not distributed)'},ghost:{creator:'Original procedural low-poly test model',source:'scripts/generate-assets.mjs',license:'CC0-1.0',bytes:model.byteLength},note:'Hiragana labels replace the English marker captions while preserving marker IDs and targetIndex ordering; targets and printable PDFs are regenerated together.'},null,2)+'\n');
 console.log(`Generated ${ids.length} markers; ghost.glb ${model.byteLength} bytes.`);

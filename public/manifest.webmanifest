@@ -1,6 +1,6 @@
 {
-  "name": "ARおばけ探偵団",
-  "short_name": "おばけ探偵団",
+  "name": "おばけたんていだん",
+  "short_name": "おばけたんていだん",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
