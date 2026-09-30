@@ -1,44 +1,215 @@
 {
-  "testedAt": "2026-09-30T07:05:48.114Z",
-  "environment": "Chromium SwiftShader; actual GLB and runtime geometry; not physical iPad",
-  "proof": [
+  "testedAt": "2026-09-30T10:46:44.790Z",
+  "appVersion": "0.8.2",
+  "environment": "Chromium SwiftShader; actual GLB and runtime geometry; front and tilted upright previews, not physical iPad",
+  "renders": [
     {
-      "id": "TUTORIAL",
-      "kind": "greeting",
-      "rootUnchanged": true,
-      "active": false
+      "orientation": "parallel",
+      "now": 2000,
+      "proof": [
+        {
+          "id": "TUTORIAL",
+          "kind": "greeting",
+          "rootUnchanged": true,
+          "active": false
+        },
+        {
+          "id": "H01",
+          "kind": "pumpkin",
+          "rootUnchanged": true,
+          "active": false
+        },
+        {
+          "id": "H02",
+          "kind": "bat",
+          "rootUnchanged": true,
+          "active": false
+        },
+        {
+          "id": "H03",
+          "kind": "sleepy",
+          "rootUnchanged": true,
+          "active": false
+        },
+        {
+          "id": "H04",
+          "kind": "candy",
+          "rootUnchanged": true,
+          "active": false
+        },
+        {
+          "id": "H05",
+          "kind": "book",
+          "rootUnchanged": true,
+          "active": false
+        },
+        {
+          "id": "H06",
+          "kind": "bell",
+          "rootUnchanged": true,
+          "active": false
+        },
+        {
+          "id": "H07",
+          "kind": "broom",
+          "rootUnchanged": true,
+          "active": false
+        },
+        {
+          "id": "H08",
+          "kind": "surprised",
+          "rootUnchanged": true,
+          "active": false
+        },
+        {
+          "id": "ANSWER",
+          "kind": "detective",
+          "rootUnchanged": true,
+          "active": false
+        }
+      ],
+      "triangles": 36117,
+      "drawCalls": 129,
+      "gpuError": 0
     },
     {
-      "id": "H01",
-      "kind": "pumpkin",
-      "rootUnchanged": true,
-      "active": false
+      "orientation": "parallel",
+      "now": 700,
+      "proof": [
+        {
+          "id": "TUTORIAL",
+          "kind": "greeting",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H01",
+          "kind": "pumpkin",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H02",
+          "kind": "bat",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H03",
+          "kind": "sleepy",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H04",
+          "kind": "candy",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H05",
+          "kind": "book",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H06",
+          "kind": "bell",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H07",
+          "kind": "broom",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H08",
+          "kind": "surprised",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "ANSWER",
+          "kind": "detective",
+          "rootUnchanged": true,
+          "active": true
+        }
+      ],
+      "triangles": 36129,
+      "drawCalls": 130,
+      "gpuError": 0
     },
     {
-      "id": "H08",
-      "kind": "surprised",
-      "rootUnchanged": true,
-      "active": false
-    },
-    {
-      "id": "TUTORIAL",
-      "kind": "greeting",
-      "rootUnchanged": true,
-      "active": true
-    },
-    {
-      "id": "H01",
-      "kind": "pumpkin",
-      "rootUnchanged": true,
-      "active": true
-    },
-    {
-      "id": "H08",
-      "kind": "surprised",
-      "rootUnchanged": true,
-      "active": true
+      "orientation": "perpendicular",
+      "now": 700,
+      "proof": [
+        {
+          "id": "TUTORIAL",
+          "kind": "greeting",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H01",
+          "kind": "pumpkin",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H02",
+          "kind": "bat",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H03",
+          "kind": "sleepy",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H04",
+          "kind": "candy",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H05",
+          "kind": "book",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H06",
+          "kind": "bell",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H07",
+          "kind": "broom",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "H08",
+          "kind": "surprised",
+          "rootUnchanged": true,
+          "active": true
+        },
+        {
+          "id": "ANSWER",
+          "kind": "detective",
+          "rootUnchanged": true,
+          "active": true
+        }
+      ],
+      "triangles": 36129,
+      "drawCalls": 130,
+      "gpuError": 0
     }
   ],
-  "gpuError": 0,
   "pageErrors": []
 }

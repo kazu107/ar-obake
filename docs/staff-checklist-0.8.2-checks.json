@@ -1,0 +1,27 @@
+{
+  "appVersion": "0.8.2",
+  "pages": 1,
+  "paper": "A4 landscape",
+  "markers": [
+    "TUTORIAL",
+    "H01",
+    "H02",
+    "H03",
+    "H04",
+    "H05",
+    "H06",
+    "H07",
+    "H08",
+    "ANSWER"
+  ],
+  "variants": "all 10 implemented variants",
+  "perpendicularDefaults": [
+    "H01",
+    "H02",
+    "H03"
+  ],
+  "qr": "https://kazu107.github.io/ar-obake/",
+  "originalPublicDist": "identical",
+  "sha256": "c6f89c5767670c9252c133e9accefcd5b2eb2d767d9e077015d4def1a36128bf",
+  "visualReview": "Rendered single page inspected; no clipping or overlaps"
+}

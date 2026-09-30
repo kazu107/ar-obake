@@ -10,5 +10,6 @@
     "H01",
     "H08"
   ],
-  "otherCards": "proposed"
+  "implementedIn082": ["H02", "H03", "H04", "H05", "H06", "H07", "ANSWER"],
+  "otherCards": "implemented as lightweight runtime geometry; illustration remains a design reference"
 }

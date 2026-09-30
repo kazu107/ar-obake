@@ -1,5 +1,5 @@
 {
-  "testedAt": "2026-09-30T07:08:56.692Z",
+  "testedAt": "2026-09-30T10:49:40.957Z",
   "environment": "Playwright Chromium at http://127.0.0.1:4173/ with network disabled after explicit preparation",
   "passed": [
     "staff screen downloads the complete offline game bundle and shows the accepted disconnect timing",

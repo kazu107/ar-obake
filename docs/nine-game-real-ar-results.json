@@ -1,6 +1,6 @@
 {
-  "testedAt": "2026-09-30T07:08:54.822Z",
-  "appVersion": "0.8.1",
+  "testedAt": "2026-09-30T10:49:38.899Z",
+  "appVersion": "0.8.2",
   "missionId": "obake-mission-01",
   "environment": "Chromium SwiftShader with synthetic Y4M input; actual MindAR pipeline, not physical iPad",
   "passed": [
@@ -14,7 +14,8 @@
     "consultation stops camera and retains the full memo",
     "ANSWER recognition opens colour and item selection",
     "correct answer completes game",
-    "TUTORIAL greeting, H01 pumpkin lantern, H08 surprised face/raised arms render in the real AR frame; H01 gesture finishes and returns to rest",
+    "All ten variants render in the real AR frame; H02 bat, H03 sleepy eyes/pillow, H04 candy, H05 book, H06 bell, H07 broom and ANSWER notebook/nod are distinct; H01 gesture finishes and returns to rest",
+    "ANSWER leaves time for the detective nod before opening colour selection",
     "retained laboratory page starts and stops AR",
     "camera denial offers restart without discarding progress"
   ],

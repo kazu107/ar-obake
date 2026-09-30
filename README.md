@@ -1,13 +1,14 @@
 # ARおばけ探偵団：チュートリアル＋9枚ゲーム
 
-0.8.1ではTUTORIALの手振り、H01のかぼちゃランタン、H08の驚きを追加しました。10体の比較イラストとスタッフ用の設置確認表も用意しています。利用者の画面・せりふ・カード表面はひらがなです。スタッフがカードごとのおばけの角度を平行／垂直で設定でき、H01〜H03は初期設定で垂直です。色とアイテムから「青い帽子」を推理するWebARゲームです。
+0.8.2でH02〜H07とANSWERの小物・表情・動きを追加し、全10体のバリエーションを実装しました。こうもり・まくら・おかし・本・鈴・ほうき・メモ帳で見分けられます。10体の比較イラストとスタッフ用の設置確認表も用意しています。利用者の画面・せりふ・カード表面はひらがなです。スタッフがカードごとのおばけの角度を平行／垂直で設定でき、H01〜H03は初期設定で垂直です。色とアイテムから「青い帽子」を推理するWebARゲームです。
 
 - [実装計画](docs/implementation-plan.md)
 - [実機試験の記録表](docs/air2-test-checklist.md)
 - [実装と検証の状況](docs/phase-0-1-status.md)
 - [ひらがな・メモ吹き出し・角度設定と更新手順](docs/participant-ui-0.8.0.md)
 - [おばけのバリエーション案](docs/ghost-variation-proposals.md)
-- [3体の実装・比較イラスト・スタッフ確認表](docs/ghost-variations-0.8.1.md)
+- [全10体の実装と検証](docs/ghost-variations-0.8.2.md)
+- [最初の3体・比較イラスト・スタッフ確認表（0.8.1）](docs/ghost-variations-0.8.1.md)
 - 公開URL：https://kazu107.github.io/ar-obake/
 - 旧Sitesの非公開配信URL：https://ar-obake-lab.kazu107.chatgpt.site
 - GitHubリポジトリ：https://github.com/kazu107/ar-obake
@@ -19,7 +20,7 @@
 
 0.7.3以前のカードを使っている場合は、0.8.0で画像が変わったため全10枚を新版PDFで印刷し直してください。
 
-0.8.1ではカード画像を変えていません。0.8.0の印刷物を使い、スタッフ画面でアプリ0.8.1を確認してオフラインデータを更新してください。確認表と比較イラストはスタッフ画面の「印刷・資料」から開けます。
+0.8.2ではカード画像を変えていません。0.8.0の印刷物を使い、スタッフ画面でアプリ0.8.2を確認してオフラインデータを更新してください。確認表と比較イラストはスタッフ画面の「印刷・資料」から開けます。動きは約2秒で止まり、体と追跡の位置は動かしません。ANSWERは安定認識後に約1.5秒うなずきを見せてから回答画面へ進みます。
 
 - [9枚ミッションの設計・検証・確認手順](docs/nine-mission-0.3.0.md)
 - [自動記録・AR吹き出しの実装と確認手順](docs/auto-record-ar-speech-0.4.0.md)
@@ -107,6 +108,8 @@ npm run check:assets
 ```
 
 PDF生成にはreportlabが必要です。Windowsの游ゴシックがある場合はサブセットを埋め込みます。`scripts/print-markers.py`は配布用PDFを`output/pdf/`へ生成し、同じ内容を公開用の`public/`へコピーします。画像生成は`@napi-rs/canvas`、GLBはThree.jsのGLTFExporterを使います。
+
+設置確認表は`python scripts/print-staff-checklist.py`で生成します。Popplerの`pdftoppm`で1ページを`tmp/pdfs/staff-0.8.2.png`へ描画して目視確認し、ビルド後に`python scripts/check-staff-checklist.py`でページサイズ・10体の欄・QR・原本／public／distの一致を検証できます。検証にはpypdf・Pillow・zxing-cppが必要です。3Dモデルの一覧描画は`node scripts/ghost-variation-browser.mjs`、ゲームと認識の通し確認は`node scripts/verify-game-browser.mjs`を使います。
 
 マーカーは固定seedで生成する非対称なハロウィン柄です。カボチャ、コウモリ、おばけ、クモの巣、キャンディ、三日月、墓石、星を組み合わせます。H01〜H08、ANSWER、TUTORIALの認識順を維持し、1枚・4枚・9枚・10枚のセットを生成します。4枚セットのANSWERはindex 3、9枚セットではindex 8、10枚セットのTUTORIALはindex 9です。素材の編集後は.mindとPDFも作り直してください。
 

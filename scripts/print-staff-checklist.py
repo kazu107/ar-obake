@@ -59,7 +59,7 @@ for x, heading in zip(starts, headings):
 
 ids = ['TUTORIAL'] + [f'H{i:02}' for i in range(1, 9)] + ['ANSWER']
 names = ['れんしゅう', 'いちばん', 'にばん', 'さんばん', 'よんばん', 'ごばん', 'ろくばん', 'ななばん', 'はちばん', 'こたえ']
-variants = {'TUTORIAL': '手振り', 'H01': 'かぼちゃ', 'H08': '驚き'}
+variants = {'TUTORIAL': '手振り', 'H01': 'かぼちゃ', 'H02': 'こうもり', 'H03': 'まくら / 半目', 'H04': 'おかし', 'H05': '本', 'H06': '鈴', 'H07': 'ほうき', 'H08': '驚き', 'ANSWER': 'メモ帳 / うなずき'}
 for index, (marker_id, name) in enumerate(zip(ids, names)):
     row_top = top - header_h - index * row_h
     bottom = row_top - row_h
@@ -85,7 +85,7 @@ for index, (marker_id, name) in enumerate(zip(ids, names)):
     checkbox(starts[6] + 3, bottom + 4.3, '回収済み')
 
 text(13, 22, '平行＝壁向け／垂直＝机向け。角度は端末ごとに設定し、次のカメラ開始で反映します。', 8.5)
-text(13, 15, f'アプリ{version}用。TUTORIAL・H01・H08は約2秒で動きが止まることも確認。A4横・100%で印刷。', 8.5)
+text(13, 15, f'アプリ{version}用。全10体の小物・表情と、約2秒で動きが止まることも確認。A4横・100%で印刷。', 8.5)
 url = 'https://kazu107.github.io/ar-obake/'
 pdf.setFont('Helvetica', 9)
 pdf.drawString(13 * mm, 8 * mm, url)

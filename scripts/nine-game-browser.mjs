@@ -36,6 +36,8 @@ try{
   await action('share').click();assert.equal(await page.locator('.saved-clue').count(),7);assert.equal(await page.locator('iframe').count(),0);
   for(const [w,h]of [[768,1024],[1024,768],[390,844]]){await page.setViewportSize({width:w,height:h});await noOverflow();await hiragana();await page.screenshot({path:`.artifacts/nine-game/share-${w}.png`,fullPage:true});}
   await action('answer-scan').click();await marker('H08');assert.equal(await page.locator('[data-color]').count(),0);await marker('ANSWER');
+  assert.equal(await page.locator('[data-color]').count(),0);await action('home').click();await page.waitForTimeout(1600);assert.equal(await page.locator('[data-color]').count(),0);
+  await action('continue').click();await action('answer-scan').click();await marker('ANSWER');await page.locator('[data-color="blue"]').waitFor({timeout:5000});passed.push('leaving the camera during the detective nod cancels the pending answer transition; scanning again resumes normally');
   await page.screenshot({path:'.artifacts/nine-game/answer-colors.png',fullPage:true});
   await page.locator('[data-color="blue"]').click();await action('next-item').click();await page.screenshot({path:'.artifacts/nine-game/answer-items.png',fullPage:true});await page.locator('[data-item="hat"]').click();await action('confirm-answer').click();await action('submit-answer').click();assert.equal((await saved()).phase,'complete');
   await page.reload();await action('continue').click();assert.equal(await page.locator('h1').innerText(),'せいかい！');await action('reset').click();await action('cancel-reset').click();assert.equal((await saved()).phase,'complete');await action('reset').click();await action('confirm-reset').click();assert.deepEqual((await saved()).markerIds,[]);

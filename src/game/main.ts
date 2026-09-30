@@ -27,6 +27,7 @@ let selected:Partial<Answer>={},answerUnlocked=false,saveFailed=false;
 let frame:HTMLIFrameElement|undefined,ready=false,simulating=false,openedAt=0,lastFrameAt=0;
 let shownMarker:string|undefined;
 let tutorialTimer:number|undefined;
+let answerTimer:number|undefined;
 let memoSelection:views.MemoSelection|undefined;
 let markerSettings:MarkerSettings=defaultMarkerSettings(),settingsMessage='';
 let offlineStatus:OfflineStatus={state:'checking',detail:'オフライン準備の状態を確認しています。'};
@@ -56,6 +57,7 @@ function showSaveWarning() {
 }
 function stopCamera() {
   if(tutorialTimer!==undefined){clearTimeout(tutorialTimer);tutorialTimer=undefined;}
+  if(answerTimer!==undefined){clearTimeout(answerTimer);answerTimer=undefined;}
   frame?.remove();frame=undefined;ready=false;simulating=false;shownMarker=undefined;gate?.reset();
 }
 function enterFullscreen(){const root=document.documentElement;if(requestBrowserFullscreen&&!document.fullscreenElement&&root.requestFullscreen)void root.requestFullscreen().catch(()=>{});}
@@ -127,7 +129,13 @@ function updateHint(force=false) {
     return;
   }
   if(screen==='answer-scan'){
-    if(marker===mission.answerMarker.markerId){answerUnlocked=true;selected={};go('color');}
+    if(marker===mission.answerMarker.markerId){
+      if(answerTimer===undefined){
+        answerUnlocked=true;selected={};panel.textContent='こたえを かんがえよう。';
+        // Leave time for the detective's short nod before closing the AR frame.
+        answerTimer=window.setTimeout(()=>{answerTimer=undefined;if(screen==='answer-scan')go('color');},1500);
+      }
+    }
     else panel.innerHTML='<p class="hint-placeholder">これは ひんとの かーどだよ。「こたえ」を さがしてね。</p>';
     return;
   }

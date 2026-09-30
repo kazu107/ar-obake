@@ -1,7 +1,8 @@
 {
-  "testedAt": "2026-09-30T05:54:07.992Z",
+  "testedAt": "2026-09-30T10:43:11.422Z",
   "environment": "Chromium, development-only simulated recognition; physical iPad not tested",
   "passed": [
+    "leaving the camera during the detective nod cancels the pending answer transition; scanning again resumes normally",
     "participant text and accessible labels use hiragana in both missions",
     "all eight memo buttons explain possible, excluded or confirmed state; open feedback updates with new clues; toggle/close/Escape work",
     "feedback fits 390/768/1024 viewports",
