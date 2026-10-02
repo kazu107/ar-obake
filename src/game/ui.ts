@@ -20,7 +20,7 @@ export function shell(content: string, count = 0, active = false, mission?:Missi
   if(immersive)return `<main id="game-main" class="game-shell immersive-shell">${content}</main>`;
   const home=practice?'./?mission=practice':'./';
   const total=mission?mission.hints.length+1+(mission.tutorialMarker?1:0):practice?4:10;
-  return `<header class="game-header"><a class="brand" href="${home}">おばけたんていだん</a>${active?`<button class="memo-shortcut" data-action="memo">${icon('note')}そうさめも <span>${numberLabel(count)}</span></button>`:`<span class="edition">${numberLabel(total)}まいの おはなし</span>`}</header><main id="game-main" class="game-shell">${content}</main><footer class="game-footer"><span>${staff?'試作版 · <span id="game-version"></span>':'おばけたんていだん'}</span><a href="${practice?'./':'./?mission=practice'}">${practice?'じゅうまいで あそぶ':'よんまいで あそぶ'}</a><a href="./?staff=1">すたっふの がめん</a><a href="./lab.html">かめらの かくにん</a><a href="./guide.html#reader" target="_blank" rel="noopener">ひょうじで こまったら</a></footer>`;
+  return `<header class="game-header"><a class="brand" href="${home}">おばけたんていだん</a>${active?`<button class="memo-shortcut" data-action="memo">${icon('note')}そうさめも <span>${numberLabel(count)}</span></button>`:`<span class="edition">${numberLabel(total)}まいの おはなし</span>`}</header><main id="game-main" class="game-shell">${content}</main><footer class="game-footer"><span>${staff?'試作版 · <span id="game-version"></span>':'おばけたんていだん'}</span><a href="${practice?'./':'./?mission=practice'}">${practice?'10まいで あそぶ':'4まいで あそぶ'}</a><a href="./?staff=1">すたっふの がめん</a><a href="./lab.html">かめらの かくにん</a><a href="./guide.html#reader" target="_blank" rel="noopener">ひょうじで こまったら</a></footer>`;
 }
 
 export function welcome(m:Mission,hasSave = false, completed = false) {

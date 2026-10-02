@@ -11,6 +11,7 @@ import { parseMission, type Mission } from '../game/mission';
 import { defaultMarkerSettings, loadMarkerSettings, parseMarkerSettings } from '../storage/marker-settings';
 import { orientMarkerContent } from './marker-orientation';
 import { createGhostVariant } from './ghost-variations';
+import { layoutSpeakingContent, SPEECH_LAYOUT, speechGapPixels } from './speech-layout';
 
 // A disposable browsing context owns camera, TensorFlow, worker and WebGL resources.
 // Removing this frame tears down the entire AR runtime, including upstream workers.
@@ -92,10 +93,10 @@ function createSpeechBubble() {
   const canvas=document.createElement('canvas');canvas.width=768;canvas.height=360;
   const context=canvas.getContext('2d')!;
   const texture=new CanvasTexture(canvas);texture.colorSpace=SRGBColorSpace;texture.minFilter=LinearFilter;texture.magFilter=LinearFilter;
-  const mesh=new Mesh(new PlaneGeometry(.72,.337),new MeshBasicMaterial({map:texture,transparent:true,depthTest:false,depthWrite:false}));
+  const mesh=new Mesh(new PlaneGeometry(SPEECH_LAYOUT.width,SPEECH_LAYOUT.height),new MeshBasicMaterial({map:texture,transparent:true,depthTest:false,depthWrite:false}));
   // Keep the bubble inside a portrait camera crop while it remains attached to
   // and rotates with the recognized marker.
-  mesh.position.set(.1,.36,.2);mesh.renderOrder=2;mesh.visible=false;
+  mesh.position.set(...SPEECH_LAYOUT.position);mesh.renderOrder=2;mesh.visible=false;
   const draw=(speaker:string,text:string)=>{
     context.clearRect(0,0,canvas.width,canvas.height);
     const x=12,y=12,w=744,h=282,r=34;
@@ -144,8 +145,11 @@ async function start() {
   const scene = new Scene(), camera = new PerspectiveCamera();
   const anchors = SETS[setId].ids.map(id => {
     const group = new Group();group.matrixAutoUpdate=false;group.visible=false;
-    const content=new Group(),orientation=orientations[id];orientMarkerContent(content,orientation);
+    const content=new Group(),orientation=orientations[id];
+    if(mission)layoutSpeakingContent(content,orientation);else orientMarkerContent(content,orientation);
     const {model,gesture}=createGhostVariant(ghost,id);model.position.z=.1;
+    // Keep the head at the same height and lift the hem clear of the memo HUD.
+    if(mission&&orientation==='parallel'){model.scale.multiplyScalar(.8);model.position.y=.08;}
     content.add(model);group.add(content);scene.add(group);
     return {id,group,content,orientation,model,gesture,post:new Matrix4(),input:new Matrix4(),pose:tracking.poseStabilization?.algorithm==='stationary-hold-v3'?new StationaryPoseStabilizer():tracking.poseStabilization?.algorithm==='projection-depth-v2'?new ProjectedPoseStabilizer():new PoseStabilizer(),markerWidth:1,inputAtMs:0,updateIndex:0};
   });
@@ -213,11 +217,14 @@ async function start() {
     if(tracking.ghostMotion==='float') for(const a of anchors) if(a.group.visible) {a.model.position.y=Math.sin(time/650)*.025;a.model.rotation.y=Math.sin(time/1100)*.08;}
     const speaking=anchors.find(a=>a.group.visible),copy=speaking?speechById.get(speaking.id):undefined;
     if(speaking&&copy){
-      if(speechBubble.mesh.parent!==speaking.content)speaking.content.add(speechBubble.mesh);
-      if(spokenId!==speaking.id){spokenId=speaking.id;speechBubble.draw(copy.speaker,copy.text);document.body.dataset.speechId=speaking.id;document.body.dataset.speechCopy=`${copy.speaker}\n${copy.text}`;document.body.dataset.markerOrientation=speaking.orientation;send('speech-visible',{id:speaking.id,rendering:'three-mesh',orientation:speaking.orientation});}
+      if(speechBubble.mesh.parent!==speaking.content){
+        speaking.content.add(speechBubble.mesh);
+        speechBubble.mesh.position.y=speaking.orientation==='perpendicular'?SPEECH_LAYOUT.standingY:SPEECH_LAYOUT.position[1];
+      }
       speechBubble.mesh.visible=true;
+      if(spokenId!==speaking.id){spokenId=speaking.id;speechBubble.draw(copy.speaker,copy.text);document.body.dataset.speechId=speaking.id;document.body.dataset.speechCopy=`${copy.speaker}\n${copy.text}`;document.body.dataset.markerOrientation=speaking.orientation;document.body.dataset.speechGapPx=speechGapPixels(speaking.model,speechBubble.mesh,camera,innerHeight).toFixed(1);send('speech-visible',{id:speaking.id,rendering:'three-mesh',orientation:speaking.orientation});}
       document.body.dataset.ghostVariant=speaking.gesture.kind;document.body.dataset.gestureActive=String(speaking.gesture.isActive(now));
-    }else{speechBubble.mesh.visible=false;spokenId='';delete document.body.dataset.speechId;delete document.body.dataset.speechCopy;delete document.body.dataset.markerOrientation;delete document.body.dataset.ghostVariant;delete document.body.dataset.gestureActive;}
+    }else{speechBubble.mesh.visible=false;spokenId='';delete document.body.dataset.speechId;delete document.body.dataset.speechCopy;delete document.body.dataset.markerOrientation;delete document.body.dataset.speechGapPx;delete document.body.dataset.ghostVariant;delete document.body.dataset.gestureActive;}
     renderer.render(scene,camera);frames++;
     if(now-recordingStarted<=10000 && now-lastPoseSample>=100) {
       const a=anchors.find(anchor=>anchor.group.visible);

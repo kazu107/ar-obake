@@ -1,7 +1,8 @@
 {
-  "testedAt": "2026-09-30T10:43:11.422Z",
+  "testedAt": "2026-10-02T04:49:24.862Z",
   "environment": "Chromium, development-only simulated recognition; physical iPad not tested",
   "passed": [
+    "memo feedback closes automatically after five seconds; choosing another option restarts the timer and leaves the camera running",
     "leaving the camera during the detective nod cancels the pending answer transition; scanning again resumes normally",
     "participant text and accessible labels use hiragana in both missions",
     "all eight memo buttons explain possible, excluded or confirmed state; open feedback updates with new clues; toggle/close/Escape work",

@@ -13,20 +13,24 @@ try{
   const marker=async id=>{await page.locator(`[data-sim="${id}"]`).click();await page.waitForTimeout(600);};
   const saved=()=>page.evaluate(key=>JSON.parse(localStorage.getItem(key)),key);
   const noOverflow=async()=>assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
-  const hiragana=async()=>{const copy=await page.evaluate(()=>{const root=document.querySelector('#app').cloneNode(true);root.querySelectorAll('.dev-controls').forEach(e=>e.remove());return root.textContent+Array.from(root.querySelectorAll('[aria-label]')).map(e=>e.getAttribute('aria-label')).join('')+document.title;});assert.doesNotMatch(copy,/[\p{Script=Han}\p{Script=Katakana}A-Za-z0-9]/u);};
+  const hiragana=async()=>{const copy=await page.evaluate(()=>{const root=document.querySelector('#app').cloneNode(true);root.querySelectorAll('.dev-controls').forEach(e=>e.remove());return root.textContent+Array.from(root.querySelectorAll('[aria-label]')).map(e=>e.getAttribute('aria-label')).join('')+document.title;});assert.doesNotMatch(copy,/[\p{Script=Han}\p{Script=Katakana}A-Za-z]/u);};
   const option=(field,value)=>page.locator(`[data-memo-field="${field}"][data-memo-value="${value}"]`);
-  await page.goto(url);await action('new').waitFor();assert.equal(await page.locator('.edition').innerText(),'じゅうまいの おはなし');assert.ok((await page.locator('h1').innerText()).includes('はちにん'));assert.equal(await page.locator('.notice.error').count(),0);await hiragana();
+  await page.goto(url);await action('new').waitFor();assert.equal(await page.locator('.edition').innerText(),'10まいの おはなし');assert.ok((await page.locator('h1').innerText()).includes('8にん'));assert.equal(await page.locator('.notice.error').count(),0);await hiragana();
   await page.screenshot({path:'.artifacts/nine-game/home.png',fullPage:true});
   await action('new').click();assert.equal(await page.locator('.game-header').count(),0);assert.equal(await page.locator('.hud-memo').count(),0);await marker('TUTORIAL');await page.locator('.hud-memo').waitFor({timeout:5000});assert.equal((await saved()).tutorialComplete,true);assert.deepEqual((await saved()).markerIds,[]);
   // No clues: all eight options must be possible, including the eventual answer.
   for(const button of await page.locator('.hud-memo-option').all()){await button.click();assert.ok((await page.locator('#memo-feedback').innerText()).includes('かも しれないよ'));await hiragana();}
   await action('close-memo-state').click();assert.equal(await page.locator('#memo-feedback').count(),0);
+  await option('color','green').click();await page.waitForTimeout(3000);assert.equal(await page.locator('#memo-feedback').count(),1);
+  await option('color','blue').click();await page.waitForTimeout(2300);assert.equal(await page.locator('#memo-feedback strong').innerText(),'あお');
+  await page.waitForFunction(()=>!document.querySelector('#memo-feedback'),{},{timeout:4000});assert.equal(await option('color','blue').getAttribute('aria-expanded'),'false');
+  passed.push('memo feedback closes automatically after five seconds; choosing another option restarts the timer and leaves the camera running');
   await option('color','green').click();await page.locator('[data-sim="H01"]').evaluate(button=>button.click());await page.waitForTimeout(600);assert.ok((await page.locator('#memo-feedback').innerText()).includes('この いろでは ないよ。'));assert.equal(await option('color','green').getAttribute('aria-expanded'),'true');await page.keyboard.press('Escape');assert.equal(await page.locator('#memo-feedback').count(),0);
   for(const id of ['H01','H02','H03'])await marker(id);
   assert.equal(await page.locator('.hud-memo-option.yes').count(),0);assert.equal((await saved()).markerIds.length,3);assert.equal(await page.locator('.saved-clue,.hint-bubble,.hint-stamps').count(),0);
   await marker('H03');assert.equal(await action('collect').count(),0);assert.equal((await saved()).markerIds.filter(id=>id==='H03').length,1);await marker('ANSWER');assert.equal(await page.locator('[data-color]').count(),0);
   await page.reload();await action('continue').click();assert.deepEqual((await saved()).markerIds,['H01','H02','H03']);
-  await page.goto('http://127.0.0.1:5173/?mission=practice&simulate=1&windowed=1');await action('continue').waitFor();assert.equal(await page.locator('.edition').innerText(),'よんまいの おはなし');await action('continue').click();assert.equal(await page.locator('.hud-memo').count(),1);assert.equal(await page.locator('.hud-memo-option.no').count(),2);await hiragana();
+  await page.goto('http://127.0.0.1:5173/?mission=practice&simulate=1&windowed=1');await action('continue').waitFor();assert.equal(await page.locator('.edition').innerText(),'4まいの おはなし');await action('continue').click();assert.equal(await page.locator('.hud-memo').count(),1);assert.equal(await page.locator('.hud-memo-option.no').count(),2);await hiragana();
   await page.goto(url);await action('continue').click();
   // Deliberately omit H04: the other seven must still identify both answer components.
   for(const id of ['H05','H06','H07','H08'])await marker(id);

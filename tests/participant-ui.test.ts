@@ -7,11 +7,11 @@ import {shell,welcome} from '../src/game/ui';
 import * as views from '../src/game/screens';
 const m=parseMission(main);
 describe('participant copy and memo feedback',()=>{
-  it('covers both missions and every participant view with hiragana text and accessible labels',()=>{
+  it('covers both missions and every participant view with hiragana text, digits and accessible labels',()=>{
     for(const data of [main,practice]){
       const mission=parseMission(data);let p=newProgress(mission);for(const h of mission.hints)p=collect(mission,p,h.markerId);
       const all=[welcome(mission),welcome(mission,true,true),views.memo(mission,p),views.hintList(mission,p),views.share(mission,p),views.scan(mission,p,'tutorial'),views.scan(mission,p,'explore'),views.scan(mission,p,'answer-scan'),views.choose(mission,'color',{}),views.choose(mission,'item',{}),views.confirm(mission,mission.answer),views.wrong(mission,mission.answer),views.win(mission),views.scanMemo(mission,p,{field:'item',value:'hat'})];
-      for(const html of all){const wrapped=shell(html,p.markerIds.length,true,mission);const copy=wrapped.replace(/<[^>]*>/g,'')+(wrapped.match(/aria-label="([^"]*)"/g)??[]).map(v=>v.slice(12,-1)).join('');expect(copy).not.toMatch(/[\p{Script=Han}\p{Script=Katakana}A-Za-z0-9]/u);}
+      for(const html of all){const wrapped=shell(html,p.markerIds.length,true,mission);const copy=wrapped.replace(/<[^>]*>/g,'')+(wrapped.match(/aria-label="([^"]*)"/g)??[]).map(v=>v.slice(12,-1)).join('');expect(copy).not.toMatch(/[\p{Script=Han}\p{Script=Katakana}A-Za-z]/u);}
     }
   });
   it('explains possible, excluded and confirmed states from collected clues rather than the hidden answer',()=>{

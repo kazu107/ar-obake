@@ -2,7 +2,14 @@ import {describe,it,expect} from 'vitest';
 import {Group,Vector3} from 'three';
 import {defaultMarkerSettings,loadMarkerSettings,parseMarkerSettings,saveMarkerSettings,MARKER_SETTINGS_KEY} from '../src/storage/marker-settings';
 import {orientMarkerContent} from '../src/ar/marker-orientation';
+import {layoutSpeakingContent} from '../src/ar/speech-layout';
 describe('per-marker device settings',()=>{
+  it('makes room for speech without lifting the upright ghost off its card or moving its tracked parent',()=>{
+    const tracked=new Group(),content=new Group();tracked.position.set(2,3,4);tracked.add(content);tracked.updateMatrix();const original=tracked.matrix.clone();
+    layoutSpeakingContent(content,'perpendicular');content.updateMatrix();const first=content.matrix.clone();
+    expect(new Vector3(0,-.32,0).applyMatrix4(content.matrix).z).toBeCloseTo(.02);expect(tracked.matrix.equals(original)).toBe(true);
+    layoutSpeakingContent(content,'perpendicular');content.updateMatrix();expect(content.matrix.equals(first)).toBe(true);
+  });
   it('defaults only H01-H03 to standing and supports a different choice on each card',()=>{
     const defaults=defaultMarkerSettings();expect(Object.keys(defaults)).toHaveLength(10);
     expect(Object.entries(defaults).filter(([,v])=>v==='perpendicular').map(([id])=>id)).toEqual(['H01','H02','H03']);

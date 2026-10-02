@@ -1,6 +1,6 @@
 {
-  "testedAt": "2026-09-30T10:49:38.899Z",
-  "appVersion": "0.8.2",
+  "testedAt": "2026-10-02T05:02:41.246Z",
+  "appVersion": "0.8.3",
   "missionId": "obake-mission-01",
   "environment": "Chromium SwiftShader with synthetic Y4M input; actual MindAR pipeline, not physical iPad",
   "passed": [
@@ -17,7 +17,50 @@
     "All ten variants render in the real AR frame; H02 bat, H03 sleepy eyes/pillow, H04 candy, H05 book, H06 bell, H07 broom and ANSWER notebook/nod are distinct; H01 gesture finishes and returns to rest",
     "ANSWER leaves time for the detective nod before opening colour selection",
     "retained laboratory page starts and stops AR",
-    "camera denial offers restart without discarding progress"
+    "camera denial offers restart without discarding progress",
+    "speech and model projected bounds are separated on all ten cards; memo feedback automatically closes while real AR continues"
+  ],
+  "speechGaps": [
+    {
+      "id": "TUTORIAL",
+      "gapPx": 69
+    },
+    {
+      "id": "H01",
+      "gapPx": 27.6
+    },
+    {
+      "id": "H02",
+      "gapPx": 28.2
+    },
+    {
+      "id": "H03",
+      "gapPx": 27.9
+    },
+    {
+      "id": "H04",
+      "gapPx": 68
+    },
+    {
+      "id": "H05",
+      "gapPx": 68.8
+    },
+    {
+      "id": "H06",
+      "gapPx": 68.4
+    },
+    {
+      "id": "H07",
+      "gapPx": 68.4
+    },
+    {
+      "id": "H08",
+      "gapPx": 68
+    },
+    {
+      "id": "ANSWER",
+      "gapPx": 69.4
+    }
   ],
   "pageErrors": []
 }

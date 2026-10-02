@@ -1,5 +1,7 @@
 # ARおばけ探偵団：チュートリアル＋9枚ゲーム
 
+0.8.3ではARのヒント吹き出しをおばけの頭から離し、下部メモの状態吹き出しは5秒で自動終了するようにしました。タイトル・枚数・件数は数字で表示します。[変更と確認手順](docs/speech-layout-0.8.3.md)。
+
 0.8.2でH02〜H07とANSWERの小物・表情・動きを追加し、全10体のバリエーションを実装しました。こうもり・まくら・おかし・本・鈴・ほうき・メモ帳で見分けられます。10体の比較イラストとスタッフ用の設置確認表も用意しています。利用者の画面・せりふ・カード表面はひらがなです。スタッフがカードごとのおばけの角度を平行／垂直で設定でき、H01〜H03は初期設定で垂直です。色とアイテムから「青い帽子」を推理するWebARゲームです。
 
 - [実装計画](docs/implementation-plan.md)
@@ -20,7 +22,7 @@
 
 0.7.3以前のカードを使っている場合は、0.8.0で画像が変わったため全10枚を新版PDFで印刷し直してください。
 
-0.8.2ではカード画像を変えていません。0.8.0の印刷物を使い、スタッフ画面でアプリ0.8.2を確認してオフラインデータを更新してください。確認表と比較イラストはスタッフ画面の「印刷・資料」から開けます。動きは約2秒で止まり、体と追跡の位置は動かしません。ANSWERは安定認識後に約1.5秒うなずきを見せてから回答画面へ進みます。
+0.8.3ではカード画像を変えていません。0.8.0の印刷物を使い、スタッフ画面でアプリ0.8.3を確認してオフラインデータを更新してください。確認表と比較イラストはスタッフ画面の「印刷・資料」から開けます。動きは約2秒で止まり、体と追跡の位置は動かしません。ANSWERは安定認識後に約1.5秒うなずきを見せてから回答画面へ進みます。
 
 - [9枚ミッションの設計・検証・確認手順](docs/nine-mission-0.3.0.md)
 - [自動記録・AR吹き出しの実装と確認手順](docs/auto-record-ar-speech-0.4.0.md)
@@ -109,7 +111,7 @@ npm run check:assets
 
 PDF生成にはreportlabが必要です。Windowsの游ゴシックがある場合はサブセットを埋め込みます。`scripts/print-markers.py`は配布用PDFを`output/pdf/`へ生成し、同じ内容を公開用の`public/`へコピーします。画像生成は`@napi-rs/canvas`、GLBはThree.jsのGLTFExporterを使います。
 
-設置確認表は`python scripts/print-staff-checklist.py`で生成します。Popplerの`pdftoppm`で1ページを`tmp/pdfs/staff-0.8.2.png`へ描画して目視確認し、ビルド後に`python scripts/check-staff-checklist.py`でページサイズ・10体の欄・QR・原本／public／distの一致を検証できます。検証にはpypdf・Pillow・zxing-cppが必要です。3Dモデルの一覧描画は`node scripts/ghost-variation-browser.mjs`、ゲームと認識の通し確認は`node scripts/verify-game-browser.mjs`を使います。
+0.8.2の設置確認表は0.8.3でも使えます。再生成する場合は`python scripts/print-staff-checklist.py`で生成します。Popplerの`pdftoppm`で1ページを`tmp/pdfs/staff-<アプリ版>.png`へ描画して目視確認し、ビルド後に`python scripts/check-staff-checklist.py`でページサイズ・10体の欄・QR・原本／public／distの一致を検証できます。検証にはpypdf・Pillow・zxing-cppが必要です。3Dモデルの一覧描画は`node scripts/ghost-variation-browser.mjs`、ゲームと認識の通し確認は`node scripts/verify-game-browser.mjs`を使います。
 
 マーカーは固定seedで生成する非対称なハロウィン柄です。カボチャ、コウモリ、おばけ、クモの巣、キャンディ、三日月、墓石、星を組み合わせます。H01〜H08、ANSWER、TUTORIALの認識順を維持し、1枚・4枚・9枚・10枚のセットを生成します。4枚セットのANSWERはindex 3、9枚セットではindex 8、10枚セットのTUTORIALはindex 9です。素材の編集後は.mindとPDFも作り直してください。
 

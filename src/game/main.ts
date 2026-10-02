@@ -29,6 +29,7 @@ let shownMarker:string|undefined;
 let tutorialTimer:number|undefined;
 let answerTimer:number|undefined;
 let memoSelection:views.MemoSelection|undefined;
+let memoFeedbackTimer:number|undefined;
 let markerSettings:MarkerSettings=defaultMarkerSettings(),settingsMessage='';
 let offlineStatus:OfflineStatus={state:'checking',detail:'オフライン準備の状態を確認しています。'};
 let storage:Pick<Storage,'getItem'|'setItem'>;
@@ -45,6 +46,7 @@ function updateMiniMemo() {
   const memo=byId('mini-memo');if(memo)memo.innerHTML=views.scanMemo(mission,progress,memoSelection);
 }
 function closeMemoFeedback() {
+  if(memoFeedbackTimer!==undefined){clearTimeout(memoFeedbackTimer);memoFeedbackTimer=undefined;}
   if(!memoSelection)return;memoSelection=undefined;updateMiniMemo();
 }
 
@@ -56,6 +58,7 @@ function showSaveWarning() {
   notice.textContent='この たんまつに めもを ほぞんできません。あそぶことは できますが、とじると めもが きえることがあります。すたっふに つたえてね。';
 }
 function stopCamera() {
+  closeMemoFeedback();
   if(tutorialTimer!==undefined){clearTimeout(tutorialTimer);tutorialTimer=undefined;}
   if(answerTimer!==undefined){clearTimeout(answerTimer);answerTimer=undefined;}
   frame?.remove();frame=undefined;ready=false;simulating=false;shownMarker=undefined;gate?.reset();
@@ -157,7 +160,9 @@ app.addEventListener('click',event=>{
       const field=button.dataset.memoField,value=button.dataset.memoValue;
       if((field==='color'||field==='item')&&value&&(field==='color'?mission.colors:mission.items).some(c=>c.id===value)){
         const closing=memoSelection?.field===field&&memoSelection.value===value;
+        if(memoFeedbackTimer!==undefined){clearTimeout(memoFeedbackTimer);memoFeedbackTimer=undefined;}
         memoSelection=closing?undefined:{field,value};updateMiniMemo();
+        if(memoSelection)memoFeedbackTimer=window.setTimeout(closeMemoFeedback,5000);
         // Keep keyboard focus on the toggle after updating its current state.
         byId('mini-memo')?.querySelector<HTMLButtonElement>(`[data-memo-field="${field}"][data-memo-value="${value}"]`)?.focus({preventScroll:true});
       }
