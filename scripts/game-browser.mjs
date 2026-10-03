@@ -1,7 +1,7 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
-const url='http://127.0.0.1:5173/?mission=practice&simulate=1&windowed=1';
+const url='http://127.0.0.1:5173/?mission=practice&title=1&simulate=1&windowed=1';
 const key='ar-obake-game-v1',errors=[],passed=[];
 await mkdir('.artifacts/game',{recursive:true});
 const browser=await chromium.launch({headless:true});
@@ -18,7 +18,7 @@ try{
   assert.equal((await saved()).markerIds.length,0);
   await marker('H01');assert.deepEqual((await saved()).markerIds,['H01']);assert.equal(await action('collect').count(),0);assert.equal(await page.locator('.auto-recorded,.hint-bubble').count(),0);
   assert.equal(await page.locator('.hud-memo-option.no').count(),2);
-  await action('stop-camera').click();assert.equal(await action('collect').count(),0);await action('camera').click();
+  assert.equal(await action('stop-camera').count(),0);await action('share').click();assert.equal(await page.locator('iframe').count(),0);await action('explore').click();
   await marker('ANSWER');assert.ok((await page.locator('#hint-panel').innerText()).includes('そうだん'));assert.equal(await page.locator('[data-color]').count(),0);
   await page.screenshot({path:'.artifacts/game/explore.png',fullPage:true});
   passed.push('stable recognition records a hint automatically; brief recognition and loss do not record; duplicate collection prevented; early ANSWER does not skip consultation');

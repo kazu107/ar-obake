@@ -4,6 +4,9 @@ import {decode} from '@msgpack/msgpack';
 import assert from 'node:assert/strict';
 const manifest=JSON.parse(await readFile('public/targets/manifest.json','utf8'));
 for(const marker of manifest.markers){const b=await readFile(`public/${marker.file}`);assert.equal(createHash('sha256').update(b).digest('hex'),marker.sha256);}
+const previous=JSON.parse(await readFile('tests/fixtures/markers-hiragana-v1/manifest.json','utf8'));
+assert.equal(previous.version,'halloween-hiragana-v1');assert.deepEqual(previous.markers.map(m=>m.id),manifest.markers.map(m=>m.id));
+for(const marker of previous.markers){const b=await readFile(`tests/fixtures/markers-hiragana-v1/${marker.file}`);assert.equal(createHash('sha256').update(b).digest('hex'),marker.sha256);}
 const master=decode(await readFile('public/targets/ten.mind'));
 const features=[];
 for(const [set,ids]of Object.entries(manifest.sets)){

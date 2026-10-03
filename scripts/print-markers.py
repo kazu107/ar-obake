@@ -32,8 +32,6 @@ else:
 mission = json.loads((root / 'public' / 'missions' / 'main.json').read_text(encoding='utf-8'))
 hint_by_marker = {hint['markerId']: hint for hint in mission['hints']}
 all_ids = ['TUTORIAL'] + [f'H{i:02}' for i in range(1, 9)] + ['ANSWER']
-participant_labels = dict(zip([f'H{i:02}' for i in range(1, 9)], ['いちばん', 'にばん', 'さんばん', 'よんばん', 'ごばん', 'ろくばん', 'ななばん', 'はちばん']))
-participant_labels.update(TUTORIAL='れんしゅう', ANSWER='こたえ')
 game_url = 'https://kazu107.github.io/ar-obake/'
 marker_size = 190 * mm
 qr_size = 43 * mm
@@ -66,7 +64,7 @@ def marker_info(marker_id: str) -> dict:
         }
     hint = hint_by_marker[marker_id]
     return {
-        'kind': 'ひんと',
+        'kind': 'ヒント',
         'title': 'ヒントカード',
         'name': hint['speaker'],
         'accent': BLUE,
@@ -87,8 +85,8 @@ def draw_front(pdf: canvas.Canvas, marker_id: str) -> None:
     pdf.drawCentredString(41 * mm, 273.5 * mm, info['kind'])
 
     pdf.setFillColor(INK)
-    pdf.setFont(japanese_bold, 18)
-    pdf.drawRightString(192 * mm, 273.5 * mm, participant_labels[marker_id])
+    pdf.setFont('Helvetica-Bold', 18)
+    pdf.drawRightString(192 * mm, 273.5 * mm, marker_id)
     pdf.drawImage(
         str(root / 'public' / 'markers' / f'{marker_id}.png'),
         (width - marker_size) / 2,
@@ -99,7 +97,7 @@ def draw_front(pdf: canvas.Canvas, marker_id: str) -> None:
         mask='auto',
     )
     pdf.setFont(japanese_bold, 15)
-    pdf.drawCentredString(width / 2, 42 * mm, 'かーどぜんたいを かめらに うつそう')
+    pdf.drawCentredString(width / 2, 42 * mm, 'カードぜんたいを カメラに うつそう')
 
 
 def draw_back(pdf: canvas.Canvas, marker_id: str) -> None:

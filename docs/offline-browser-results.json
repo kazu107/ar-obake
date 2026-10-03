@@ -1,6 +1,6 @@
 {
-  "testedAt": "2026-10-03T03:53:38.278Z",
-  "appVersion": "0.8.4",
+  "testedAt": "2026-10-03T06:53:14.306Z",
+  "appVersion": "0.8.5",
   "environment": "Playwright Chromium at http://127.0.0.1:4173/ with network disabled after explicit preparation",
   "passed": [
     "staff screen downloads the complete offline game bundle and shows the accepted disconnect timing",

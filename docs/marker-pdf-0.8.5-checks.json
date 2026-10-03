@@ -1,0 +1,67 @@
+{
+  "testedAt": "2026-10-03T06:45:49.540177+00:00",
+  "appVersion": "0.8.5",
+  "frontText": "original H01-H08 / ANSWER / TUTORIAL labels",
+  "pdfs": [
+    {
+      "file": "markers.pdf",
+      "pages": 20,
+      "markerSizeMm": 190,
+      "qrChecks": [
+        {
+          "page": 2,
+          "qr": "https://kazu107.github.io/ar-obake/"
+        },
+        {
+          "page": 4,
+          "qr": "https://kazu107.github.io/ar-obake/"
+        },
+        {
+          "page": 6,
+          "qr": "https://kazu107.github.io/ar-obake/"
+        },
+        {
+          "page": 8,
+          "qr": "https://kazu107.github.io/ar-obake/"
+        },
+        {
+          "page": 10,
+          "qr": "https://kazu107.github.io/ar-obake/"
+        },
+        {
+          "page": 12,
+          "qr": "https://kazu107.github.io/ar-obake/"
+        },
+        {
+          "page": 14,
+          "qr": "https://kazu107.github.io/ar-obake/"
+        },
+        {
+          "page": 16,
+          "qr": "https://kazu107.github.io/ar-obake/"
+        },
+        {
+          "page": 18,
+          "qr": "https://kazu107.github.io/ar-obake/"
+        },
+        {
+          "page": 20,
+          "qr": "https://kazu107.github.io/ar-obake/"
+        }
+      ],
+      "originalPublicDist": "identical"
+    },
+    {
+      "file": "tutorial-marker.pdf",
+      "pages": 2,
+      "markerSizeMm": 190,
+      "qrChecks": [
+        {
+          "page": 2,
+          "qr": "https://kazu107.github.io/ar-obake/"
+        }
+      ],
+      "originalPublicDist": "identical"
+    }
+  ]
+}

@@ -108,7 +108,6 @@ function cameraStatus(title:string,message:string,cover:boolean) {
   byId('camera-cover')!.hidden=!cover;byId('scan-message')!.textContent=message;
   const running=!!frame||simulating;
   byId<HTMLButtonElement>('camera-action')!.disabled=running;byId('camera-action')!.textContent=running?'かめらを つかっているよ':'かめらを はじめる';
-  byId<HTMLButtonElement>('camera-stop')!.disabled=!running;
 }
 function pauseCamera(message:string) {
   if(!isScan())return;stopCamera();updateHint(true);cameraStatus('かめらは おやすみ',message,true);
@@ -192,7 +191,6 @@ app.addEventListener('click',event=>{
       case 'prepare-offline':if(screen==='staff'){offlineStatus={state:'preparing',detail:'必要なデータをこのiPadへ保存しています。'};render();void prepareOffline().then(status=>{offlineStatus=status;if(screen==='staff')render();});}break;
       case 'explore':if(hasGame&&progress.phase!=='complete'){answerUnlocked=false;persist({...progress,phase:'exploring'});go('explore',true);}break;
       case 'camera':startCamera();break;
-      case 'stop-camera':pauseCamera('また さがすときは「かめらを はじめる」をおしてね。');break;
       case 'memo':if(hasGame&&screen!=='memo'){memoReturn=screen;go('memo');}break;
       case 'memo-back':go(memoReturn,isScanScreen(memoReturn));break;
       case 'share':if(hasGame&&progress.phase!=='complete'){answerUnlocked=false;persist({...progress,phase:'sharing'});go('share');}break;

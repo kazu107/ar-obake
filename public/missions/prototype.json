@@ -1,6 +1,6 @@
 {
   "id": "obake-prototype", "version": 2,
-  "title": "おばけのひみつを あばけ！", "markerSet": "four", "assetVersion": "halloween-hiragana-v1",
+  "title": "おばけのひみつを あばけ！", "markerSet": "four", "assetVersion": "halloween-v1",
   "colors": [
     {"id":"green","label":"みどり","hex":"#31a46c"},
     {"id":"pink","label":"ぴんく","hex":"#e768a2"},

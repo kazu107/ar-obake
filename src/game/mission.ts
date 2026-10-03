@@ -54,7 +54,9 @@ export function parseMission(raw: unknown): Mission {
   const tutorialMarker=m.tutorialMarker===undefined?undefined:(()=>{const t=object(m.tutorialMarker);return {...marker(t),speaker:text(t.speaker,40),text:text(t.text,300)};})();
   unique(hints.map(h=>h.id));unique([...hints.map(h=>h.markerId),answerMarker.markerId,...(tutorialMarker?[tutorialMarker.markerId]:[])]);
   requireValue(hints.length+1+(tutorialMarker?1:0)===SETS[markerSet].ids.length,'ヒントの枚数とマーカーセットが違います。');
-  requireValue(m.assetVersion===ASSET_VERSION,'認識素材の版が違います。');
+  // Both Halloween print editions share IDs and target order. Also accept the
+  // previous Mission file while an existing offline cache updates to this build.
+  requireValue(m.assetVersion===ASSET_VERSION||m.assetVersion==='halloween-hiragana-v1','認識素材の版が違います。');
   requireValue(Number.isInteger(m.version) && (m.version as number)>0,'問題の版が不正です。');
   const a=object(m.answer),answer={color:id(a.color),item:id(a.item)};
   const result:Mission={id:id(m.id),version:m.version as number,title:text(m.title,80),markerSet,assetVersion:ASSET_VERSION,colors,items,answer,answerMarker,...(tutorialMarker?{tutorialMarker}:{}),hints};

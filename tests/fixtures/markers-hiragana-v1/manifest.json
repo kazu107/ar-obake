@@ -1,0 +1,76 @@
+{
+  "version": "halloween-hiragana-v1",
+  "sourceCommit": "ea65304c746d11bad60404006067d9de240a1224",
+  "markers": [
+    {
+      "id": "H01",
+      "file": "H01.png",
+      "width": 800,
+      "height": 800,
+      "sha256": "a03256937629d73f3cd79cb9ede7746d5b6d4fc4c5e00891d053678251849cdd"
+    },
+    {
+      "id": "H02",
+      "file": "H02.png",
+      "width": 800,
+      "height": 800,
+      "sha256": "5ce22f71943b8e23a41d494163b0872a88808eb8846a9b3423f55fdca8f0a19e"
+    },
+    {
+      "id": "H03",
+      "file": "H03.png",
+      "width": 800,
+      "height": 800,
+      "sha256": "1908c51defe8ca3ab84f5412916d599bf4af7a52ed77af6bdb9edd6177a04abc"
+    },
+    {
+      "id": "H04",
+      "file": "H04.png",
+      "width": 800,
+      "height": 800,
+      "sha256": "ff1f0c41a7784e99e7f46c36b5763d866490c193b8383ad33739e3bea3cb35ef"
+    },
+    {
+      "id": "H05",
+      "file": "H05.png",
+      "width": 800,
+      "height": 800,
+      "sha256": "ff4ccebd4ecfecf57ffbf7ab26bce1007fe49db94872ac05bd254ea23bc9f741"
+    },
+    {
+      "id": "H06",
+      "file": "H06.png",
+      "width": 800,
+      "height": 800,
+      "sha256": "8271131cdf43ec090129bb351e469a7d9d89e09353d8f3dde9f639404201d02e"
+    },
+    {
+      "id": "H07",
+      "file": "H07.png",
+      "width": 800,
+      "height": 800,
+      "sha256": "39fb5c8647ce9f8635d86afb5952fe7400dd6f2167904b21f5fd2ee37e9c68fa"
+    },
+    {
+      "id": "H08",
+      "file": "H08.png",
+      "width": 800,
+      "height": 800,
+      "sha256": "df1dcfd87d42f5fb8d1078efdb9c59e5bef0fa64463d49b0c8b5cde64f4511c1"
+    },
+    {
+      "id": "ANSWER",
+      "file": "ANSWER.png",
+      "width": 800,
+      "height": 800,
+      "sha256": "39d98033b2e4987b4d322a4c512cc8af18b105524eda67ac8f8db16d7595231d"
+    },
+    {
+      "id": "TUTORIAL",
+      "file": "TUTORIAL.png",
+      "width": 800,
+      "height": 800,
+      "sha256": "440eeba1d57b42b3243e51bd623f4e12c3d03152a0c29dd02d51609fee422a5f"
+    }
+  ]
+}

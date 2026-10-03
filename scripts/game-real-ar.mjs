@@ -4,12 +4,14 @@ import {mkdir,open,readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import assert from 'node:assert/strict';
 const practice=process.argv.includes('--practice');
+const hiragana=process.argv.includes('--hiragana-markers');
+const markerSource=hiragana?'tests/fixtures/markers-hiragana-v1':'public/markers';
 const mission=JSON.parse(await readFile(practice?'public/missions/prototype.json':'public/missions/main.json','utf8'));
 const hintIds=mission.hints.map(h=>h.markerId);
 const variants={H01:'pumpkin',H02:'bat',H03:'sleepy',H04:'candy',H05:'book',H06:'bell',H07:'broom',H08:'surprised'};
 const storageKey=practice?'ar-obake-game-v1':`ar-obake-game-v1:${mission.id}`;
 const query=practice?'?mission=practice&simulate=1':'?simulate=1';
-const directory=path.resolve(practice?'.artifacts/game':'.artifacts/nine-game');await mkdir(directory,{recursive:true});
+const directory=path.resolve(hiragana?'.artifacts/marker-compatibility-hiragana':practice?'.artifacts/game':'.artifacts/nine-game');await mkdir(directory,{recursive:true});
 const width=640,height=480,filePath=path.join(directory,practice?'four.y4m':'ten.y4m');
 function yuv(data){const y=Buffer.alloc(width*height),u=Buffer.alloc(width*height/4),v=Buffer.alloc(width*height/4);for(let row=0;row<height;row++)for(let col=0;col<width;col++){const i=row*width+col,j=i*4,r=data[j],g=data[j+1],b=data[j+2];y[i]=Math.round(16+.257*r+.504*g+.098*b);if(row%2===0&&col%2===0){const k=row/2*(width/2)+col/2;u[k]=Math.round(128-.148*r-.291*g+.439*b);v[k]=Math.round(128+.439*r-.368*g-.071*b);}}return Buffer.concat([Buffer.from('FRAME\n'),y,u,v]);}
 const video=await open(filePath,'w');await video.write(`YUV4MPEG2 W${width} H${height} F10:1 Ip A1:1 C420jpeg\n`);
@@ -17,7 +19,7 @@ const scanIds=[...(mission.tutorialMarker?[mission.tutorialMarker.markerId]:[]),
 for(const id of scanIds){
   const canvas=createCanvas(width,height),ctx=canvas.getContext('2d');ctx.fillStyle='#686f78';ctx.fillRect(0,0,width,height);
   const blank=yuv(ctx.getImageData(0,0,width,height).data);for(let i=0;i<10;i++)await video.write(blank);
-  const img=await loadImage(`public/markers/${id}.png`);
+  const img=await loadImage(`${markerSource}/${id}.png`);
   if(['H01','H02','H03'].includes(id)){
     // A projective view of a card lying on a table, seen from its lower edge.
     // Far rows are smaller. This makes the perpendicular ghost's face visible.
@@ -34,7 +36,7 @@ const errors=[],passed=[],speechGaps=[];
 try{
   const context=await browser.newContext({viewport:{width:768,height:1024},permissions:['camera']});const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
   const action=name=>page.locator(`[data-action="${name}"]`).first();
-  await page.goto('http://127.0.0.1:4173/'+query);await page.locator('.immersive-scanner').waitFor();assert.equal(await page.locator('[data-sim],.welcome').count(),0);
+  await page.goto('http://127.0.0.1:4173/'+query);await page.locator('.immersive-scanner').waitFor();assert.equal(await page.locator('[data-sim],.welcome,[data-action="stop-camera"],#camera-stop').count(),0);
   await page.waitForFunction(()=>document.querySelector('#scan-status')?.textContent==='さがしています',{},{timeout:90000});
   assert.ok((await page.locator('iframe').getAttribute('src')).includes('tracking=stable&motion=still'));
   if(mission.tutorialMarker){
@@ -81,5 +83,6 @@ try{
   const denied=await browser.newContext();await denied.addInitScript(()=>{navigator.mediaDevices.getUserMedia=async()=>{throw new DOMException('test denied','NotAllowedError');};});const d=await denied.newPage();await d.goto('http://127.0.0.1:4173/'+query);await d.getByText('かめらを つかえなかったよ。すたっふに きょかの せっていを かくにんしてもらってね。').first().waitFor();assert.equal(await d.locator('iframe').count(),0);assert.ok(await d.locator('#camera-action').isEnabled());await denied.close();passed.push('automatic camera entry runs the real MindAR pipeline without a title/start step; the settings dropdown and AR-frame tap work while tracking continues; camera denial offers restart without discarding progress');
   assert.deepEqual(errors,[]);const {version}=JSON.parse(await readFile('package.json','utf8'));
   passed.push('speech and model projected bounds are separated on all ten cards; memo feedback automatically closes while real AR continues');
-  await writeFile(practice?'docs/game-real-ar-results.json':'docs/nine-game-real-ar-results.json',JSON.stringify({testedAt:new Date().toISOString(),appVersion:version,missionId:mission.id,environment:'Chromium SwiftShader with synthetic Y4M input; actual MindAR pipeline, not physical iPad',passed,speechGaps,pageErrors:errors},null,2)+'\n');console.log('GAME_REAL_AR_OK');
+  passed.push('camera pause button is absent; settings, consultation and background lifecycle still release the camera when leaving');
+  await writeFile(hiragana?'docs/hiragana-marker-real-ar-results.json':practice?'docs/game-real-ar-results.json':'docs/nine-game-real-ar-results.json',JSON.stringify({testedAt:new Date().toISOString(),appVersion:version,missionId:mission.id,markerImages:hiragana?'halloween-hiragana-v1 (0.8.0-0.8.4)':'halloween-v1 (0.7.0-0.7.3 / 0.8.5)',recognitionTargets:'halloween-v1',environment:'Chromium SwiftShader with synthetic Y4M input; actual MindAR pipeline, not physical iPad',passed,speechGaps,pageErrors:errors},null,2)+'\n');console.log(hiragana?'HIRAGANA_MARKER_COMPATIBILITY_OK':'GAME_REAL_AR_OK');
 }finally{await browser.close();}

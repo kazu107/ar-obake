@@ -15,7 +15,7 @@ const menu=()=>page.locator('#camera-settings'),gear=()=>menu().locator('summary
 const saved=()=>page.evaluate(key=>JSON.parse(localStorage.getItem(key)),key);
 const raw=()=>page.evaluate(key=>localStorage.getItem(key),key);
 const seed=async value=>{await page.evaluate(({key,value})=>value===null?localStorage.removeItem(key):localStorage.setItem(key,typeof value==='string'?value:JSON.stringify(value)),{key,value});await page.goto(origin+query);};
-const scanner=async tutorial=>{await page.locator('.immersive-scanner').waitFor();assert.equal(await page.locator('.welcome,.game-header,.game-footer').count(),0);assert.equal(await page.locator('.hud-memo').count(),tutorial?0:1);};
+const scanner=async tutorial=>{await page.locator('.immersive-scanner').waitFor();assert.equal(await page.locator('.welcome,.game-header,.game-footer,#camera-stop,[data-action="stop-camera"]').count(),0);assert.equal(await page.locator('.hud-memo').count(),tutorial?0:1);};
 const openMenu=async()=>{await gear().click();assert.equal(await menu().getAttribute('open'),'');};
 try{
   await page.goto(origin+query);await scanner(true);assert.equal(await page.locator('#scan-status').innerText(),'ためす かめら');
@@ -54,6 +54,9 @@ try{
   passed.push('explicit title and staff entry do not create a game or request camera; practice defaults to its own saved camera and links to its own title');
   const restricted=await browser.newContext();await restricted.addInitScript(()=>{Object.defineProperty(window,'localStorage',{get(){throw Error('storage blocked');}});});const r=await restricted.newPage();r.on('pageerror',error=>errors.push(error.message));await r.goto(origin+query);await r.locator('.immersive-scanner').waitFor();assert.ok(await r.locator('#save-warning').isVisible());assert.equal(await r.locator('#scan-status').innerText(),'ためす かめら');await restricted.close();
   passed.push('unavailable storage still permits the tutorial and explains that progress cannot be saved');
+  const upgrade=await browser.newContext();await upgrade.route('**/missions/main.json',async route=>{const data=JSON.parse(await readFile('public/missions/main.json','utf8'));await route.fulfill({json:{...data,assetVersion:'halloween-hiragana-v1'}});});
+  const u=await upgrade.newPage();u.on('pageerror',error=>errors.push(error.message));await u.goto(origin+query);await u.locator('.immersive-scanner').waitFor();assert.equal(await u.locator('#scan-status').innerText(),'ためす かめら');await upgrade.close();
+  passed.push('previous cached hiragana Mission files still boot into the camera while offline data is being updated');
   assert.deepEqual(errors,[]);const {version}=JSON.parse(await readFile('package.json','utf8'));
   await writeFile('docs/camera-entry-browser-results.json',JSON.stringify({testedAt:new Date().toISOString(),appVersion:version,environment:'Chromium with development-only simulated recognition; separate real MindAR and physical iPad validation',passed,pageErrors:errors},null,2)+'\n');console.log('CAMERA_ENTRY_BROWSER_OK');
 }finally{await browser.close();}

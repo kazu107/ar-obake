@@ -1,12 +1,12 @@
 {
-  "testedAt": "2026-10-03T03:54:36.055Z",
-  "appVersion": "0.8.4",
+  "testedAt": "2026-10-03T06:53:12.187Z",
+  "appVersion": "0.8.5",
   "environment": "Production build in Chromium with injected Safari playback rejection and a synthetic camera; physical Safari not tested",
   "passed": [
     "root entry requests camera without title/start gesture",
     "playback rejection keeps the live camera and shows a direct tap button in the camera screen",
     "settings remain available during the playback prompt",
-    "trusted button tap starts MindAR without asking for capture again; stop releases the frame"
+    "trusted button tap starts MindAR without asking for capture again; no pause button is displayed; title navigation releases the frame"
   ],
   "pageErrors": []
 }

@@ -1,8 +1,8 @@
 {
-  "testedAt": "2026-10-03T06:47:47.087Z",
+  "testedAt": "2026-10-03T06:50:41.052Z",
   "appVersion": "0.8.5",
   "missionId": "obake-mission-01",
-  "markerImages": "halloween-v1 (0.7.0-0.7.3 / 0.8.5)",
+  "markerImages": "halloween-hiragana-v1 (0.8.0-0.8.4)",
   "recognitionTargets": "halloween-v1",
   "environment": "Chromium SwiftShader with synthetic Y4M input; actual MindAR pipeline, not physical iPad",
   "passed": [
@@ -26,43 +26,43 @@
   "speechGaps": [
     {
       "id": "TUTORIAL",
-      "gapPx": 68.7
-    },
-    {
-      "id": "H01",
-      "gapPx": 27.3
-    },
-    {
-      "id": "H02",
-      "gapPx": 28.3
-    },
-    {
-      "id": "H03",
-      "gapPx": 23.6
-    },
-    {
-      "id": "H04",
-      "gapPx": 69.6
-    },
-    {
-      "id": "H05",
-      "gapPx": 68.7
-    },
-    {
-      "id": "H06",
       "gapPx": 68.1
     },
     {
+      "id": "H01",
+      "gapPx": 26
+    },
+    {
+      "id": "H02",
+      "gapPx": 24
+    },
+    {
+      "id": "H03",
+      "gapPx": 20.6
+    },
+    {
+      "id": "H04",
+      "gapPx": 69.1
+    },
+    {
+      "id": "H05",
+      "gapPx": 68.4
+    },
+    {
+      "id": "H06",
+      "gapPx": 68.7
+    },
+    {
       "id": "H07",
-      "gapPx": 68.3
+      "gapPx": 69.5
     },
     {
       "id": "H08",
-      "gapPx": 68.2
+      "gapPx": 68.4
     },
     {
       "id": "ANSWER",
-      "gapPx": 69.8
+      "gapPx": 68.3
     }
   ],
   "pageErrors": []

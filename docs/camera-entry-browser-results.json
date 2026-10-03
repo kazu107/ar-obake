@@ -1,6 +1,6 @@
 {
-  "testedAt": "2026-10-03T03:50:11.074Z",
-  "appVersion": "0.8.4",
+  "testedAt": "2026-10-03T06:53:09.020Z",
+  "appVersion": "0.8.5",
   "environment": "Chromium with development-only simulated recognition; separate real MindAR and physical iPad validation",
   "passed": [
     "fresh root entry immediately starts the tutorial camera; the gear dropdown fits 390/768/1024 viewports, closes with outside tap or Escape, and links to the unchanged title without resetting progress",
@@ -8,7 +8,8 @@
     "saved consultation opens the ANSWER camera; completed games keep their result instead of silently resetting",
     "damaged or incompatible saves are retained until a confirmed reset and do not open the camera or accept new hints",
     "explicit title and staff entry do not create a game or request camera; practice defaults to its own saved camera and links to its own title",
-    "unavailable storage still permits the tutorial and explains that progress cannot be saved"
+    "unavailable storage still permits the tutorial and explains that progress cannot be saved",
+    "previous cached hiragana Mission files still boot into the camera while offline data is being updated"
   ],
   "pageErrors": []
 }

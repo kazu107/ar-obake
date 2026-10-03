@@ -8,6 +8,19 @@ import {gameStorageKey,GAME_STORAGE_KEY,loadProgress,saveProgress} from '../src/
 import {hintMarkerLabel,welcome} from '../src/game/ui';
 import {memo} from '../src/game/screens';
 const mission=parseMission(mainData),practice=parseMission(practiceData),report=analyzeBalance(mission);
+describe('compatible Halloween Mission files',()=>{
+  it('loads the previous cached hiragana Mission without changing clues or discarding progress',()=>{
+    const cached=parseMission({...mainData,assetVersion:'halloween-hiragana-v1'});
+    expect(cached).toEqual(mission);
+    const progress=collect(mission,newProgress(mission),'H01');
+    expect(parseProgress(progress,cached)).toEqual(progress);
+    expect(parseMission({...practiceData,assetVersion:'halloween-hiragana-v1'})).toEqual(practice);
+  });
+  it('still rejects unrelated editions and incorrect marker order',()=>{
+    expect(()=>parseMission({...mainData,assetVersion:'unrelated-marker-v1'})).toThrow('認識素材の版');
+    expect(()=>parseMission({...mainData,assetVersion:'halloween-hiragana-v1',hints:mainData.hints.map((h,i)=>i? h:{...h,targetIndex:9})})).toThrow('印刷カード');
+  });
+});
 describe('eight-hint content and omission tolerance',()=>{
   it('uses all eight existing hint cards, ANSWER, and a separate tutorial marker',()=>{
     expect(mission.markerSet).toBe('ten');expect(mission.hints.map(h=>h.targetIndex)).toEqual([0,1,2,3,4,5,6,7]);expect(mission.answerMarker).toEqual({markerId:'ANSWER',targetIndex:8});expect(mission.tutorialMarker).toEqual({markerId:'TUTORIAL',targetIndex:9,speaker:'れんしゅうの おばけ',text:'こんにちは！\nかーどを しばらく うつしてね。'});
