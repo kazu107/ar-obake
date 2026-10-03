@@ -17,9 +17,10 @@ const app=document.querySelector<HTMLDivElement>('#app')!;
 const params=new URLSearchParams(location.search);
 const practice=params.get('mission')==='practice';
 const missionFile=practice?'./missions/prototype.json':'./missions/main.json';
-const homeUrl=practice?'./?mission=practice':'./';
+const homeUrl=practice?'./?mission=practice&title=1':'./?title=1';
 const simulation=import.meta.env.DEV && params.has('simulate');
 const staffMode=params.has('staff');
+const titleMode=params.has('title');
 const requestBrowserFullscreen=!import.meta.env.DEV||!params.has('windowed');
 let mission:Mission, progress:Progress, gate:ScanGate, loaded:LoadResult, hasGame=false;
 let screen:Screen='home',memoReturn:Screen='explore',resetReturn:Screen='home';
@@ -48,6 +49,10 @@ function updateMiniMemo() {
 function closeMemoFeedback() {
   if(memoFeedbackTimer!==undefined){clearTimeout(memoFeedbackTimer);memoFeedbackTimer=undefined;}
   if(!memoSelection)return;memoSelection=undefined;updateMiniMemo();
+}
+function closeSettingsMenu(restoreFocus=false) {
+  const menu=byId<HTMLDetailsElement>('camera-settings');if(!menu?.open)return;
+  menu.open=false;if(restoreFocus)menu.querySelector('summary')?.focus({preventScroll:true});
 }
 
 function persist(next:Progress) {
@@ -110,6 +115,9 @@ function pauseCamera(message:string) {
 }
 function startCamera() {
   if(!isScan()||frame||simulating)return;
+  if(loaded.kind==='invalid'||loaded.kind==='incompatible'){
+    cameraStatus('めもを かくにんしてね','まえの めもを よみこめません。すたっふと かくにんし、せっていから「しんちょくを りせっと」を えらんでね。',true);return;
+  }
   enterFullscreen();
   gate.reset();shownMarker=undefined;openedAt=lastFrameAt=performance.now();
   if(import.meta.env.DEV && simulation){simulating=true;ready=true;cameraStatus('ためす かめら','したの かくにんようの ぼたんで ためせるよ。',true);return;}
@@ -203,13 +211,13 @@ app.addEventListener('change',event=>{
   if(screen!=='staff'||!id||!Object.prototype.hasOwnProperty.call(markerSettings,id)||(select.value!=='parallel'&&select.value!=='perpendicular'))return;
   markerSettings={...markerSettings,[id]:select.value};saveOrientations();
 });
-document.addEventListener('keydown',event=>{if(event.key==='Escape')closeMemoFeedback();});
-document.addEventListener('pointerdown',event=>{if(!(event.target as Element).closest('#mini-memo'))closeMemoFeedback();});
+document.addEventListener('keydown',event=>{if(event.key==='Escape'){closeMemoFeedback();closeSettingsMenu(true);}});
+document.addEventListener('pointerdown',event=>{if(!(event.target as Element).closest('#mini-memo'))closeMemoFeedback();if(!(event.target as Element).closest('#camera-settings'))closeSettingsMenu();});
 window.addEventListener('message',event=>{
   if(!frame||event.source!==frame.contentWindow||event.origin!==location.origin||event.data?.channel!=='obake-lab'||!isScan())return;
   const d=event.data;
   switch(d.type){
-    case 'interaction':closeMemoFeedback();break;
+    case 'interaction':closeMemoFeedback();closeSettingsMenu();break;
     case 'loading':cameraStatus('じゅんびちゅう','かめらと おばけを じゅんびしているよ。おねがいが でたら、つかって よいほうを おしてね。',true);break;
     case 'playback-required':cameraStatus('かめらを うつしてね','かめらの なかの「かめらを うつす」を おしてね。',false);break;
     case 'ready':ready=true;lastFrameAt=performance.now();cameraStatus('さがしています','かーどの ぜんたいを うつしてね。',false);break;
@@ -231,15 +239,20 @@ setInterval(()=>{
   if(ready)updateHint();
 },100);
 async function boot(){
-  app.innerHTML=shell('<section class="loading"><h1>おはなしを じゅんびちゅう…</h1></section>');
+  const directCamera=!staffMode&&!titleMode;
+  document.body.classList.toggle('camera-mode',directCamera);
+  app.innerHTML=pageShell('<section class="loading"><p role="status">おはなしを じゅんびちゅう…</p></section>',0,false,undefined,practice,directCamera,staffMode);
   const abort=new AbortController(),timeout=setTimeout(()=>abort.abort(),10000);
   try{
     const response=await fetch(new URL(missionFile,document.baseURI),{signal:abort.signal});if(!response.ok)throw Error('Mission unavailable');
     mission=parseMission(await response.json());gate=new ScanGate(SETS[mission.markerSet].ids);
     const settings=loadMarkerSettings(storage);markerSettings=settings.settings;settingsMessage=settings.kind==='unavailable'?'この端末で設定を保存できません。初期設定を使用します。':settings.kind==='invalid'?'保存された角度設定を読み込めません。初期設定を使用します。':'この端末の角度設定です。変更は自動保存されます。';
-    loaded=loadProgress(storage,mission);hasGame=loaded.kind==='valid';progress=loaded.kind==='valid'?loaded.progress:newProgress(mission);screen=staffMode?'staff':'home';render();
+    loaded=loadProgress(storage,mission);hasGame=loaded.kind==='valid';progress=loaded.kind==='valid'?loaded.progress:newProgress(mission);
+    if(directCamera&&!hasGame&&loaded.kind!=='invalid'&&loaded.kind!=='incompatible')persist(progress);
+    screen=staffMode?'staff':titleMode?'home':progress.phase==='complete'?'win':!progress.tutorialComplete?'tutorial':progress.phase==='sharing'?'answer-scan':'explore';
+    render();if(directCamera&&isScan())startCamera();
     void registerOffline().then(status=>{offlineStatus=status;if(screen==='staff')render();});
-  }catch{app.innerHTML=shell('<section class="centered card"><h1>おはなしを よみこめません</h1><p>つうしんを かくにんして、もういちど ひらいてね。<br>なおらないときは すたっふに つたえてね。</p><a class="primary" href="'+homeUrl+'">もういちど よみこむ</a></section>');}
+  }catch{screen='home';document.body.classList.remove('camera-mode');app.innerHTML=shell('<section class="centered card"><h1>おはなしを よみこめません</h1><p>つうしんを かくにんして、もういちど ひらいてね。<br>なおらないときは すたっふに つたえてね。</p><a class="primary" href="'+homeUrl+'">もういちど よみこむ</a></section>');}
   finally{clearTimeout(timeout);}
 }
 void boot();

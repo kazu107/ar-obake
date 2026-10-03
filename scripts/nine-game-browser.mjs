@@ -1,7 +1,7 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile,readFile} from 'node:fs/promises';
-const url='http://127.0.0.1:5173/?simulate=1&windowed=1',key='ar-obake-game-v1:obake-mission-01';
+const url='http://127.0.0.1:5173/?title=1&simulate=1&windowed=1',key='ar-obake-game-v1:obake-mission-01';
 const appVersion=JSON.parse(await readFile('package.json','utf8')).version;
 const legacyKey='ar-obake-game-v1',legacy={schemaVersion:1,missionId:'obake-prototype',missionVersion:2,markerIds:['H01'],phase:'exploring',attempts:[],tutorialComplete:true};
 const browser=await chromium.launch({headless:true}),errors=[],passed=[];
@@ -30,7 +30,7 @@ try{
   assert.equal(await page.locator('.hud-memo-option.yes').count(),0);assert.equal((await saved()).markerIds.length,3);assert.equal(await page.locator('.saved-clue,.hint-bubble,.hint-stamps').count(),0);
   await marker('H03');assert.equal(await action('collect').count(),0);assert.equal((await saved()).markerIds.filter(id=>id==='H03').length,1);await marker('ANSWER');assert.equal(await page.locator('[data-color]').count(),0);
   await page.reload();await action('continue').click();assert.deepEqual((await saved()).markerIds,['H01','H02','H03']);
-  await page.goto('http://127.0.0.1:5173/?mission=practice&simulate=1&windowed=1');await action('continue').waitFor();assert.equal(await page.locator('.edition').innerText(),'4まいの おはなし');await action('continue').click();assert.equal(await page.locator('.hud-memo').count(),1);assert.equal(await page.locator('.hud-memo-option.no').count(),2);await hiragana();
+  await page.goto('http://127.0.0.1:5173/?mission=practice&title=1&simulate=1&windowed=1');await action('continue').waitFor();assert.equal(await page.locator('.edition').innerText(),'4まいの おはなし');await action('continue').click();assert.equal(await page.locator('.hud-memo').count(),1);assert.equal(await page.locator('.hud-memo-option.no').count(),2);await hiragana();
   await page.goto(url);await action('continue').click();
   // Deliberately omit H04: the other seven must still identify both answer components.
   for(const id of ['H05','H06','H07','H08'])await marker(id);
@@ -40,7 +40,7 @@ try{
   await action('share').click();assert.equal(await page.locator('.saved-clue').count(),7);assert.equal(await page.locator('iframe').count(),0);
   for(const [w,h]of [[768,1024],[1024,768],[390,844]]){await page.setViewportSize({width:w,height:h});await noOverflow();await hiragana();await page.screenshot({path:`.artifacts/nine-game/share-${w}.png`,fullPage:true});}
   await action('answer-scan').click();await marker('H08');assert.equal(await page.locator('[data-color]').count(),0);await marker('ANSWER');
-  assert.equal(await page.locator('[data-color]').count(),0);await action('home').click();await page.waitForTimeout(1600);assert.equal(await page.locator('[data-color]').count(),0);
+  assert.equal(await page.locator('[data-color]').count(),0);await page.locator('#camera-settings summary').click();await action('home').click();await action('continue').waitFor();await page.waitForTimeout(1600);assert.equal(await page.locator('[data-color]').count(),0);await page.goto(url);
   await action('continue').click();await action('answer-scan').click();await marker('ANSWER');await page.locator('[data-color="blue"]').waitFor({timeout:5000});passed.push('leaving the camera during the detective nod cancels the pending answer transition; scanning again resumes normally');
   await page.screenshot({path:'.artifacts/nine-game/answer-colors.png',fullPage:true});
   await page.locator('[data-color="blue"]').click();await action('next-item').click();await page.screenshot({path:'.artifacts/nine-game/answer-items.png',fullPage:true});await page.locator('[data-item="hat"]').click();await action('confirm-answer').click();await action('submit-answer').click();assert.equal((await saved()).phase,'complete');

@@ -34,7 +34,7 @@ const errors=[],passed=[],speechGaps=[];
 try{
   const context=await browser.newContext({viewport:{width:768,height:1024},permissions:['camera']});const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));
   const action=name=>page.locator(`[data-action="${name}"]`).first();
-  await page.goto('http://127.0.0.1:4173/'+query);await action('new').click();assert.equal(await page.locator('[data-sim]').count(),0);
+  await page.goto('http://127.0.0.1:4173/'+query);await page.locator('.immersive-scanner').waitFor();assert.equal(await page.locator('[data-sim],.welcome').count(),0);
   await page.waitForFunction(()=>document.querySelector('#scan-status')?.textContent==='さがしています',{},{timeout:90000});
   assert.ok((await page.locator('iframe').getAttribute('src')).includes('tracking=stable&motion=still'));
   if(mission.tutorialMarker){
@@ -60,6 +60,8 @@ try{
       await page.waitForFunction(()=>!document.querySelector('#memo-feedback'),{},{timeout:7000});assert.equal(await page.locator('iframe').count(),1);
       await page.locator('[data-memo-field="color"][data-memo-value="green"]').click();
       await page.frameLocator('iframe').locator('body').click({position:{x:100,y:350}});await page.waitForFunction(()=>!document.querySelector('#memo-feedback'));
+      await page.locator('#camera-settings summary').click();await page.screenshot({path:path.join(directory,'real-settings-menu.png')});assert.equal(await page.locator('iframe').count(),1);
+      await page.frameLocator('iframe').locator('body').click({position:{x:600,y:350}});await page.waitForFunction(()=>!document.querySelector('#camera-settings')?.open);assert.equal(await page.locator('iframe').count(),1);
       await page.frameLocator('iframe').locator('body[data-speech-id="H01"][data-gesture-active="false"]').waitFor({timeout:5000});
     }
   }
@@ -76,7 +78,7 @@ try{
   passed.push('All ten variants render in the real AR frame; H02 bat, H03 sleepy eyes/pillow, H04 candy, H05 book, H06 bell, H07 broom and ANSWER notebook/nod are distinct; H01 gesture finishes and returns to rest','ANSWER leaves time for the detective nod before opening colour selection');
   await page.goto('http://127.0.0.1:4173/lab.html');assert.ok(await page.locator('#start').isEnabled());await page.locator('#start').click();await page.waitForFunction(()=>document.querySelector('#status')?.textContent==='認識中',{},{timeout:90000});await page.locator('#stop').click();assert.equal(await page.locator('iframe').count(),0);passed.push('retained laboratory page starts and stops AR');
   // Reuse the Safari playback-recovery implementation through the game's own cover.
-  const denied=await browser.newContext();await denied.addInitScript(()=>{navigator.mediaDevices.getUserMedia=async()=>{throw new DOMException('test denied','NotAllowedError');};});const d=await denied.newPage();await d.goto('http://127.0.0.1:4173/'+query);await d.locator('[data-action="new"]').click();await d.getByText('かめらを つかえなかったよ。すたっふに きょかの せっていを かくにんしてもらってね。').first().waitFor();assert.equal(await d.locator('iframe').count(),0);assert.ok(await d.locator('#camera-action').isEnabled());await denied.close();passed.push('camera denial offers restart without discarding progress');
+  const denied=await browser.newContext();await denied.addInitScript(()=>{navigator.mediaDevices.getUserMedia=async()=>{throw new DOMException('test denied','NotAllowedError');};});const d=await denied.newPage();await d.goto('http://127.0.0.1:4173/'+query);await d.getByText('かめらを つかえなかったよ。すたっふに きょかの せっていを かくにんしてもらってね。').first().waitFor();assert.equal(await d.locator('iframe').count(),0);assert.ok(await d.locator('#camera-action').isEnabled());await denied.close();passed.push('automatic camera entry runs the real MindAR pipeline without a title/start step; the settings dropdown and AR-frame tap work while tracking continues; camera denial offers restart without discarding progress');
   assert.deepEqual(errors,[]);const {version}=JSON.parse(await readFile('package.json','utf8'));
   passed.push('speech and model projected bounds are separated on all ten cards; memo feedback automatically closes while real AR continues');
   await writeFile(practice?'docs/game-real-ar-results.json':'docs/nine-game-real-ar-results.json',JSON.stringify({testedAt:new Date().toISOString(),appVersion:version,missionId:mission.id,environment:'Chromium SwiftShader with synthetic Y4M input; actual MindAR pipeline, not physical iPad',passed,speechGaps,pageErrors:errors},null,2)+'\n');console.log('GAME_REAL_AR_OK');

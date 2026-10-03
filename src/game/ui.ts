@@ -10,6 +10,7 @@ export const icon = (kind: string) => `<svg viewBox="0 0 64 64" aria-hidden="tru
   note: '<rect x="14" y="9" width="40" height="48" rx="5"/><path d="M9 19h10M9 32h10M9 45h10M29 23h14M29 34h14M29 45h9"/>',
   scan: '<path d="M9 24V10h15m16 0h15v14M9 40v14h15m16 0h15V40M18 32h28"/>',
   chat: '<path d="M10 13h44v31H30L17 55V44h-7zM21 24h22M21 33h15"/>',
+  settings: '<path d="M27 7h10l2 8 6 3 8-2 5 9-6 6v7l6 6-5 9-8-2-6 3-2 8H27l-2-8-6-3-8 2-5-9 6-6v-7l-6-6 5-9 8 2 6-3z"/><circle cx="32" cy="34" r="9"/>',
 } as Record<string,string>)[kind]??''}</svg>`;
 
 export function hintMarkerLabel(m:Mission):string {

@@ -4,7 +4,7 @@ const dev=await createServer({server:{host:'127.0.0.1',port:5173,strictPort:true
 await dev.listen();let production;
 try{
   production=await preview({preview:{host:'127.0.0.1',port:4173,strictPort:true},logLevel:'error'});
-  const scripts=process.argv.includes('--production-only')?['scripts/game-real-ar.mjs','scripts/offline-browser.mjs']:['scripts/nine-game-browser.mjs','scripts/game-real-ar.mjs','scripts/offline-browser.mjs'];
+  const scripts=process.argv.includes('--production-only')?['scripts/game-real-ar.mjs','scripts/camera-playback-browser.mjs','scripts/offline-browser.mjs']:['scripts/camera-entry-browser.mjs','scripts/nine-game-browser.mjs','scripts/game-real-ar.mjs','scripts/camera-playback-browser.mjs','scripts/offline-browser.mjs'];
   for(const script of scripts){
     await new Promise((resolve,reject)=>{const child=spawn(process.execPath,[script],{stdio:'inherit'});child.on('error',reject);child.on('exit',code=>code===0?resolve():reject(Error(`${script} exited ${code}`)));});
   }

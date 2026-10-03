@@ -1,9 +1,11 @@
 {
-  "testedAt": "2026-10-02T05:02:43.289Z",
+  "testedAt": "2026-10-03T03:53:38.278Z",
+  "appVersion": "0.8.4",
   "environment": "Playwright Chromium at http://127.0.0.1:4173/ with network disabled after explicit preparation",
   "passed": [
     "staff screen downloads the complete offline game bundle and shows the accepted disconnect timing",
-    "offline reload restores the staff page, Mission v2, AR runtime bundle, ten-marker target data, gesture ghost model, staff checklist PDF, and comparison illustration"
+    "offline reload restores the staff page, Mission v2, AR runtime bundle, ten-marker target data, gesture ghost model, staff checklist PDF, and comparison illustration",
+    "offline root entry shows the camera screen and settings instead of a title; physical iPad camera startup while already offline is a separate device check"
   ],
   "pageErrors": []
 }
