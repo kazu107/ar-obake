@@ -53,7 +53,7 @@
 
 ## ローカル開発
 
-検証した実行環境はNode.js 24.19.0、npm 11.6.1。`.node-version`を用意しています。
+Node.js 24系を使います。2026-10-28時点の24系最新であるNode.js 24.22.1、npm 11.19.1で検証しています。`.node-version`とGitHub Actionsは24.22.1を指定し、`package.json`の必要条件は24.22.1以上・25未満です。
 
 ```powershell
 npm ci
@@ -65,7 +65,7 @@ npm run check:mission
 npm run preview
 ```
 
-このPCにある古いNode.js 24.11.0では、大きい依存を含むbuildがWindowsネイティブ例外で終了しました。Codexの同梱Node.js 24.19.0では成功しています。Windowsでは同梱版を選ぶ次の補助スクリプトも使えます。
+Windowsでは次の補助スクリプトも使えます。通常の`node`が`.node-version`以上の24系であれば優先し、条件を満たさない場合はCodex同梱版を確認します。25系以降は使いません。`-Verbose`を付けると、選んだ版と実行ファイルを確認できます。[Node.js 24系の更新記録](docs/node-24-update-20261028.md)。
 
 ```powershell
 .\scripts\run.ps1 dev

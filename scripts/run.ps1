@@ -1,12 +1,21 @@
+[CmdletBinding()]
 param([ValidateSet('dev','build','preview','test','typecheck','assets','compile:targets','check:assets','check:mission','test:browser')][string]$Command = 'dev')
 $ErrorActionPreference = 'Stop'
-$taskNode = (Get-Command node -ErrorAction SilentlyContinue).Source
-$taskBundledNode = Join-Path $env:USERPROFILE '.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe'
-if (Test-Path -LiteralPath $taskBundledNode) { $taskNode = $taskBundledNode }
-if (-not $taskNode) { throw 'Node.js 24.19.0 or later is required.' }
-$taskVersion = & $taskNode -p 'process.versions.node'
-if ([version]$taskVersion -lt [version]'24.19.0') { throw "Node.js 24.19.0 or later is required (found $taskVersion)." }
 $taskRoot = Split-Path -Parent $PSScriptRoot
+$taskMinimum = [version](Get-Content -LiteralPath (Join-Path $taskRoot '.node-version') -Raw).Trim()
+$taskPathNode = (Get-Command node -ErrorAction SilentlyContinue).Source
+$taskBundledNode = Join-Path $env:USERPROFILE '.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe'
+$taskNode = $null
+foreach ($taskCandidate in @($taskPathNode, $taskBundledNode) | Select-Object -Unique) {
+  if (-not $taskCandidate -or -not (Test-Path -LiteralPath $taskCandidate)) { continue }
+  $taskVersion = & $taskCandidate -p 'process.versions.node'
+  $taskParsedVersion = $null
+  if ($LASTEXITCODE -eq 0 -and [version]::TryParse($taskVersion, [ref]$taskParsedVersion)) {
+    if ($taskParsedVersion.Major -eq 24 -and $taskParsedVersion -ge $taskMinimum) { $taskNode = $taskCandidate; break }
+  }
+}
+if (-not $taskNode) { throw "Node.js 24.x ($taskMinimum or later) is required. Update Node.js to the version in .node-version." }
+Write-Verbose "Using Node.js $taskVersion ($taskNode)"
 Push-Location -LiteralPath $taskRoot
 try {
   switch ($Command) {
